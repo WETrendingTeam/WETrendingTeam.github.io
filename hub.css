@@ -1,0 +1,542 @@
+/* ===========================
+   WETrendingTeam HUB STYLE
+=========================== */
+
+
+* {
+
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+
+}
+
+
+
+body {
+
+    font-family: Arial, sans-serif;
+
+    background:#10101a;
+
+    color:white;
+
+}
+
+
+
+.hub-page {
+
+    min-height:100vh;
+
+    width:100%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:
+
+linear-gradient(
+    rgba(5,10,25,0.78),
+    rgba(40,0,20,0.78)
+),
+
+url("images/hub-bg.jpg");
+
+    background-size:cover;
+
+    background-position:center;
+
+}
+
+
+
+/* ===========================
+   CENTER LOGO
+=========================== */
+
+.hub-logo {
+
+    width:120px;
+
+    height:auto;
+
+    margin-bottom:25px;
+
+}
+
+
+
+
+/* WELCOME AREA */
+
+.welcome-box {
+
+    text-align:center;
+
+    max-width:600px;
+
+    padding:20px;
+
+}
+
+
+
+.welcome-box h1 {
+
+    font-size:45px;
+
+    margin-bottom:15px;
+
+}
+
+
+
+.welcome-box > p {
+
+    font-size:18px;
+
+    opacity:.85;
+
+    margin-bottom:45px;
+
+}
+
+
+
+
+
+/* BUTTON AREA */
+
+.hub-buttons {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    width: 70%;
+
+    margin: 0 auto;
+
+}
+
+
+
+/* HUB CARDS */
+
+.hub-card {
+
+    display:block;
+
+    text-decoration:none;
+
+    color:white;
+
+    padding:25px;
+
+    border-radius:25px;
+
+    background:rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(12px);
+
+    border:1px solid rgba(255,255,255,0.25);
+
+    transition:.3s;
+
+}
+
+
+
+.hub-card span {
+
+    font-size:35px;
+
+}
+
+
+
+.hub-card h2 {
+
+    margin:10px 0;
+
+    font-size:24px;
+
+}
+
+
+
+.hub-card p {
+
+    opacity:.8;
+
+    font-size:14px;
+
+}
+
+
+
+
+
+/* HOVER */
+
+.hub-card:hover {
+
+    transform:translateY(-5px);
+
+    border-color:#ff003c;
+
+}
+
+
+
+
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+
+    .hub-logo {
+
+        width:70px;
+
+        top:20px;
+
+        left:20px;
+
+    }
+
+
+
+    .welcome-box h1 {
+
+        font-size:34px;
+
+    }
+
+
+
+    .welcome-box > p {
+
+        font-size:15px;
+
+    }
+
+
+    .hub-card {
+
+        padding:20px;
+
+    }
+
+
+}
+/* ===========================
+   HUB CARD COLOR IDENTITY
+=========================== */
+
+
+.hub-card {
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+
+/* Trend Center */
+
+.hub-card.trend {
+
+    border:1px solid rgba(255,0,60,0.6);
+
+}
+
+
+
+.hub-card.trend:hover {
+
+    box-shadow:0 0 25px rgba(255,0,60,0.5);
+
+}
+
+
+
+/* Campaign Center */
+
+.hub-card.campaign {
+
+    border:1px solid rgba(80,160,255,0.6);
+
+}
+
+
+
+.hub-card.campaign:hover {
+
+    box-shadow:0 0 25px rgba(80,160,255,0.5);
+
+}
+
+
+
+.hub-card span {
+
+    display:block;
+
+    margin-bottom:8px;
+
+}
+
+/* ===========================
+   HUB FOOTER
+=========================== */
+
+
+.hub-footer {
+
+    position:absolute;
+
+    bottom:20px;
+
+    width:100%;
+
+    text-align:center;
+
+    font-size:12px;
+
+    opacity:.7;
+
+}
+
+
+
+.hub-footer a {
+
+    color:white;
+
+    text-decoration:none;
+
+    font-weight:bold;
+
+}
+
+
+
+.hub-footer a:hover {
+
+    color:#ff003c;
+
+}
+
+/* ===========================
+   HUB FINAL CENTER LAYOUT
+=========================== */
+
+.hub-page{
+
+    min-height:100vh;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    position:relative;
+
+    padding:30px 20px;
+
+    transition:background-image 1.5s ease-in-out;
+
+}
+
+
+.welcome-box{
+
+    width:100%;
+
+    max-width:500px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    text-align:center;
+
+}
+
+
+.hub-logo{
+
+    width:100px;
+
+    height:auto;
+
+    margin-bottom:20px;
+
+}
+
+
+.welcome-box h1{
+
+    font-size:38px;
+
+    margin-bottom:12px;
+
+}
+
+
+.welcome-box > p{
+
+    font-size:17px;
+
+    opacity:.85;
+
+    margin-bottom:35px;
+
+}
+
+
+/* ===========================
+   HUB BUTTONS
+=========================== */
+
+.hub-buttons{
+
+    width:85%;
+
+    max-width:360px;
+
+    margin:0 auto;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+
+}
+
+
+/* ===========================
+   HUB ACTION CARDS
+=========================== */
+
+.hub-card{
+
+    display:block;
+
+    width:100%;
+
+    text-decoration:none;
+
+    text-align:center;
+
+    color:#fff;
+
+    background:rgba(0,0,0,.35);
+
+    backdrop-filter:blur(12px);
+
+    border-radius:22px;
+
+    padding:16px 12px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+
+    transition:.3s ease;
+
+}
+
+
+.hub-card.trend{
+
+    border:2px solid rgba(255,0,60,.8);
+
+}
+
+
+.hub-card.campaign{
+
+    border:2px solid rgba(80,160,255,.8);
+
+}
+
+
+.hub-card:hover{
+
+    transform:translateY(-4px);
+
+}
+
+
+.hub-card span{
+
+    font-size:30px;
+
+}
+
+
+.hub-card h2{
+
+    margin:10px 0 5px;
+
+    font-size:21px;
+
+}
+
+
+.hub-card p{
+
+    margin:0;
+
+    font-size:13px;
+
+    opacity:.85;
+
+}
+
+
+/* ===========================
+   MOBILE
+=========================== */
+
+@media(max-width:600px){
+
+    .welcome-box h1{
+
+        font-size:30px;
+
+    }
+
+    .welcome-box > p{
+
+        font-size:15px;
+
+    }
+
+    .hub-logo{
+
+        width:85px;
+
+    }
+
+}
+
+/*Last*/
