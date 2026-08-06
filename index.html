@@ -48,6 +48,9 @@
 
 
         <!-- HUB BUTTONS -->
+<button id="notifyBtn" class="notify-btn">
+🔔 Enable WETrendingTeam Notifications
+</button>
 
         <div class="hub-buttons">
 
@@ -151,7 +154,13 @@ if ("serviceWorker" in navigator) {
 }
 </script>
 
+<script type="module">
+import { requestNotificationPermission } from "./firebase-messaging.js";
 
+document.getElementById("notifyBtn").addEventListener("click", () => {
+  requestNotificationPermission();
+});
+</script>
 </body>
 
 </html>
