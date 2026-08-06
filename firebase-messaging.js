@@ -4,7 +4,7 @@ import { app } from "./firebase-config.js";
 const messaging = getMessaging(app);
 
 export async function requestNotificationPermission() {
-
+alert("Button connected");
   const permission = await Notification.requestPermission();
 
   if (permission === "granted") {
