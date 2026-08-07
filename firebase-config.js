@@ -1,3 +1,4 @@
+alert("admin.js loaded");
 // ==========================================
 // WETrendingTeam Firebase Config
 // firebase-config.js
