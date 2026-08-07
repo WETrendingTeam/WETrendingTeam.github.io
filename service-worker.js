@@ -1,75 +1,88 @@
-const CACHE_NAME = "wetrending-v1";
+// ==========================================
+// WETrendingTeam Service Worker
+// Cache + Offline Support Only
+// ==========================================
 
-const filesToCache = [
+const CACHE_NAME = "wetrending-v2";
+
+const FILES_TO_CACHE = [
   "./",
   "./index.html",
+  "./hub.html",
   "./campaign.html",
-  "./trend.html",
   "./hub.css",
-  "./manifest.json"
+  "./manifest.json",
+  "./images/logo.png"
 ];
 
-self.addEventListener("install", event => {
+// Install
+
+self.addEventListener("install", (event) => {
+
+  self.skipWaiting();
+
   event.waitUntil(
+
     caches.open(CACHE_NAME)
-    .then(cache => cache.addAll(filesToCache))
+
+      .then((cache) => {
+
+        return cache.addAll(FILES_TO_CACHE);
+
+      })
+
   );
+
 });
 
+// Activate
 
-self.addEventListener("fetch", event => {
+self.addEventListener("activate", (event) => {
+
+  event.waitUntil(
+
+    caches.keys()
+
+      .then((keys) =>
+
+        Promise.all(
+
+          keys.map((key) => {
+
+            if (key !== CACHE_NAME) {
+
+              return caches.delete(key);
+
+            }
+
+          })
+
+        )
+
+      )
+
+  );
+
+  self.clients.claim();
+
+});
+
+// Fetch
+
+self.addEventListener("fetch", (event) => {
+
+  if (event.request.method !== "GET") return;
+
   event.respondWith(
+
     caches.match(event.request)
-    .then(response => response || fetch(event.request))
-  );
-});
 
+      .then((response) => {
 
-// Firebase Messaging
-importScripts(
-  "https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"
-);
+        return response || fetch(event.request);
 
-importScripts(
-  "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"
-);
+      })
 
-
-firebase.initializeApp({
-  apiKey: "AIzaSyDY5F84tiRyDLNPBaBGpO5giwxlJ4q27Cg",
-  authDomain: "wetrendingteam-1f8ce.firebaseapp.com",
-  projectId: "wetrendingteam-1f8ce",
-  storageBucket: "wetrendingteam-1f8ce.firebasestorage.app",
-  messagingSenderId: "1072737815830",
-  appId: "1:1072737815830:web:4fce8aa6e88680404e1437"
-});
-
-
-const messaging = firebase.messaging();
-
-
-messaging.onBackgroundMessage((payload) => {
-
-  console.log(
-    "Background message received:",
-    payload
-  );
-
-
-  const notificationTitle =
-    payload.notification.title;
-
-
-  const notificationOptions = {
-    body: payload.notification.body,
-    icon: "/images/logo.png"
-  };
-
-
-  self.registration.showNotification(
-    notificationTitle,
-    notificationOptions
   );
 
 });
-

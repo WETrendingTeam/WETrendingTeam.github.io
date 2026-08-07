@@ -52,7 +52,10 @@ messaging.onBackgroundMessage((payload) => {
     "New update available",
 
     icon:
-    "./images/logo.png"
+    "/images/logo.png",
+
+    badge:
+    "/images/logo.png"
 
   };
 
