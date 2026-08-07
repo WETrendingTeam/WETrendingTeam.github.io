@@ -11,7 +11,15 @@ import {
 
 import { app } from "./firebase-config.js";
 
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 const messaging = getMessaging(app);
+const db = getFirestore(app);
 
 export async function requestNotificationPermission() {
 
@@ -57,13 +65,39 @@ export async function requestNotificationPermission() {
 
     if (token) {
 
-      alert(
-        "Device connected to WETrendingTeam notifications."
-      );
-
       console.log(
         "FCM Token:",
         token
+      );
+
+      // Save this device's FCM token so the Admin Dashboard
+      // can target subscribed devices later.
+      try {
+
+        await addDoc(
+          collection(db, "fcmTokens"),
+          {
+            token: token,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+            platform: navigator.platform || "unknown",
+            userAgent: navigator.userAgent
+          }
+        );
+
+        console.log("FCM token saved to Firestore.");
+
+      } catch (saveError) {
+
+        console.error(
+          "FCM token was generated, but could not be saved:",
+          saveError
+        );
+
+      }
+
+      alert(
+        "Device connected to WETrendingTeam notifications."
       );
 
     } else {
