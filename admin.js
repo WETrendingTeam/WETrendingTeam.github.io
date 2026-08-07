@@ -4,178 +4,276 @@
 // Firebase Authentication Login
 // ==========================================
 
+
 import { app } from "./firebase-config.js";
 
+
 import {
+
     getAuth,
+
     signInWithEmailAndPassword,
+
     setPersistence,
+
     browserLocalPersistence,
+
     browserSessionPersistence
+
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
 
 
 const auth = getAuth(app);
 
 
+
+// Login form
+
 const loginForm = document.getElementById("loginForm");
+
+
+console.log(
+    "Login form:",
+    loginForm
+);
+
+
 
 const rememberBox = document.getElementById("remember");
 
 
-// ================================
-// ROLE SELECTOR
-// ================================
 
-let selectedRole = "developer";
+// Stop if form is missing
 
-
-const roleCards = document.querySelectorAll(".role-card");
+if (!loginForm) {
 
 
-roleCards.forEach((card) => {
+    console.error(
+        "Login form not found"
+    );
 
 
-    card.addEventListener("click", () => {
+} else {
 
 
-        roleCards.forEach((item) => {
 
-            item.classList.remove("active");
+    // ================================
+    // ROLE SELECTOR
+    // ================================
+
+
+    let selectedRole = "developer";
+
+
+
+    const roleCards =
+    document.querySelectorAll(".role-card");
+
+
+
+    roleCards.forEach((card) => {
+
+
+
+        card.addEventListener("click", () => {
+
+
+
+            roleCards.forEach((item) => {
+
+
+                item.classList.remove("active");
+
+
+            });
+
+
+
+            card.classList.add("active");
+
+
+
+            selectedRole =
+            card.dataset.role;
+
+
+
+            console.log(
+
+                "Selected role:",
+
+                selectedRole
+
+            );
+
 
         });
-
-
-        card.classList.add("active");
-
-
-        selectedRole = card.dataset.role;
-
-
-        console.log(
-            "Selected role:",
-            selectedRole
-        );
 
 
     });
 
 
-});
 
 
+    // ================================
+    // LOGIN
+    // ================================
 
-// ================================
-// LOGIN
-// ================================
 
-loginForm.addEventListener("submit", async (event) => {
 
+    loginForm.addEventListener(
 
-    event.preventDefault();
+        "submit",
 
+        async (event) => {
 
 
-    const email =
-    document.getElementById("email").value;
 
+            event.preventDefault();
 
-    const password =
-    document.getElementById("password").value;
 
 
+            const email =
 
-    try {
+            document.getElementById("email").value;
 
 
-        // Remember me option
 
-        await setPersistence(
+            const password =
 
-            auth,
+            document.getElementById("password").value;
 
-            rememberBox.checked
 
-            ? browserLocalPersistence
 
-            : browserSessionPersistence
+            console.log(
 
-        );
+                "Trying login:",
 
+                email
 
+            );
 
-        const userCredential =
-        await signInWithEmailAndPassword(
 
-            auth,
 
-            email,
+            try {
 
-            password
 
-        );
 
+                await setPersistence(
 
+                    auth,
 
-        const user =
-        userCredential.user;
+                    rememberBox && rememberBox.checked
 
+                    ? browserLocalPersistence
 
+                    : browserSessionPersistence
 
-        console.log(
-            "Logged in:",
-            user.email
-        );
+                );
 
 
 
-        // Save session temporarily
 
-        localStorage.setItem(
+                const userCredential =
 
-            "userEmail",
+                await signInWithEmailAndPassword(
 
-            user.email
+                    auth,
 
-        );
+                    email,
 
+                    password
 
-        localStorage.setItem(
+                );
 
-            "userRole",
 
-            selectedRole
 
-        );
+                const user =
 
+                userCredential.user;
 
 
-        alert(
-            "Login successful"
-        );
 
+                console.log(
 
+                    "Login success:",
 
-        window.location.href =
-        "dashboard.html";
+                    user.email
 
+                );
 
 
-    } catch(error) {
 
 
-        console.error(
-            "Login error:",
-            error
-        );
+                localStorage.setItem(
 
+                    "userEmail",
 
-        alert(
-            "Login failed: " + error.message
-        );
+                    user.email
 
+                );
 
-    }
 
 
-});
+                localStorage.setItem(
+
+                    "userRole",
+
+                    selectedRole
+
+                );
+
+
+
+
+
+                alert(
+
+                    "Login successful"
+
+                );
+
+
+
+                window.location.href =
+
+                "dashboard.html";
+
+
+
+
+            } catch(error) {
+
+
+
+                console.error(
+
+                    "Login error:",
+
+                    error
+
+                );
+
+
+
+                alert(
+
+                    "Login failed: "
+
+                    + error.message
+
+                );
+
+
+
+            }
+
+
+
+        }
+
+    );
+
+
+}
