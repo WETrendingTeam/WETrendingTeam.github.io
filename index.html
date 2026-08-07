@@ -121,19 +121,15 @@
 <script>
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js")
-  .then(() => console.log("WETrendingTeam App Ready"))
-  .catch(error => console.log("Service Worker Error:", error));
+    .then(() => console.log("WETrendingTeam App Ready"))
+    .catch(error => console.log("Service Worker Error:", error));
 }
 </script>
 
-<script type="module">
-import { requestNotificationPermission } from "./firebase-messaging.js";
-
-document.getElementById("notifyBtn").addEventListener("click", () => {
-  requestNotificationPermission();
-});
+<!-- Firebase Messaging temporarily disabled for testing -->
+<script>
+console.log("Firebase Messaging temporarily disabled.");
 </script>
+
 </body>
-
 </html>
-
