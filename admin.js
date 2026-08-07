@@ -20,9 +20,11 @@ import {
 
     browserSessionPersistence
 
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+} 
 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+alert("admin.js loaded");
 
 const auth = getAuth(app);
 
