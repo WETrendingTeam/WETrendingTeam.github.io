@@ -2,103 +2,123 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WETrendingTeam Control Center</title>
 
-    <link rel="stylesheet" href="admin.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>WETrendingTeam Control Center</title>
+
+<link rel="stylesheet" href="admin.css">
+
 </head>
+
 
 <body>
 
-    <div class="login-container">
 
-        <div class="login-card">
+<div class="login-container">
 
-            <img src="images/logo.png" alt="WETrendingTeam Logo" class="logo">
 
-            <h1>WETrendingTeam</h1>
+<div class="login-card">
 
-            <h2>Control Center</h2>
 
-            <p class="description">
-                Secure access for authorized personnel only.
-            </p>
+<img src="images/logo.png" class="logo" alt="WETrendingTeam Logo">
 
-         <div class="role-selector">
 
-    <div class="role-card active" data-role="developer">
-        <h3>Developer</h3>
-    </div>
+<h1>WETrendingTeam</h1>
 
-    <div class="role-card" data-role="admin">
-        <h3>Admin</h3>
-    </div>
+<h2>Control Center</h2>
 
-    <div class="role-card" data-role="moderator">
-        <h3>Moderator</h3>
-    </div>
+
+<p class="description">
+Secure access for authorized personnel only.
+</p>
+
+
+
+<div class="role-selector">
+
+
+<div class="role-card active" data-role="developer">
+Developer
+</div>
+
+
+<div class="role-card" data-role="admin">
+Admin
+</div>
+
+
+<div class="role-card" data-role="moderator">
+Moderator
+</div>
+
 
 </div>
 
-            <form id="loginForm">
 
-                <label for="email">Email</label>
 
-                <input
-                    type="email"
-                    id="email"
-                    placeholder="Enter your email"
-                    required>
 
-                <label for="password">Password</label>
+<form id="loginForm">
 
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Enter your password"
-                    required>
 
-                <div class="remember">
+<label>Email</label>
 
-                    <input
-                        type="checkbox"
-                        id="remember">
+<input 
+type="email"
+id="email"
+placeholder="Enter your email"
+required>
 
-                    <label for="remember">
-                        Remember me
-                    </label>
 
-                </div>
 
-                <button type="submit" id="loginBtn">
-                    Login
-                </button>
+<label>Password</label>
 
-            </form>
+<input
+type="password"
+id="password"
+placeholder="Enter your password"
+required>
 
-            <footer>
 
-                <p>Version 1.0</p>
 
-                <p class="developer">
-                    Web Developer: @mr_queen00
-                </p>
+<label class="remember">
 
-                <p>
-                    © 2026 WETrendingTeam. All rights reserved.
-                </p>
+<input type="checkbox" id="remember">
 
-            </footer>
+Remember me
 
-        </div>
+</label>
 
-     </div>
 
-<script src="./auth.js"></script>
 
-<script type="module" src="./firebase-auth.js"></script>
+<button type="submit">
+Login
+</button>
 
-</script>
+
+</form>
+
+
+
+<footer>
+
+<p>Version 1.0</p>
+
+<p>
+© 2026 WETrendingTeam
+</p>
+
+</footer>
+
+
+
+</div>
+
+
+</div>
+
+<script src="admin.js"></script>
+
 </body>
 </html>

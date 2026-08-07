@@ -538,5 +538,44 @@ url("images/hub-bg.jpg");
     }
 
 }
+/* ==========================
+   DISABLED TREND CARD
+========================== */
 
-/*Last*/
+.disabled-card{
+
+    position:relative;
+
+    pointer-events:none;
+
+    cursor:not-allowed;
+
+    opacity:.75;
+
+}
+
+.disabled-card:hover{
+
+    transform:none !important;
+
+    box-shadow:none !important;
+
+}
+
+.soon-text{
+
+    display:block;
+
+    margin-top:8px;
+
+    font-size:10px;
+
+    font-style:italic;
+
+    color:#FFD54A;
+
+    opacity:.9;
+
+    letter-spacing:.3px;
+
+}

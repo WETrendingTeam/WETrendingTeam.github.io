@@ -10,7 +10,6 @@ import {
     signInWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-
 import {
     getFirestore,
     collection,
@@ -19,28 +18,19 @@ import {
     getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-
 const auth = getAuth(app);
-
 const db = getFirestore(app);
 
-
-
 const loginForm = document.getElementById("loginForm");
-
 
 loginForm.addEventListener("submit", async function(event){
 
     event.preventDefault();
 
-
     const email = document.getElementById("email").value.trim();
-
     const password = document.getElementById("password").value;
 
-
-    try {
-
+    try{
 
         // Firebase Authentication
 
@@ -50,27 +40,20 @@ loginForm.addEventListener("submit", async function(event){
             password
         );
 
-
         const user = userCredential.user;
 
-
-
-        // Check user role in Firestore
+        // Firestore role lookup
 
         const usersRef = collection(db, "users");
-
 
         const q = query(
             usersRef,
             where("email", "==", user.email)
         );
 
-
         const snapshot = await getDocs(q);
 
-
-
-        if (snapshot.empty) {
+        if(snapshot.empty){
 
             alert("No role assigned to this account.");
 
@@ -78,10 +61,7 @@ loginForm.addEventListener("submit", async function(event){
 
         }
 
-
-
         let role = "";
-
 
         snapshot.forEach((doc)=>{
 
@@ -89,39 +69,32 @@ loginForm.addEventListener("submit", async function(event){
 
         });
 
+        // Save Login Details
 
+        localStorage.setItem(
+            "userEmail",
+            user.email
+        );
 
         localStorage.setItem(
             "userRole",
             role
         );
 
+        // Open Dashboard
 
-
-        alert(
-            "Login successful\nRole: " + role
-        );
-
-
-        console.log({
-            email: user.email,
-            role: role
-        });
-
-
-
-    } catch(error){
-
-
-        alert(
-            "Login failed: " + error.message
-        );
-
-
-        console.error(error);
-
+        window.location.href = "dashboard.html";
 
     }
 
+    catch(error){
+
+        alert(
+            "Login failed:\n" + error.message
+        );
+
+        console.error(error);
+
+    }
 
 });
