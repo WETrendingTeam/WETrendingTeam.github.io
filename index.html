@@ -1,3 +1,6 @@
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
@@ -32,7 +35,6 @@
              alt="WETrendingTeam Logo">
 
 
-
         <!-- WELCOME -->
 
         <h1>
@@ -46,48 +48,81 @@
 
 
 
+        <!-- NOTIFICATION BUTTON -->
+
+        <button id="notifyBtn" class="notify-btn">
+
+            🔔 Enable WETrendingTeam Notifications
+
+        </button>
+
+
 
         <!-- HUB BUTTONS -->
 
-<div class="hub-buttons">
-
-    <!-- CAMPAIGN CENTER -->
-
-    <a href="campaign.html" class="hub-card campaign">
-
-        <span>🎯</span>
-
-        <h2>Campaign Center</h2>
-
-        <p>
-            Join campaigns, streaming missions & more
-        </p>
-
-    </a>
-
-    <!-- TREND CENTER -->
-
-<a href="javascript:void(0)" class="hub-card trend disabled-card">
-
-    <span>📲</span>
-
-    <h2>
-        Trend Center
-    </h2>
-
-    <p>
-        Create. Generate. Amplify
-    </p>
-
-    <small class="soon-text">
-        Coming Soon
-    </small>
-
-</a>
+        <div class="hub-buttons">
 
 
-    <!-- FOOTER CREDIT -->
+            <!-- CAMPAIGN CENTER -->
 
+            <a href="campaign.html" class="hub-card campaign">
+
+                <span>
+                    🎯
+                </span>
+
+
+                <h2>
+                    Campaign Center
+                </h2>
+
+
+                <p>
+                    Join campaigns, streaming missions & more
+                </p>
+
+
+            </a>
+
+
+
+            <!-- TREND CENTER -->
+
+            <a href="javascript:void(0)" 
+               class="hub-card trend disabled-card">
+
+
+                <span>
+                    📲
+                </span>
+
+
+                <h2>
+                    Trend Center
+                </h2>
+
+
+                <p>
+                    Create. Generate. Amplify
+                </p>
+
+
+                <small class="soon-text">
+                    Coming Soon
+                </small>
+
+
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- FOOTER -->
 
     <div class="hub-footer">
 
@@ -115,28 +150,23 @@
 
 
 
-
 </div>
 
+
+
+<!-- SERVICE WORKER TEMPORARILY DISABLED -->
+
 <script>
-if ("serviceWorker" in navigator) {
 
-  navigator.serviceWorker.register("./service-worker.js")
+console.log(
+    "Service worker disabled for testing"
+);
 
-    .then(() => {
-
-      console.log("WETrendingTeam App Ready");
-
-    })
-
-    .catch((error) => {
-
-      console.log("Service Worker Error:", error);
-
-    });
-
-}
 </script>
+
+
+
+<!-- FIREBASE MESSAGING -->
 
 <script type="module">
 
@@ -150,15 +180,22 @@ const notifyBtn = document.getElementById("notifyBtn");
 
 if (notifyBtn) {
 
-  notifyBtn.addEventListener("click", () => {
 
-    requestNotificationPermission();
+    notifyBtn.addEventListener("click", () => {
 
-  });
+
+        requestNotificationPermission();
+
+
+    });
+
 
 }
 
+
 </script>
 
+
 </body>
+
 </html>
