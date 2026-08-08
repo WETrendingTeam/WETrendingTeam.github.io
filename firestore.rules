@@ -1,0 +1,73 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // =========================
+    // CHECK SIGNED-IN USER
+    // =========================
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    // =========================
+    // CHECK ADMIN ROLE
+    // =========================
+    function isAdmin() {
+      return signedIn()
+        && get(
+          /databases/$(database)/documents/users/$(request.auth.uid)
+        ).data.Role in [
+          "Developer",
+          "Admin",
+          "Moderator"
+        ];
+    }
+
+    // =========================
+    // USERS
+    // =========================
+    match /users/{userId} {
+
+      // A signed-in user can view their own profile.
+      allow read: if signedIn()
+        && request.auth.uid == userId;
+
+      // Only Developer/Admin/Moderator can modify users.
+      allow write: if isAdmin();
+    }
+
+    // =========================
+    // NOTIFICATIONS
+    // =========================
+    match /notifications/{notificationId} {
+
+      // Notifications can be read by the public.
+      allow read: if true;
+
+      // Only authorized control-center roles can create,
+      // update, or delete notifications.
+      allow write: if isAdmin();
+    }
+
+    // =========================
+    // FCM TOKENS
+    // =========================
+    match /fcmTokens/{tokenId} {
+
+      // A signed-in user can save their own FCM token.
+      allow create: if signedIn()
+        && request.resource.data.uid == request.auth.uid;
+
+      // Only authorized control-center roles can manage tokens.
+      allow read, update, delete: if isAdmin();
+    }
+
+    // =========================
+    // DENY EVERYTHING ELSE
+    // =========================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
