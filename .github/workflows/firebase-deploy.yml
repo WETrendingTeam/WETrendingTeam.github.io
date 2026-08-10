@@ -55,15 +55,13 @@ jobs:
 
 
       # ==============================
-      # 6. SET ARTIFACT CLEANUP POLICY
+      # 6. DISABLE AUTOMATIC ARTIFACT CLEANUP
       # ==============================
-      - name: Set Firebase Functions cleanup policy
+      - name: Disable Firebase artifact cleanup
         run: |
           firebase functions:artifacts:setpolicy \
             --project wetrendingteam-1f8ce \
-            --location us-central1 \
-            --days 7 \
-            --force
+            --none
 
 
       # ==============================
