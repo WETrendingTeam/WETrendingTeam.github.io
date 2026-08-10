@@ -49,13 +49,24 @@ jobs:
       # 5. INSTALL FUNCTIONS DEPENDENCIES
       # ==============================
       - name: Install Functions dependencies
+        working-directory: functions
         run: |
-          cd functions
           npm install
+          npm install firebase-functions firebase-admin --save
 
 
       # ==============================
-      # 6. DEPLOY FIREBASE
+      # 6. VERIFY FUNCTIONS DEPENDENCIES
+      # ==============================
+      - name: Verify Functions dependencies
+        working-directory: functions
+        run: |
+          npm list firebase-functions
+          npm list firebase-admin
+
+
+      # ==============================
+      # 7. DEPLOY FIREBASE
       # ==============================
       - name: Deploy Firebase
         run: |
