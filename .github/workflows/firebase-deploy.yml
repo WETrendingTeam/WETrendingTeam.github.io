@@ -64,10 +64,21 @@ jobs:
 
 
       # ==============================
-      # 7. DEPLOY FIREBASE
+      # 7. DIAGNOSE FIREBASE FUNCTIONS ACCESS
+      # ==============================
+      - name: Diagnose Firebase Functions access
+        run: |
+          firebase functions:list \
+            --project wetrendingteam-1f8ce \
+            --debug
+
+
+      # ==============================
+      # 8. DEPLOY FIREBASE
       # ==============================
       - name: Deploy Firebase
         run: |
           firebase deploy \
             --project wetrendingteam-1f8ce \
-            --only hosting,functions,firestore:rules
+            --only hosting,functions,firestore:rules \
+            --debug
