@@ -56,10 +56,14 @@ exports.sendNotification = onRequest(
       });
 
       const tokenSnap = await db.collection("fcmTokens").get();
-      const tokens = tokenSnap.docs
-        .map(d => d.data().token)
-        .filter(Boolean);
 
+const tokens = [
+  ...new Set(
+    tokenSnap.docs
+      .map(d => d.data().token)
+      .filter(Boolean)
+  )
+];
       let sent = 0;
       let failed = 0;
 
