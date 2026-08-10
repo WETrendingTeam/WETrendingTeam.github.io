@@ -1,143 +1,388 @@
 // ==========================================
 // WETrendingTeam Notifications
 // firebase-messaging.js
+// PRODUCTION FCM VERSION
 // ==========================================
 
 import {
-    getMessaging,
-    getToken,
-    onMessage
+ getMessaging,
+ getToken,
+ onMessage
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
 
-import { app } from "./firebase-config.js";
+import {
+ app,
+ db
+} from "./firebase-config.js";
 
 import {
-    getAuth,
-    signInAnonymously
+ getAuth,
+ signInAnonymously
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
-    getFirestore,
-    doc,
-    setDoc,
-    serverTimestamp
+ doc,
+ setDoc,
+ serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+
+// ==========================================
+// FIREBASE SERVICES
+// ==========================================
+
 const messaging = getMessaging(app);
+
 const auth = getAuth(app);
-const db = getFirestore(app);
+
+
+// ==========================================
+// FCM VAPID KEY
+// ==========================================
 
 const VAPID_KEY =
-    "BAw-ZA0fgoyK9bcUVcbZOeI_0oRNJZBtSkxRcPDJGba3nXRdo27FV4L0qHTZd_K7z_RE3qCToyK34gwMivNNBdE";
+ "BAw-ZA0fgoyK9bcUVcbZOeI_0oRNJZBtSkxRcPDJGba3nXRdo27FV4L0qHTZd_K7z_RE3qCToyK34gwMivNNBdE";
 
+
+// ==========================================
+// CHECK NOTIFICATION STATUS
+// ==========================================
 
 export async function checkPushStatus() {
-    if (!("Notification" in window)) return "unsupported";
-    return Notification.permission;
+
+ if (!("Notification" in window)) {
+ return "unsupported";
+ }
+
+ return Notification.permission;
 }
+
+
+// ==========================================
+// REQUEST NOTIFICATION PERMISSION
+// ==========================================
 
 export async function requestNotificationPermission() {
 
-    try {
+ try {
 
-        if (!("Notification" in window)) {
-            alert("This browser/device does not support notifications.");
-            return false;
-        }
+ // ------------------------------------------
+ // CHECK NOTIFICATION SUPPORT
+ // ------------------------------------------
 
-        if (!("serviceWorker" in navigator)) {
-            alert("This browser does not support service workers.");
-            return false;
-        }
+ if (!("Notification" in window)) {
 
-        const permission = await Notification.requestPermission();
+ alert(
+ "This browser/device does not support notifications."
+ );
 
-        if (permission !== "granted") {
-            alert("Notification permission was not granted.");
-            return false;
-        }
+ return false;
+ }
 
-        // The Firestore rules require an authenticated UID for token creation.
-        // Anonymous Auth lets normal Hub visitors subscribe without a login form.
-        if (!auth.currentUser) {
-            await signInAnonymously(auth);
-        }
 
-        const user = auth.currentUser;
+ // ------------------------------------------
+ // CHECK SERVICE WORKER SUPPORT
+ // ------------------------------------------
 
-        if (!user) {
-            throw new Error("Firebase could not create a subscriber identity.");
-        }
+ if (!("serviceWorker" in navigator)) {
 
-        const registration =
-            await navigator.serviceWorker.register(
-                "./firebase-messaging-sw.js",
-                { scope: "./" }
-            );
+ alert(
+ "This browser does not support service workers."
+ );
 
-        await navigator.serviceWorker.ready;
+ return false;
+ }
 
-        const token = await getToken(messaging, {
-            vapidKey: VAPID_KEY,
-            serviceWorkerRegistration: registration
-        });
 
-        if (!token) {
-            throw new Error("No Firebase Cloud Messaging token was returned.");
-        }
+ // ------------------------------------------
+ // REQUEST NOTIFICATION PERMISSION
+ // ------------------------------------------
 
-        console.log("FCM Token:", token);
+ let permission = Notification.permission;
 
-        await setDoc(
-            doc(db, "fcmTokens", token),
-            {
-                token,
-                uid: user.uid,
-                updatedAt: serverTimestamp(),
-                platform: navigator.platform || "unknown",
-                userAgent: navigator.userAgent
-            },
-            { merge: true }
-        );
+ if (permission !== "granted") {
 
-        console.log("FCM token saved to Firestore.");
+ permission =
+ await Notification.requestPermission();
+ }
 
-        alert("✅ WETrendingTeam notifications are now enabled on this device.");
-        return true;
 
-    } catch (error) {
+ if (permission !== "granted") {
 
-        console.error("Firebase Messaging Error:", error);
+ alert(
+ "Notification permission was not granted."
+ );
 
-        if (error?.code === "auth/operation-not-allowed") {
-            alert("Firebase Anonymous Authentication is not enabled yet. Enable Anonymous sign-in in Firebase Authentication, then try again.");
-        } else {
-            alert("Firebase notification error: " + error.message);
-        }
+ return false;
+ }
 
-        return false;
-    }
+
+ console.log(
+ "Notification permission granted."
+ );
+
+
+ // ------------------------------------------
+ // ANONYMOUS FIREBASE AUTHENTICATION
+ // ------------------------------------------
+
+ if (!auth.currentUser) {
+
+ await signInAnonymously(auth);
+ }
+
+
+ const user = auth.currentUser;
+
+
+ if (!user) {
+
+ throw new Error(
+ "Firebase could not create a subscriber identity."
+ );
+ }
+
+
+ console.log(
+ "Anonymous Firebase user:",
+ user.uid
+ );
+
+
+ // ------------------------------------------
+ // REGISTER FCM SERVICE WORKER
+ // ------------------------------------------
+
+ const registration =
+ await navigator.serviceWorker.register(
+ "./firebase-messaging-sw.js",
+ {
+ scope: "./"
+ }
+ );
+
+
+ console.log(
+ "WETrendingTeam FCM Service Worker registered.",
+ registration
+ );
+
+
+ // ------------------------------------------
+ // WAIT FOR SERVICE WORKER
+ // ------------------------------------------
+
+ await navigator.serviceWorker.ready;
+
+
+ console.log(
+ "WETrendingTeam FCM Service Worker ready."
+ );
+
+
+ // ------------------------------------------
+ // GET FCM TOKEN
+ // ------------------------------------------
+
+ const token =
+ await getToken(
+ messaging,
+ {
+ vapidKey: VAPID_KEY,
+ serviceWorkerRegistration:
+ registration
+ }
+ );
+
+
+ if (!token) {
+
+ throw new Error(
+ "Firebase did not return an FCM registration token."
+ );
+ }
+
+
+ // ------------------------------------------
+ // SHOW TOKEN IN CONSOLE
+ // ------------------------------------------
+
+ console.log(
+ "FCM Token:",
+ token
+ );
+
+
+ // ------------------------------------------
+ // SAVE TOKEN TO FIRESTORE
+ // ------------------------------------------
+
+ await setDoc(
+
+ doc(
+ db,
+ "fcmTokens",
+ token
+ ),
+
+ {
+ token: token,
+
+ uid: user.uid,
+
+ updatedAt:
+ serverTimestamp(),
+
+ platform:
+ navigator.platform ||
+ "unknown",
+
+ userAgent:
+ navigator.userAgent
+ },
+
+ {
+ merge: true
+ }
+ );
+
+
+ console.log(
+ "FCM token successfully saved to Firestore."
+ );
+
+
+ // ------------------------------------------
+ // SUCCESS
+ // ------------------------------------------
+
+ alert(
+ "WETrendingTeam notifications are now enabled on this device."
+ );
+
+
+ return true;
+
+
+ } catch (error) {
+
+ console.error(
+ "Firebase Messaging Error:",
+ error
+ );
+
+
+ // ------------------------------------------
+ // AUTHENTICATION ERROR
+ // ------------------------------------------
+
+ if (
+ error?.code ===
+ "auth/operation-not-allowed"
+ ) {
+
+ alert(
+ "Anonymous Authentication is not enabled in Firebase. Enable Anonymous sign-in in Firebase Authentication, then try again."
+ );
+
+ }
+
+
+ // ------------------------------------------
+ // NOTIFICATION BLOCKED
+ // ------------------------------------------
+
+ else if (
+ error?.code ===
+ "messaging/permission-blocked"
+ ) {
+
+ alert(
+ "Notifications are blocked for this site. Please allow notifications in your browser settings."
+ );
+
+ }
+
+
+ // ------------------------------------------
+ // TOKEN ERROR
+ // ------------------------------------------
+
+ else if (
+ error?.code ===
+ "messaging/token-subscribe-failed"
+ ) {
+
+ alert(
+ "Firebase could not register this device for notifications. Check the FCM configuration and try again."
+ );
+
+ }
+
+
+ // ------------------------------------------
+ // GENERAL ERROR
+ // ------------------------------------------
+
+ else {
+
+ alert(
+ "Firebase notification error: " +
+ (
+ error?.message ||
+ "Unknown error."
+ )
+ );
+ }
+
+
+ return false;
+ }
 }
 
-// Receive notifications while the Hub is open.
-onMessage(messaging, (payload) => {
 
-    console.log("Foreground notification:", payload);
+// ==========================================
+// FOREGROUND NOTIFICATIONS
+// ==========================================
 
-    const title =
-        payload.notification?.title ||
-        payload.data?.title ||
-        "WETrendingTeam";
+onMessage(
+ messaging,
+ (payload) => {
 
-    const body =
-        payload.notification?.body ||
-        payload.data?.body ||
-        "New notification from WETrendingTeam.";
+ console.log(
+ "Foreground notification received:",
+ payload
+ );
 
-    if (Notification.permission === "granted") {
-        new Notification(title, {
-            body,
-            icon: "./images/logo.png"
-        });
-    }
-});
+
+ const title =
+ payload.notification?.title ||
+ payload.data?.title ||
+ "WETrendingTeam";
+
+
+ const body =
+ payload.notification?.body ||
+ payload.data?.body ||
+ "New notification from WETrendingTeam.";
+
+
+ // ------------------------------------------
+ // SHOW FOREGROUND NOTIFICATION
+ // ------------------------------------------
+
+ if (
+ "Notification" in window &&
+ Notification.permission === "granted"
+ ) {
+
+ new Notification(
+ title,
+ {
+ body: body,
+ icon: "./images/logo.png"
+ }
+ );
+ }
+ }
+);
