@@ -21,12 +21,12 @@ jobs:
 
 
       # ==============================
-      # 2. SETUP NODE.JS
+      # 2. SETUP NODE.JS 22
       # ==============================
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
 
       # ==============================
@@ -50,9 +50,7 @@ jobs:
       # ==============================
       - name: Install Functions dependencies
         working-directory: functions
-        run: |
-          npm install
-          npm install firebase-functions firebase-admin --save
+        run: npm install
 
 
       # ==============================
