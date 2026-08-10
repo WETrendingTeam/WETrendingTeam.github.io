@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+
   workflow_dispatch:
 
 jobs:
@@ -11,22 +12,51 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      # ==============================
+      # 1. CHECKOUT PROJECT
+      # ==============================
       - name: Checkout
         uses: actions/checkout@v4
 
+
+      # ==============================
+      # 2. SETUP NODE.JS
+      # ==============================
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
+
+      # ==============================
+      # 3. AUTHENTICATE GOOGLE CLOUD
+      # ==============================
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
           credentials_json: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
 
+
+      # ==============================
+      # 4. INSTALL FIREBASE CLI
+      # ==============================
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
 
+
+      # ==============================
+      # 5. INSTALL FUNCTIONS DEPENDENCIES
+      # ==============================
+      - name: Install Functions dependencies
+        run: |
+          cd functions
+          npm install
+
+
+      # ==============================
+      # 6. DEPLOY FIREBASE
+      # ==============================
       - name: Deploy Firebase
         run: |
           firebase deploy \
