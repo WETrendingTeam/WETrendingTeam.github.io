@@ -1,0 +1,18 @@
+{
+  "name": "WETrending SPACE",
+  "short_name": "WETrending",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f1f5f9",
+  "theme_color": "#2563eb",
+  "description": "WETrending campaign and social posting toolkit.",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/4730/4730509.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
