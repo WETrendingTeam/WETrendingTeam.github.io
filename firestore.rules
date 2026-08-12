@@ -8,13 +8,11 @@ service cloud.firestore {
     }
 
     function isControl() {
-      return signedIn() &&
-        request.auth.token.email == "lade.galleria@gmail.com";
+      return signedIn() && request.auth.token.email == "lade.galleria@gmail.com";
     }
 
     function isAdmin() {
-      return signedIn() &&
-        request.auth.token.email == "wetrendingteam@gmail.com";
+      return signedIn() && request.auth.token.email == "wetrendingteam@gmail.com";
     }
 
     function isManagement() {
@@ -31,14 +29,14 @@ service cloud.firestore {
     }
 
     match /notifications/{notificationId} {
-      allow read: if isAdmin() || isControl();
+      allow read: if isManagement();
       allow write: if isAdmin();
     }
 
     match /fcmTokens/{tokenId} {
       allow create: if signedIn() &&
         request.resource.data.uid == request.auth.uid;
-      allow read, update, delete: if isAdmin() || isControl();
+      allow read, update, delete: if isManagement();
     }
 
     match /campaigns/{campaignId} {
