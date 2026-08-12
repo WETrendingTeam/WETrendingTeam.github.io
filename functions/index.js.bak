@@ -7,7 +7,7 @@ const { getMessaging } = require("firebase-admin/messaging");
 initializeApp();
 const db = getFirestore();
 
-const APP_BASE_URL = "https://wetrendingteam.github.io";
+const APP_BASE_URL = "https://comfy-starburst-5f9eb9.netlify.app";
 
 const AUTHORIZED_SENDERS = new Set([
   "wetrendingteam@gmail.com",
@@ -78,24 +78,10 @@ exports.sendNotification = onRequest(
         });
       }
 
-      // Create the history record BEFORE delivery. This guarantees that a
-      // successful send is recorded even if the function is interrupted after
-      // FCM accepts the message. The document is updated with delivery totals
-      // when the send finishes.
+      // Reserve the ID before sending so the same ID can be included in the
+      // FCM data payload. The history document is written only after at least
+      // one device is successfully sent the notification.
       const notificationRef = db.collection("notifications").doc();
-      await notificationRef.set({
-        title,
-        message,
-        type,
-        campaignName: campaignName || null,
-        url,
-        sender: decoded.email || decoded.uid,
-        sent: 0,
-        failed: 0,
-        recipientCount: tokens.length,
-        status: "sending",
-        createdAt: FieldValue.serverTimestamp()
-      });
 
       let sent = 0;
       let failed = 0;
@@ -120,12 +106,24 @@ exports.sendNotification = onRequest(
         failed += response.failureCount;
       }
 
-      await notificationRef.update({
-        sent,
-        failed,
-        status: sent > 0 ? (failed > 0 ? "partial" : "sent") : "failed",
-        completedAt: FieldValue.serverTimestamp()
-      });
+      // Count a notification only when at least one subscribed device was
+      // successfully reached. This makes the dashboard's live count match
+      // real successful send actions instead of failed/empty attempts.
+      if (sent > 0) {
+        await notificationRef.set({
+          title,
+          message,
+          type,
+          campaignName: campaignName || null,
+          url,
+          sender: decoded.email || decoded.uid,
+          sent,
+          failed,
+          recipientCount: tokens.length,
+          status: "sent",
+          createdAt: FieldValue.serverTimestamp()
+        });
+      }
 
       return res.status(200).json({
         sent,
