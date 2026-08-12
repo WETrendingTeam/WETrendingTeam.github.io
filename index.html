@@ -15,15 +15,13 @@
     <button id="hubMenuBtn" class="hub-menu-btn" type="button" aria-label="Open menu" aria-expanded="false">☰</button>
     <nav id="hubMenu" class="hub-menu" aria-hidden="true">
         <a href="index.html">🏠 Home</a>
-        <a href="campaign.html">🎯 Campaign Center</a>
-        <button type="button" class="menu-trend-link" id="menuTrendBtn">📲 Trend Center</button>
         <div class="management-menu">
             <button type="button" class="management-toggle" id="managementToggle" aria-expanded="false">
                 ⚙️ Management <span id="managementArrow">▾</span>
             </button>
             <div class="management-submenu" id="managementSubmenu">
-                <a href="control-center.html">⚙️ Control Center &amp; Updates</a>
-                <a href="admin.html">🔔 Admin Login</a>
+                <a href="control-center.html">⚙️ Control Center</a>
+                <a href="admin.html">🔔 Admin Center</a>
             </div>
         </div>
     </nav>
@@ -44,7 +42,6 @@
                 <span>🎯</span>
                 <h2>Campaign Center</h2>
                 <p>Join campaigns, streaming missions &amp; more</p>
-                <small class="card-action">Open Campaign Center</small>
             </a>
 
             <button type="button" class="hub-card trend" id="trendCenterBtn"
@@ -52,7 +49,6 @@
                 <span>📲</span>
                 <h2>Trend Center</h2>
                 <p>Create. Generate. Amplify</p>
-                <small class="card-action">Open Trend Center</small>
             </button>
         </div>
     </div>
@@ -104,10 +100,7 @@ notifyBtn?.addEventListener("click", () => requestNotificationPermission());
     const managementToggle = document.getElementById("managementToggle");
     const submenu = document.getElementById("managementSubmenu");
     const arrow = document.getElementById("managementArrow");
-    const trendButtons = [
-        document.getElementById("trendCenterBtn"),
-        document.getElementById("menuTrendBtn")
-    ];
+    const trendButtons = [document.getElementById("trendCenterBtn")];
     const modal = document.getElementById("trendDestinationModal");
     const closeBtn = document.getElementById("closeTrendModal");
 

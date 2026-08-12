@@ -47,13 +47,6 @@ messaging.onBackgroundMessage((payload) => {
   payload
  );
 
- // If a server ever sends a notification payload, Firebase's web SDK can
- // display it automatically while the page is in the background. Do NOT call
- // showNotification() again in that case or the user can receive it twice.
- if (payload.notification) {
-  return;
- }
-
  const data = payload.data || {};
  const title = data.title || "WETrendingTeam";
  const body = data.body || "You have a new notification from WETrendingTeam.";

@@ -39,7 +39,13 @@ onAuthStateChanged(auth, (user) => {
       const message = document.createElement("p");
       message.textContent = data.message || "";
 
-      card.append(title, message);
+      const meta = document.createElement("small");
+      const kind = data.type ? String(data.type).toUpperCase() : "GENERAL";
+      const sent = Number(data.sent || 0);
+      const failed = Number(data.failed || 0);
+      meta.textContent = `${kind} • ${sent} delivered${failed ? ` • ${failed} failed` : ""}`;
+
+      card.append(title, message, meta);
       list.appendChild(card);
     });
   }, (error) => {
