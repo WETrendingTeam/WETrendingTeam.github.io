@@ -3828,3 +3828,32 @@ MISSION HUB
     font-size:11px;
     font-weight:700;
 }
+/* ==========================
+   X / TWITTER MISSION CARD
+========================== */
+
+.mission-card.x {
+    background: #000000;
+    color: #ffffff;
+}
+
+.mission-card.x i {
+    color: #ffffff;
+}
+
+.mission-card.x h3 {
+    color: #ffffff;
+}
+
+.mission-card.x span {
+    color: #ffffff;
+}
+
+.mission-card.x .go-btn {
+    background: #ffffff;
+    color: #111827;
+}
+
+.mission-card.x:hover {
+    background: #111111;
+}
