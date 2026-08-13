@@ -458,11 +458,13 @@ messageInput.value = "";
 // SHOW FAILURE INFORMATION
 // --------------------------------------
 
-if (failed > 0) {
+const targeted = Number(result.targeted || sent + failed);
+const removed = Number(result.removed || 0);
 
-status(
-`⚠️ Sent to ${sent} subscriber(s). ${failed} device(s) failed.`
-);
+if (failed > 0 || removed > 0) {
+  status(
+    `⚠️ Targeted ${targeted}. Sent to ${sent}. ${failed} failed. ${removed} stale subscription(s) removed.`
+  );
 }
 
 

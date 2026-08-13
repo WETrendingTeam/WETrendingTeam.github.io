@@ -28,8 +28,20 @@ service cloud.firestore {
     }
 
     match /fcmTokens/{tokenId} {
-      allow create: if signedIn() && request.resource.data.uid == request.auth.uid;
-      allow read, update, delete: if isAdmin() || isControl();
+      // A signed-in device may create its own token record.
+      allow create: if signedIn()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.token == tokenId;
+
+      // A returning device may refresh its own token metadata/subscription.
+      // Management can still read/update/delete subscriber records.
+      allow update: if isManagement()
+        || (signedIn()
+          && resource.data.uid == request.auth.uid
+          && request.resource.data.uid == request.auth.uid
+          && request.resource.data.token == tokenId);
+
+      allow read, delete: if isAdmin() || isControl();
     }
 
     match /campaigns/{campaignId} {

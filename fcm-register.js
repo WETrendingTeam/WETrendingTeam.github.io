@@ -1,15 +1,24 @@
-// FCM status for the Control Center notifications page.
+// WETrendingTeam — FCM status helper
 const statusEl = document.getElementById("fcmStatus");
 
-function render(message) { if (statusEl) statusEl.innerHTML = `<p>${message}</p>`; }
+function render(message) {
+  if (statusEl) statusEl.innerHTML = `<p>${message}</p>`;
+}
 
 export async function showFCMReadyStatus() {
   try {
-    if (!("Notification" in window)) return render("⚠️ This browser does not expose notification support.");
-    const permission = Notification.permission;
-    if (permission === "granted") return render("✅ Push notification permission is enabled on this device.");
-    if (permission === "denied") return render("⚠️ Push notifications are blocked for this site. Enable them in browser/site settings.");
-    return render("🔔 Push permission has not been granted on this device yet.");
+    if (!("Notification" in window)) {
+      render("⚠️ This browser does not support notifications.");
+      return;
+    }
+
+    if (Notification.permission === "granted") {
+      render("✅ Push notifications are enabled on this device.");
+    } else if (Notification.permission === "denied") {
+      render("⚠️ Push notifications are blocked for this site.");
+    } else {
+      render("🔔 Push notifications have not been enabled yet.");
+    }
   } catch (error) {
     console.error("FCM status error:", error);
     render("⚠️ Unable to check push notification status.");
