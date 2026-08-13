@@ -9,9 +9,14 @@ const db = getFirestore(app);
 function liveCount(name, id) {
   const el = document.getElementById(id);
   if (!el) return;
-  onSnapshot(collection(db, name),
+
+  onSnapshot(
+    collection(db, name),
     snap => el.textContent = String(snap.size),
-    err => { console.warn(err); el.textContent = "—"; }
+    err => {
+      console.warn(`Could not load ${name}:`, err);
+      el.textContent = "—";
+    }
   );
 }
 
@@ -21,8 +26,17 @@ onAuthStateChanged(auth, (user) => {
     return;
   }
 
-  liveCount("users", "adminUsersCount");
+  // Real Firebase values — never hard-coded.
+  liveCount("fcmTokens", "adminUsersCount");
   liveCount("notifications", "adminNotificationCount");
+});
+
+document.getElementById("adminBackBtn")?.addEventListener("click", () => {
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    window.location.replace("admin.html");
+  }
 });
 
 document.getElementById("adminLogoutBtn")?.addEventListener("click", async () => {

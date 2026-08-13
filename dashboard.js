@@ -9,10 +9,14 @@ const db = getFirestore(app);
 function liveCount(collectionName, elementId) {
   const element = document.getElementById(elementId);
   if (!element) return;
-  onSnapshot(collection(db, collectionName),
-    snap => element.textContent = String(snap.size),
-    error => {
-      console.warn(`Could not load ${collectionName}:`, error.message);
+
+  onSnapshot(
+    collection(db, collectionName),
+    (snapshot) => {
+      element.textContent = String(snapshot.size);
+    },
+    (error) => {
+      console.warn(`Could not load ${collectionName}:`, error);
       element.textContent = "—";
     }
   );
@@ -30,17 +34,28 @@ onAuthStateChanged(auth, (user) => {
   const roleEl = document.getElementById("userRole");
   if (roleEl) roleEl.textContent = "Control Center";
 
-  const welcome = document.querySelector(".welcome h1");
-  if (welcome) welcome.textContent = "Welcome Back 👋";
+  // Live Firebase values — no prototype numbers.
+  // Each fcmTokens document represents a registered notification subscription/device token.
+  liveCount("fcmTokens", "usersCount");
 
-  liveCount("users", "usersCount");
-  liveCount("campaigns", "campaignCount");
+  // Each notifications document represents a notification recorded by the Admin send system.
   liveCount("notifications", "notificationCount");
+
+  liveCount("campaigns", "campaignCount");
   liveCount("trendRequests", "trendCount");
+});
+
+document.getElementById("backBtn")?.addEventListener("click", () => {
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    window.location.replace("control-center.html");
+  }
 });
 
 document.getElementById("logoutBtn")?.addEventListener("click", async () => {
   if (!confirm("Logout from Control Center?")) return;
+
   await signOut(auth);
   localStorage.removeItem("userEmail");
   localStorage.removeItem("userRole");
