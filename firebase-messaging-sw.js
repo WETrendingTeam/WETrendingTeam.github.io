@@ -38,35 +38,49 @@ const messaging = firebase.messaging();
 // BACKGROUND NOTIFICATIONS
 // ==========================================
 
-// The server sends DATA-ONLY FCM messages. This handler is the single place
-// that displays a background notification, preventing duplicate notifications.
 messaging.onBackgroundMessage((payload) => {
 
  console.log(
-  "[firebase-messaging-sw.js] Background message:",
-  payload
+ "[firebase-messaging-sw.js] Background message:",
+ payload
  );
 
- // If a server ever sends a notification payload, Firebase's web SDK can
- // display it automatically while the page is in the background. Do NOT call
- // showNotification() again in that case or the user can receive it twice.
- if (payload.notification) {
-  return;
+ const notification =
+ payload.notification || {};
+
+ const data =
+ payload.data || {};
+
+ const title =
+ notification.title ||
+ data.title ||
+ "WETrendingTeam";
+
+ const body =
+ notification.body ||
+ data.body ||
+ "You have a new notification from WETrendingTeam.";
+
+ const icon =
+ notification.icon ||
+ data.icon ||
+ "/images/logo.png";
+
+
+ self.registration.showNotification(
+ title,
+ {
+ body: body,
+ icon: icon,
+ badge: icon,
+ data: {
+ url:
+ data.url ||
+ "/"
  }
+ }
+ );
 
- const data = payload.data || {};
- const title = data.title || "WETrendingTeam";
- const body = data.body || "You have a new notification from WETrendingTeam.";
- const icon = data.icon || "/images/logo.png";
-
- return self.registration.showNotification(title, {
-  body,
-  icon,
-  badge: icon,
-  data: {
-   url: data.url || "/"
-  }
- });
 });
 
 

@@ -10,39 +10,41 @@
 <div class="dashboard">
 <header class="topbar">
   <div class="brand">
-    <img src="images/logo.png" alt="WETrendingTeam Logo">
-    <div><h2>WETrendingTeam</h2><p>Admin Panel</p></div>
+    <img src="images/logo.png" alt="Logo">
+    <div>
+      <h2>WETrendingTeam</h2>
+      <p>Admin Panel</p>
+    </div>
   </div>
   <div class="user-info">
     <span>Admin</span>
-    <a class="home-dashboard-btn" href="index.html">Home</a>
     <button id="adminLogoutBtn">Logout</button>
   </div>
 </header>
 
 <section class="welcome">
-  <h1>Admin Panel</h1>
-  <p>Notifications, campaigns and community monitoring.</p>
+  <h1>Admin Panel 🔔</h1>
+  <p>Notifications and basic moderation.</p>
 </section>
 
 <section class="stats">
-  <div class="stat-card"><h3>Subscribers</h3><h2 id="adminSubscriberCount">0</h2><small>registered notification devices</small></div>
-  <div class="stat-card"><h3>Total Users</h3><h2 id="adminUsersCount">0</h2><small>community profiles</small></div>
-  <div class="stat-card"><h3>Campaigns</h3><h2 id="adminCampaignCount">0</h2><small>campaign records</small></div>
-  <div class="stat-card"><h3>Notifications Sent</h3><h2 id="adminNotificationCount">0</h2><small>notification history</small></div>
-  <div class="stat-card"><h3>Trend Requests</h3><h2 id="adminTrendCount">0</h2><small>submitted requests</small></div>
+  <div class="stat-card"><h3>Total Users</h3><h2 id="adminUsersCount">0</h2></div>
+  <div class="stat-card"><h3>Notifications</h3><h2 id="adminNotificationCount">0</h2></div>
 </section>
 
 <section class="actions">
   <h2>Admin Actions</h2>
   <div class="action-grid">
-    <a href="send-notification.html" class="action-card send-card">🔔<span>Send Notification</span><small>General · Campaign · Intent Link</small></a>
-    <a href="notifications.html" class="action-card">📢<span>Notification History</span><small>View sent notifications</small></a>
-    <a href="campaign.html" class="action-card">🎯<span>Campaign Center</span><small>Open campaign center</small></a>
-    <a href="index.html" class="action-card">🏠<span>Public Hub</span><small>Return to website</small></a>
+    <a href="send-notification.html" class="action-card">
+      🔔 <span>Send Notification</span>
+    </a>
+    <a href="notifications.html" class="action-card">
+      📢 <span>Notification History</span>
+    </a>
   </div>
 </section>
 </div>
+
 <script type="module" src="admin-dashboard.js"></script>
 </body>
 </html>

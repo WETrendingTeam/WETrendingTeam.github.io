@@ -3,11 +3,12 @@
 // Cache + Offline Support Only
 // ==========================================
 
-const CACHE_NAME = "wetrending-v3-final";
+const CACHE_NAME = "wetrending-v2";
 
 const FILES_TO_CACHE = [
   "./",
   "./index.html",
+  "./hub.html",
   "./campaign.html",
   "./hub.css",
   "./manifest.json",

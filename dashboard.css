@@ -820,28 +820,3 @@ body {
     }
 
 }
-/* FINAL CONTROL CENTER UPDATES */
-.home-dashboard-btn{
-    display:inline-flex;align-items:center;justify-content:center;
-    padding:9px 14px;border-radius:10px;text-decoration:none;
-    background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.15);
-    font-size:13px;font-weight:600;
-}
-.stats{grid-template-columns:repeat(5,1fr);}
-.stat-card small{display:block;margin-top:9px;color:#9fb0ca;font-size:11px;line-height:1.35;}
-.action-grid{grid-template-columns:repeat(5,1fr);}
-.action-card small{color:#aebbd0;font-size:11px;line-height:1.35;}
-.send-card{border-color:rgba(255,90,120,.45);}
-@media(max-width:1100px){
- .stats,.action-grid{grid-template-columns:repeat(3,1fr);}
-}
-@media(max-width:700px){
- .topbar{flex-wrap:wrap;}
- .user-info{flex-direction:row;flex-wrap:wrap;}
- .stats,.action-grid{grid-template-columns:repeat(2,1fr);}
-}
-@media(max-width:480px){
- .dashboard{padding:18px 14px 50px;}
- .stats,.action-grid{grid-template-columns:1fr;}
- .welcome h1{font-size:27px;}
-}

@@ -1,111 +1,495 @@
-import { app, db } from "./firebase-config.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+// ==========================================
+// WETrendingTeam
+// send-notification.js
+// ONE-CLICK BROADCAST TO ALL SUBSCRIBERS
+// ==========================================
 
-const CONTROL_EMAIL = "lade.galleria@gmail.com";
-const ADMIN_EMAIL = "wetrendingteam@gmail.com";
-const SEND_NOTIFICATION_URL = "https://us-central1-wetrendingteam-1f8ce.cloudfunctions.net/sendNotification";
+import { app } from "./firebase-config.js";
+
+import {
+getAuth,
+onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+
+// ==========================================
+// ADMIN CONFIGURATION
+// ==========================================
+
+const ADMIN_EMAIL =
+"wetrendingteam@gmail.com";
+
+
+// ==========================================
+// CLOUD FUNCTION URL
+// ==========================================
+//
+// IMPORTANT:
+// After deploying your Firebase Cloud Function,
+// replace the URL below with the actual URL
+// Firebase gives you.
+//
+// Example:
+// https://us-central1-YOUR_PROJECT_ID.cloudfunctions.net/sendNotification
+//
+// ==========================================
+
+const SEND_NOTIFICATION_URL =
+"https://us-central1-wetrendingteam-1f8ce.cloudfunctions.net/sendNotification";
+
+
+// ==========================================
+// FIREBASE AUTH
+// ==========================================
 
 const auth = getAuth(app);
-const typeInput = document.getElementById("notificationType");
-const campaignFields = document.getElementById("campaignFields");
-const intentFields = document.getElementById("intentFields");
-const titleInput = document.getElementById("notificationTitle");
-const messageInput = document.getElementById("notificationMessage");
-const campaignInput = document.getElementById("campaignName");
-const intentInput = document.getElementById("intentUrl");
-const sendButton = document.getElementById("sendNotificationBtn");
-const statusBox = document.getElementById("sendStatus");
+
+
+// ==========================================
+// PAGE ELEMENTS
+// ==========================================
+
+const audienceInput =
+document.getElementById(
+"notificationAudience"
+);
+
+const titleInput =
+document.getElementById(
+"notificationTitle"
+);
+
+const messageInput =
+document.getElementById(
+"notificationMessage"
+);
+
+const sendButton =
+document.getElementById(
+"sendNotificationBtn"
+);
+
+const urlInput =
+document.getElementById(
+"notificationUrl"
+);
+
+const urlHelp =
+document.getElementById(
+"notificationUrlHelp"
+);
+
+const statusBox =
+document.getElementById(
+"sendStatus"
+);
+
+
+// ==========================================
+// AUDIENCE UI
+// ==========================================
+
+function updateAudienceUI() {
+
+const audience =
+audienceInput?.value || "team";
+
+if (!urlInput) return;
+
+if (audience === "space") {
+
+urlInput.placeholder =
+"Paste the exact Intent Link";
+
+if (urlHelp) {
+urlHelp.textContent =
+"Required for SPACE: tapping the notification opens this exact Intent Link.";
+}
+
+} else {
+
+urlInput.placeholder =
+"Optional destination URL";
+
+if (urlHelp) {
+urlHelp.textContent =
+"Optional. Leave blank for a normal WETrendingTeam notification.";
+}
+}
+}
+
+audienceInput?.addEventListener(
+"change",
+updateAudienceUI
+);
+
+updateAudienceUI();
+
+
+// ==========================================
+// STATE
+// ==========================================
 
 let currentUser = null;
+
 let authorized = false;
 
-function status(message, error=false) {
-  if (statusBox) {
-    statusBox.textContent = message;
-    statusBox.classList.toggle("error", error);
-  }
+
+// ==========================================
+// STATUS DISPLAY
+// ==========================================
+
+function status(message) {
+
+if (statusBox) {
+statusBox.textContent = message;
+}
 }
 
-function renderTypeFields() {
-  const type = typeInput?.value || "general";
-  if (campaignFields) campaignFields.hidden = type !== "campaign";
-  if (intentFields) intentFields.hidden = type !== "intent";
+
+// ==========================================
+// CHECK ADMIN LOGIN
+// ==========================================
+
+onAuthStateChanged(
+auth,
+(user) => {
+
+currentUser = user;
+
+
+// --------------------------------------
+// NOT LOGGED IN
+// --------------------------------------
+
+if (!user) {
+
+authorized = false;
+
+if (sendButton) {
+sendButton.disabled = true;
 }
-typeInput?.addEventListener("change", renderTypeFields);
-renderTypeFields();
 
-onSnapshot(collection(db, "fcmTokens"), snap => {
-  const el = document.getElementById("subscriberLiveCount");
-  if (el) el.textContent = String(snap.size);
-}, err => console.warn("Subscriber count:", err));
+status(
+"Admin session required. Please log in through Admin Login."
+);
 
-onSnapshot(collection(db, "notifications"), snap => {
-  const el = document.getElementById("notificationLiveCount");
-  if (el) el.textContent = String(snap.size);
-}, err => console.warn("Notification count:", err));
+return;
+}
 
-onAuthStateChanged(auth, user => {
-  currentUser = user;
-  const email = (user?.email || "").trim().toLowerCase();
-  authorized = !!user && (email === CONTROL_EMAIL || email === ADMIN_EMAIL);
-  if (sendButton) sendButton.disabled = !authorized;
-  if (!user) status("Admin/Control Center session required. Please log in first.", true);
-  else if (!authorized) status("You are not authorized to send notifications.", true);
-  else status("Ready to send a notification.");
-});
 
-sendButton?.addEventListener("click", async () => {
-  const type = typeInput?.value || "general";
-  const title = titleInput?.value.trim();
-  const message = messageInput?.value.trim();
-  const campaignName = campaignInput?.value.trim();
-  const intentUrl = intentInput?.value.trim();
+// --------------------------------------
+// CHECK ADMIN EMAIL
+// --------------------------------------
 
-  if (!authorized || !currentUser) return status("Please log in through Control Center or Admin Login.", true);
-  if (!title) return status("Please enter a notification title.", true);
-  if (!message) return status("Please enter a notification message.", true);
-  if (type === "campaign" && !campaignName) return status("Enter the campaign name.", true);
-  if (type === "intent" && !intentUrl) return status("Enter the intent/destination link.", true);
+const email =
+(user.email || "")
+.trim()
+.toLowerCase();
 
-  try { new URL(type === "intent" ? intentUrl : "https://wetrendingteam.local"); }
-  catch { return status("Please enter a valid destination link.", true); }
 
-  if (!confirm("Send this notification to all subscribed devices?")) return;
+if (email !== ADMIN_EMAIL) {
 
-  sendButton.disabled = true;
-  sendButton.textContent = "⏳ Sending…";
-  status("Connecting to the notification server…");
+authorized = false;
 
-  try {
-    const idToken = await currentUser.getIdToken(true);
-    const response = await fetch(SEND_NOTIFICATION_URL, {
-      method: "POST",
-      headers: {"Content-Type":"application/json", "Authorization":`Bearer ${idToken}`},
-      body: JSON.stringify({
-        title,
-        message,
-        type,
-        campaignName: campaignName || "",
-        url: type === "intent" ? intentUrl : (type === "campaign" ? "campaign.html" : "/")
-      })
-    });
+if (sendButton) {
+sendButton.disabled = true;
+}
 
-    const raw = await response.text();
-    let result = {};
-    try { result = JSON.parse(raw); } catch {}
-    if (!response.ok) throw new Error(result.message || `Notification server returned ${response.status}.`);
+status(
+"You are not authorized to send notifications."
+);
 
-    status(`✅ Sent to ${Number(result.sent || 0)} subscriber(s).`);
-    titleInput.value = "";
-    messageInput.value = "";
-    if (campaignInput) campaignInput.value = "";
-    if (intentInput) intentInput.value = "";
-  } catch (error) {
-    console.error("Notification error:", error);
-    status(`❌ ${error.message || "Unable to send notification."}`, true);
-  } finally {
-    sendButton.disabled = !authorized;
-    sendButton.textContent = "🔔 Send Notification";
-  }
-});
+return;
+}
+
+
+// --------------------------------------
+// AUTHORIZED
+// --------------------------------------
+
+authorized = true;
+
+if (sendButton) {
+sendButton.disabled = false;
+}
+
+status(
+"Ready to send a notification to all subscribers."
+);
+}
+);
+
+
+// ==========================================
+// SEND TO ALL SUBSCRIBERS
+// ==========================================
+
+sendButton?.addEventListener(
+"click",
+async () => {
+
+// --------------------------------------
+// GET INPUT
+// --------------------------------------
+
+const audience =
+audienceInput?.value || "team";
+
+const title =
+titleInput?.value
+.trim();
+
+const message =
+messageInput?.value
+.trim();
+
+const url =
+urlInput?.value
+.trim();
+
+
+// --------------------------------------
+// VALIDATION
+// --------------------------------------
+
+if (!title) {
+
+status(
+"Please enter a notification title."
+);
+
+titleInput?.focus();
+
+return;
+}
+
+
+if (!message) {
+
+status(
+"Please enter a notification message."
+);
+
+messageInput?.focus();
+
+return;
+}
+
+if (audience === "space" && !url) {
+
+status(
+"Please paste the exact Intent Link for a SPACE notification."
+);
+
+urlInput?.focus();
+
+return;
+}
+
+
+if (!currentUser || !authorized) {
+
+status(
+"Please log in through Admin Login first."
+);
+
+return;
+}
+
+
+// --------------------------------------
+// CONFIRM SEND
+// --------------------------------------
+
+const confirmed =
+confirm(
+"Send this notification to ALL subscribed devices?"
+);
+
+
+if (!confirmed) {
+return;
+}
+
+
+// --------------------------------------
+// DISABLE BUTTON
+// --------------------------------------
+
+sendButton.disabled = true;
+
+sendButton.textContent =
+"⏳ Sending to everyone…";
+
+
+status(
+"Connecting to WETrendingTeam notification server…"
+);
+
+
+try {
+
+// --------------------------------------
+// GET ADMIN ID TOKEN
+// --------------------------------------
+
+const idToken =
+await currentUser.getIdToken(
+true
+);
+
+
+console.log(
+"Admin authentication token obtained."
+);
+
+
+// --------------------------------------
+// CALL FIREBASE CLOUD FUNCTION
+// --------------------------------------
+
+const response =
+await fetch(
+SEND_NOTIFICATION_URL,
+{
+method: "POST",
+
+headers: {
+"Content-Type":
+"application/json",
+
+"Authorization":
+`Bearer ${idToken}`
+},
+
+body:
+JSON.stringify({
+title,
+message,
+audience,
+url: url || ""
+})
+}
+);
+
+
+// --------------------------------------
+// READ RESPONSE
+// --------------------------------------
+
+const raw =
+await response.text();
+
+
+let result = {};
+
+
+try {
+
+result =
+JSON.parse(raw);
+
+} catch {
+
+result = {};
+}
+
+
+// --------------------------------------
+// SERVER ERROR
+// --------------------------------------
+
+if (!response.ok) {
+
+throw new Error(
+result.message ||
+`Notification server returned ${response.status}.`
+);
+}
+
+
+// --------------------------------------
+// SUCCESS
+// --------------------------------------
+
+const sent =
+Number(
+result.sent || 0
+);
+
+
+const failed =
+Number(
+result.failed || 0
+);
+
+
+status(
+`✅ Notification sent to ${sent} subscriber(s).`
+);
+
+
+console.log(
+"Notification broadcast result:",
+{
+sent,
+failed,
+response: result
+}
+);
+
+
+// --------------------------------------
+// CLEAR FORM
+// --------------------------------------
+
+if (titleInput) {
+titleInput.value = "";
+}
+
+
+if (messageInput) {
+messageInput.value = "";
+}
+
+
+// --------------------------------------
+// SHOW FAILURE INFORMATION
+// --------------------------------------
+
+if (failed > 0) {
+
+status(
+`⚠️ Sent to ${sent} subscriber(s). ${failed} device(s) failed.`
+);
+}
+
+
+} catch (error) {
+
+console.error(
+"Notification broadcast error:",
+error
+);
+
+
+status(
+`❌ ${error.message || "Unable to send notification."}`
+);
+
+
+} finally {
+
+// --------------------------------------
+// RESTORE BUTTON
+// --------------------------------------
+
+sendButton.disabled =
+!authorized;
+
+sendButton.textContent =
+"🔔 Send to All Subscribers";
+}
+}
+);

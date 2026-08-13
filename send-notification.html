@@ -1,56 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
 <title>WETrendingTeam - Send Notification</title>
-<link rel="stylesheet" href="send-notification.css">
+
+<link rel="stylesheet"
+      href="send-notification.css">
+
 </head>
+
 <body>
+
 <div class="notification-container">
-  <div class="notification-card">
-    <div class="page-nav">
-      <a href="dashboard.html" id="controlBack">← Control Center</a>
-      <a href="index.html">Home</a>
+
+    <div class="notification-card">
+
+        <h1>🔔 Send Notification</h1>
+
+        <p>
+            Send an alert to users who have enabled
+            WETrendingTeam notifications.
+        </p>
+
+
+        <!-- Notification Audience -->
+
+        <label for="notificationAudience">
+            Notification Audience
+        </label>
+
+        <select
+            id="notificationAudience"
+        >
+            <option value="team">WETrendingTeam</option>
+            <option value="space">WETrending SPACE</option>
+        </select>
+
+
+        <!-- Notification Title -->
+
+        <label for="notificationTitle">
+            Notification Title
+        </label>
+
+        <input
+            type="text"
+            id="notificationTitle"
+            placeholder="Enter notification title"
+            maxlength="100"
+        >
+
+
+        <!-- Notification Message -->
+
+        <label for="notificationMessage">
+            Notification Message
+        </label>
+
+        <textarea
+            id="notificationMessage"
+            placeholder="Write your notification..."
+            maxlength="500"
+            rows="6"
+        ></textarea>
+
+
+        <!-- Destination URL -->
+
+        <label for="notificationUrl">
+            Destination URL
+        </label>
+
+        <input
+            type="url"
+            id="notificationUrl"
+            placeholder="For SPACE: paste the exact Intent Link"
+        >
+
+        <small id="notificationUrlHelp">
+            SPACE notifications can open the exact Intent Link when tapped.
+        </small>
+
+
+        <!-- Send Button -->
+
+        <button
+            id="sendNotificationBtn"
+            type="button"
+        >
+            🔔 Send to All Subscribers
+        </button>
+
+
+        <!-- Status -->
+
+        <div
+            id="sendStatus"
+            class="send-status"
+        ></div>
+
+
+        <br>
+
+
+        <!-- Back -->
+
+        <a href="admin-dashboard.html">
+
+            <button
+                type="button"
+                class="back-btn"
+            >
+                ← Back to Admin Panel
+            </button>
+
+        </a>
+
     </div>
 
-    <h1>🔔 Send Notification</h1>
-    <p>Send a targeted update to users who have enabled WETrendingTeam notifications.</p>
-
-    <div class="subscriber-strip">
-      <div><span>Live subscribers</span><strong id="subscriberLiveCount">0</strong></div>
-      <div><span>Notifications sent</span><strong id="notificationLiveCount">0</strong></div>
-    </div>
-
-    <label for="notificationType">Notification Type</label>
-    <select id="notificationType">
-      <option value="general">General Notification</option>
-      <option value="campaign">Campaign Notification</option>
-      <option value="intent">Intent Link</option>
-    </select>
-
-    <div id="campaignFields" class="conditional-fields" hidden>
-      <label for="campaignName">Campaign name</label>
-      <input type="text" id="campaignName" placeholder="e.g. YOU MANIAC Promotion">
-    </div>
-
-    <div id="intentFields" class="conditional-fields" hidden>
-      <label for="intentUrl">Intent / destination link</label>
-      <input type="url" id="intentUrl" placeholder="https://...">
-      <small>This is the page users should open when they tap the notification.</small>
-    </div>
-
-    <label for="notificationTitle">Notification Title</label>
-    <input type="text" id="notificationTitle" placeholder="Enter notification title" maxlength="100">
-
-    <label for="notificationMessage">Notification Message</label>
-    <textarea id="notificationMessage" placeholder="Write your notification..." maxlength="500" rows="6"></textarea>
-
-    <button id="sendNotificationBtn" type="button">🔔 Send Notification</button>
-    <div id="sendStatus" class="send-status" aria-live="polite"></div>
-    <p class="security-note">Only the authorized Control Center or Admin account can send notifications.</p>
-  </div>
 </div>
-<script type="module" src="send-notification.js"></script>
+
+
+<script
+    type="module"
+    src="send-notification.js">
+</script>
+
 </body>
+
 </html>
