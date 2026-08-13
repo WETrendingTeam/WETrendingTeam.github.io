@@ -5,18 +5,18 @@ const { getFirestore, FieldValue } = require("firebase-admin/firestore");
 const { getMessaging } = require("firebase-admin/messaging");
 
 initializeApp();
+
 const db = getFirestore();
 
-const APP_BASE_URL = "https://wetrendingteam.github.io";
-
-const AUTHORIZED_SENDERS = new Set([
-  "wetrendingteam@gmail.com",
-  "lade.galleria@gmail.com"
-]);
+function getRole(data) {
+  return String(data.role ?? data.Role ?? "").trim().toLowerCase();
+}
 
 function chunks(list, size) {
   const out = [];
-  for (let i = 0; i < list.length; i += size) out.push(list.slice(i, i + size));
+  for (let i = 0; i < list.length; i += size) {
+    out.push(list.slice(i, i + size));
+  }
   return out;
 }
 
@@ -33,86 +33,76 @@ exports.sendNotification = onRequest(
         return res.status(401).json({ message: "Authentication required." });
       }
 
-      const decoded = await getAuth().verifyIdToken(header.substring(7));
-      const senderEmail = String(decoded.email || "").trim().toLowerCase();
+      const idToken = header.substring(7);
+      const decoded = await getAuth().verifyIdToken(idToken);
 
-      if (!AUTHORIZED_SENDERS.has(senderEmail)) {
-        return res.status(403).json({ message: "This account is not authorized to send notifications." });
+      const senderEmail = String(decoded.email || "").trim().toLowerCase();
+      if (senderEmail !== "wetrendingteam@gmail.com") {
+        return res.status(403).json({ message: "Only the authorized Admin account can send notifications." });
       }
 
       const title = String(req.body?.title || "").trim();
       const message = String(req.body?.message || "").trim();
-      const type = String(req.body?.type || "general").trim().toLowerCase();
-      const campaignName = String(req.body?.campaignName || "").trim();
-      const rawUrl = String(req.body?.url || "").trim();
-      const url = rawUrl
-        ? (rawUrl.startsWith("http") ? rawUrl : `${APP_BASE_URL}/${rawUrl.replace(/^\//, "")}`)
-        : `${APP_BASE_URL}/`;
+      const audience = String(req.body?.audience || "team").trim().toLowerCase();
+      const url = String(req.body?.url || "").trim();
 
       if (!title || !message) {
         return res.status(400).json({ message: "Title and message are required." });
       }
-      if (!["general", "campaign", "intent"].includes(type)) {
-        return res.status(400).json({ message: "Invalid notification type." });
-      }
-      if (type === "campaign" && !campaignName) {
-        return res.status(400).json({ message: "Campaign name is required." });
-      }
-      if (type === "intent" && !rawUrl) {
-        return res.status(400).json({ message: "Intent destination URL is required." });
+
+      if (!["team", "space"].includes(audience)) {
+        return res.status(400).json({ message: "Invalid notification audience." });
       }
 
-      const tokenSnap = await db.collection("fcmTokens").get();
-      const tokens = [...new Set(
-        tokenSnap.docs.map((d) => d.data().token).filter(Boolean)
-      )];
-
-      if (tokens.length === 0) {
-        return res.status(200).json({
-          sent: 0,
-          failed: 0,
-          notificationId: null,
-          type,
-          recorded: false,
-          message: "No subscribed devices are currently registered."
-        });
+      if (audience === "space" && !url) {
+        return res.status(400).json({ message: "A destination URL is required for WETrending SPACE notifications." });
       }
 
-      // Create the history record BEFORE delivery. This guarantees that a
-      // successful send is recorded even if the function is interrupted after
-      // FCM accepts the message. The document is updated with delivery totals
-      // when the send finishes.
-      const notificationRef = db.collection("notifications").doc();
-      await notificationRef.set({
+      await db.collection("notifications").add({
         title,
         message,
-        type,
-        campaignName: campaignName || null,
-        url,
+        audience,
+        url: url || null,
         sender: decoded.email || decoded.uid,
-        sent: 0,
-        failed: 0,
-        recipientCount: tokens.length,
-        status: "sending",
+        deliveryMode: "http-v2",
         createdAt: FieldValue.serverTimestamp()
       });
 
+      const tokenSnap = await db.collection("fcmTokens").get();
+
+      const tokens = [
+        ...new Set(
+          tokenSnap.docs
+            .map(d => d.data())
+            .filter(data => audience === "space"
+              ? data?.subscriptions?.space === true
+              : data?.subscriptions?.team === true || !data?.subscriptions)
+            .map(data => data.token)
+            .filter(Boolean)
+        )
+      ];
       let sent = 0;
       let failed = 0;
 
       for (const batch of chunks(tokens, 500)) {
-        // IMPORTANT: this is a DATA-ONLY FCM payload. The service worker is
-        // responsible for displaying the notification exactly once. Sending
-        // both a notification payload and manually calling showNotification()
-        // causes duplicate notifications on supported browsers.
         const response = await getMessaging().sendEachForMulticast({
           tokens: batch,
-          data: {
-            title,
-            body: message,
-            type,
-            url,
-            notificationId: notificationRef.id
+          notification: { title, body: message },
+          webpush: {
+            notification: {
+              title,
+              body: message,
+              icon: "/images/logo.png",
+              badge: "/images/logo.png"
+            },
+            data: {
+              title,
+              body: message,
+              url: url || "/"
+            },
+            fcmOptions: {
+              link: url || "https://wetrendingteam.github.io/"
+            }
           }
         });
 
@@ -120,20 +110,7 @@ exports.sendNotification = onRequest(
         failed += response.failureCount;
       }
 
-      await notificationRef.update({
-        sent,
-        failed,
-        status: sent > 0 ? (failed > 0 ? "partial" : "sent") : "failed",
-        completedAt: FieldValue.serverTimestamp()
-      });
-
-      return res.status(200).json({
-        sent,
-        failed,
-        notificationId: sent > 0 ? notificationRef.id : null,
-        type,
-        recorded: sent > 0
-      });
+      return res.status(200).json({ sent, failed });
     } catch (error) {
       console.error("sendNotification error:", error);
       return res.status(500).json({
