@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Community Manager | WETrendingTeam</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f5f7fb;color:#17213a;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+.wrap{max-width:980px;margin:auto;padding:16px}.top{display:flex;align-items:center;gap:10px;margin-bottom:14px}.top h1{margin:0;font-size:22px}.top p{margin:3px 0;color:#6d7890;font-size:12px}.top .spacer{flex:1}
+button,.btn{border:0;border-radius:9px;padding:9px 12px;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}
+.back{background:#e9edf5;color:#17213a}.save{background:#3158c9;color:#fff}.publish{background:#d82935;color:#fff}.preview{background:#17213a;color:#fff}
+.notice{padding:10px 12px;border-radius:10px;background:#fff;border:1px solid #dfe4ee;font-size:12px;margin-bottom:12px}
+.card{background:#fff;border:1px solid #dfe4ee;border-radius:14px;padding:14px;margin-bottom:12px}.card h2{font-size:15px;margin:0 0 10px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.full{grid-column:1/-1}
+label{display:block;font-size:10px;font-weight:900;color:#68758d;margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em}
+input,textarea{width:100%;border:1px solid #dfe4ee;border-radius:8px;padding:9px;font:inherit;font-size:12px;background:#fff;color:#17213a}textarea{min-height:70px;resize:vertical}
+.row{display:flex;gap:7px;align-items:center;flex-wrap:wrap}.help{font-size:10px;color:#6d7890;margin-top:4px}.status{font-weight:800;font-size:11px}.danger{color:#d82935}.ok{color:#23834b}
+.previewbox{background:#f7f9fd;border:1px dashed #cbd3e2;border-radius:10px;padding:10px;font-size:11px}.previewbox b{color:#3158c9}
+@media(max-width:700px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.top{align-items:flex-start}.top .spacer{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div><h1>Community Manager</h1><p>Update Community content without touching GitHub.</p></div>
+    <div class="spacer"></div>
+    <a class="btn back" href="dashboard.html">← Control Center</a>
+    <button id="logout" class="back">Logout</button>
+  </header>
+
+  <div class="notice">
+    <b>How this works:</b> Save Draft keeps changes private. Publish makes the latest content appear on the public Community page.
+    Fan comments, replies, reactions and live counters remain separate and are not edited here.
+  </div>
+
+  <form id="managerForm">
+    <section class="card">
+      <h2>Campaign / Community</h2>
+      <div class="grid">
+        <div><label>Community label</label><input id="label" placeholder="COMMUNITY HUB • YOU MANIAC"></div>
+        <div><label>Campaign name</label><input id="campaign" placeholder="YOU MANIAC"></div>
+        <div><label>Main heading</label><input id="heading" placeholder="More than a chat."></div>
+        <div><label>Release time text</label><input id="releaseTime" placeholder="04:00 PM"></div>
+        <div class="full"><label>Intro text</label><textarea id="intro"></textarea></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Features</h2>
+      <div class="grid">
+        <div class="full"><label>Quote</label><textarea id="quote"></textarea></div>
+        <div><label>Quote by</label><input id="quoteBy"></div>
+        <div><label>Outfit title</label><input id="outfitTitle"></div>
+        <div><label>Outfit image URL</label><input id="outfitImage" placeholder="https://... or images/your-image.jpg"></div>
+        <div><label>Viral moment title</label><input id="viralTitle"></div>
+        <div><label>Viral moment image URL</label><input id="viralImage" placeholder="https://... or images/your-image.jpg"></div>
+        <div><label>Top Trender / Maniac name</label><input id="trender"></div>
+        <div><label>Maniac level %</label><input id="maniac" type="number" min="0" max="100"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Poll</h2>
+      <div class="grid">
+        <div class="full"><label>Poll question</label><input id="pollQuestion"></div>
+        <div><label>Option 1</label><input id="poll1"></div>
+        <div><label>Option 1 %</label><input id="poll1pct" type="number" min="0" max="100"></div>
+        <div><label>Option 2</label><input id="poll2"></div>
+        <div><label>Option 2 %</label><input id="poll2pct" type="number" min="0" max="100"></div>
+        <div><label>Option 3</label><input id="poll3"></div>
+        <div><label>Option 3 %</label><input id="poll3pct" type="number" min="0" max="100"></div>
+        <div><label>Votes (editorial/display value)</label><input id="pollVotes" type="number" min="0"></div>
+      </div>
+      <p class="help">These poll percentages are editorial fields for now. We can connect them to real voting documents next.</p>
+    </section>
+
+    <section class="card">
+      <h2>Dean + Moth Red Flag Meters</h2>
+      <div class="grid">
+        <div><label>Dean %</label><input id="dean" type="number" min="0" max="100"></div>
+        <div><label>Moth %</label><input id="moth" type="number" min="0" max="100"></div>
+      </div>
+      <p class="help">The public page automatically converts the percentage into the appropriate red-flag label.</p>
+    </section>
+
+    <section class="card">
+      <h2>Results</h2>
+      <div class="grid">
+        <div><label>Episode / campaign rating</label><input id="rating" type="number" min="0" max="10" step=".1"></div>
+        <div><label>Ratings count</label><input id="ratingsCount" type="number" min="0"></div>
+        <div><label>Posts</label><input id="posts" type="number" min="0"></div>
+        <div><label>Engagement</label><input id="engagement" type="number" min="0"></div>
+        <div><label>Potential reach</label><input id="reach" type="number" min="0"></div>
+        <div><label>Countries</label><input id="countriesCount" type="number" min="0"></div>
+        <div class="full"><label>Trending countries (comma separated)</label><input id="countryList" placeholder="Thailand, Philippines, Nigeria"></div>
+      </div>
+      <p class="help">These are editorial/analytics display fields. Fan comments and reactions remain live Firebase data.</p>
+    </section>
+
+    <section class="card">
+      <h2>Discussion</h2>
+      <div class="grid">
+        <div class="full"><label>Discussion prompt</label><textarea id="discussionPrompt"></textarea></div>
+        <div class="full"><label>Community rule</label><textarea id="rules"></textarea></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Preview</h2>
+      <div class="previewbox" id="previewBox">Make changes above to preview the main Community content.</div>
+    </section>
+
+    <div class="row">
+      <button type="button" class="save" id="saveDraft">Save Draft</button>
+      <button type="button" class="publish" id="publish">Publish</button>
+      <button type="button" class="preview" id="refreshPreview">Refresh Preview</button>
+      <span id="status" class="status"></span>
+    </div>
+  </form>
+</div>
+<script type="module" src="community-manager.js"></script>
+</body>
+</html>

@@ -16,7 +16,9 @@ import {
   deleteDoc,
   getDoc,
   updateDoc,
-  increment
+  increment,
+  doc,
+  getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const auth = getAuth(app);
@@ -346,12 +348,56 @@ document.querySelectorAll(".tab").forEach(tab => {
   });
 });
 
+
+const CONTENT_DEFAULTS = {
+  label:"COMMUNITY HUB • YOU MANIAC", campaign:"YOU MANIAC", heading:"More than a chat.",
+  intro:"Explore fan features, make choices, see campaign results, track where the fandom is trending and join the conversation.",
+  releaseTime:"04:00 PM", quote:"“It was never just a game for me.”", quoteBy:"Lade",
+  outfitTitle:"Fan Favourite", outfitImage:"images/hero2.jpg", viralTitle:"The Moment", viralImage:"images/hero1.jpg",
+  trender:"@Lade", maniac:0, pollQuestion:"What did you think of the YOU MANIAC trailer looks?",
+  poll1:"Look 1", poll1pct:0, poll2:"Look 2", poll2pct:0, poll3:"Look 3", poll3pct:0, pollVotes:0,
+  dean:0, moth:0, rating:0, ratingsCount:0, posts:0, engagement:0, reach:0, countriesCount:0, countryList:"",
+  discussionPrompt:"What did you think of the YOU MANIAC trailer?",
+  rules:"Keep discussions respectful or admin will remove you. You can join anonymously with a fan name. Let’s please be respectful to one another. We’re all here to support WilliamEst."
+};
+function setText(id,value){const e=document.getElementById(id);if(e)e.textContent=value ?? "";}
+function setImage(id,url,alt){const e=document.getElementById(id);if(e && url){e.src=url;e.alt=alt||"";}}
+function applyCommunityContent(raw){
+  const d={...CONTENT_DEFAULTS,...(raw||{})};
+  setText("cmLabel",d.label); setText("cmCampaign",d.campaign); setText("cmHeading",d.heading); setText("cmIntro",d.intro); setText("communityCountdown",d.releaseTime);
+  setText("cmQuote",d.quote); setText("cmQuoteBy",`— ${d.quoteBy}`);
+  setText("cmOutfitTitle",d.outfitTitle); setImage("cmOutfitImage",d.outfitImage,"Outfit of the episode");
+  setText("cmViralTitle",d.viralTitle); setImage("cmViralImage",d.viralImage,"Most viral moment");
+  setText("cmTrender",d.trender); setText("cmManiac",d.maniac); const mb=document.getElementById("cmManiacBar"); if(mb)mb.style.width=`${d.maniac}%`;
+  setText("cmPollQuestion",d.pollQuestion);
+  [["cmPoll1",d.poll1,"cmPoll1Pct","cmPoll1Bar",d.poll1pct],["cmPoll2",d.poll2,"cmPoll2Pct","cmPoll2Bar",d.poll2pct],["cmPoll3",d.poll3,"cmPoll3Pct","cmPoll3Bar",d.poll3pct]].forEach(([name,opt,pct,bar,val])=>{setText(name,opt);setText(pct,`${val}%`);const e=document.getElementById(bar);if(e)e.style.width=`${val}%`;});
+  setText("cmPollVotes",d.pollVotes);
+  const dean=document.getElementById("deanMeter"), moth=document.getElementById("mothMeter");
+  if (dean) dean.value = d.dean;
+  if (moth) moth.value = d.moth;
+  dean?.dispatchEvent(new Event("input")); moth?.dispatchEvent(new Event("input"));
+  setText("cmRating",d.rating); setText("cmRatingsCount",d.ratingsCount); setText("cmPosts",d.posts); setText("cmEngagement",d.engagement); setText("cmReach",d.reach); setText("cmCountries",d.countriesCount);
+  const countryRoot=document.getElementById("cmCountryList"); if(countryRoot){countryRoot.innerHTML=""; String(d.countryList||"").split(",").map(x=>x.trim()).filter(Boolean).forEach(c=>{const b=document.createElement("b");b.textContent=c;countryRoot.appendChild(b);});}
+  setText("cmDiscussionPrompt",d.discussionPrompt);
+  const rules=document.getElementById("cmRules"); if(rules) rules.innerHTML=`<b>Keep discussions respectful or admin will remove you.</b> ${String(d.rules||"").replace(/^Keep discussions respectful or admin will remove you\.\s*/i,"")}`;
+}
+async function loadPublishedCommunityContent(){
+  try {
+    const snap=await getDoc(doc(db,"communityContent","published"));
+    applyCommunityContent(snap.exists()?snap.data():CONTENT_DEFAULTS);
+  } catch(error) {
+    console.warn("Community content could not load; using safe defaults.",error);
+    applyCommunityContent(CONTENT_DEFAULTS);
+  }
+}
+
 // Start authentication BEFORE attaching Firestore listeners.
 // This prevents the listeners from making an unauthenticated request first,
 // which would otherwise fail permanently with "Missing or insufficient permissions".
 async function startCommunity() {
   try {
     await ensureUser();
+    await loadPublishedCommunityContent();
     listen("episode");
   } catch (error) {
     console.error("Community startup failed:", error);
