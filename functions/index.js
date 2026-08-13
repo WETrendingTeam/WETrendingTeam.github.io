@@ -83,21 +83,23 @@ exports.sendNotification = onRequest(
       ];
       let sent = 0;
       let failed = 0;
+      let removed = 0;
+      const invalidTokens = [];
 
       for (const batch of chunks(tokens, 500)) {
         const response = await getMessaging().sendEachForMulticast({
           tokens: batch,
-          notification: { title, body: message },
+          notification: { title, body },
           webpush: {
             notification: {
               title,
-              body: message,
+              body,
               icon: "/images/logo.png",
               badge: "/images/logo.png"
             },
             data: {
               title,
-              body: message,
+              body,
               url: url || "/"
             },
             fcmOptions: {
@@ -108,9 +110,36 @@ exports.sendNotification = onRequest(
 
         sent += response.successCount;
         failed += response.failureCount;
+
+        response.responses.forEach((result, index) => {
+          if (!result.success) {
+            const code = result.error?.code || "";
+            if (
+              code === "messaging/registration-token-not-registered" ||
+              code === "messaging/invalid-registration-token"
+            ) {
+              invalidTokens.push(batch[index]);
+            }
+          }
+        });
       }
 
-      return res.status(200).json({ sent, failed });
+      // Clean up stale tokens so future broadcasts target only current subscriptions.
+      for (const token of invalidTokens) {
+        try {
+          await db.collection("fcmTokens").doc(token).delete();
+          removed++;
+        } catch (cleanupError) {
+          console.warn("Could not remove stale FCM token:", token, cleanupError.message);
+        }
+      }
+
+      return res.status(200).json({
+        targeted: tokens.length,
+        sent,
+        failed,
+        removed
+      });
     } catch (error) {
       console.error("sendNotification error:", error);
       return res.status(500).json({
