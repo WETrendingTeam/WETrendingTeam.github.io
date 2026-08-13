@@ -28,20 +28,8 @@ service cloud.firestore {
     }
 
     match /fcmTokens/{tokenId} {
-      // A signed-in device may create its own token record.
-      allow create: if signedIn()
-        && request.resource.data.uid == request.auth.uid
-        && request.resource.data.token == tokenId;
-
-      // A returning device may refresh its own token metadata/subscription.
-      // Management can still read/update/delete subscriber records.
-      allow update: if isManagement()
-        || (signedIn()
-          && resource.data.uid == request.auth.uid
-          && request.resource.data.uid == request.auth.uid
-          && request.resource.data.token == tokenId);
-
-      allow read, delete: if isAdmin() || isControl();
+      allow create: if signedIn() && request.resource.data.uid == request.auth.uid;
+      allow read, update, delete: if isAdmin() || isControl();
     }
 
     match /campaigns/{campaignId} {
@@ -133,6 +121,20 @@ service cloud.firestore {
         allow delete: if isManagement()
           || (signedIn() && resource.data.uid == request.auth.uid);
       }
+    }
+
+
+
+    // =========================================================
+    // COMMUNITY CONTENT MANAGEMENT
+    // Public Community reads only the published document.
+    // Control Center/Admin can manage draft and published content.
+    // This is separate from fan comments/reactions and existing
+    // notification/user collections.
+    // =========================================================
+    match /communityContent/{docId} {
+      allow read: if signedIn();
+      allow create, update, delete: if isManagement();
     }
 
     // Deny everything else by default.
