@@ -1,4 +1,3 @@
-
 /* ==================================================
    WETrendingTeam v2.0
    SCRIPT FILE
@@ -77,48 +76,167 @@ if(slides.length > 0){
 
 
 /* ==========================
-   COUNTDOWN — YOU MANIAC RELEASE
-   4:00 PM Thailand time (Asia/Bangkok)
+   COUNTDOWN — 24 HOUR MISSION
+   Starts at 10:01 AM
 ========================== */
 
-const releaseTarget = Date.UTC(2026, 7, 13, 9, 0, 0);
+const missionStart = Date.UTC(2026, 7, 13, 9, 1, 0);
+
+const missionEnd =
+    missionStart + (24 * 60 * 60 * 1000);
+
 
 function updateCountdown(){
 
     const now = Date.now();
-    const distance = releaseTarget - now;
 
-    const daysEl = document.getElementById("days");
-    const hoursEl = document.getElementById("hours");
-    const minutesEl = document.getElementById("minutes");
-    const secondsEl = document.getElementById("seconds");
+    const distance =
+        missionEnd - now;
+
+
+    const daysEl =
+        document.getElementById("days");
+
+    const hoursEl =
+        document.getElementById("hours");
+
+    const minutesEl =
+        document.getElementById("minutes");
+
+    const secondsEl =
+        document.getElementById("seconds");
+
+
+
+    /* ==========================
+       MISSION ENDED
+    ========================== */
 
     if(distance <= 0){
-        if(daysEl) daysEl.textContent = "00";
-        if(hoursEl) hoursEl.textContent = "00";
-        if(minutesEl) minutesEl.textContent = "00";
-        if(secondsEl) secondsEl.textContent = "00";
 
-        const label = document.querySelector(".countdown .section-title");
-        const sub = document.querySelector(".countdown .section-subtitle");
-        if(label) label.textContent = "🔴 YOU MANIAC IS LIVE";
-        if(sub) sub.textContent = "The campaign release time has arrived. Let's support WilliamEst worldwide.";
+        if(daysEl)
+            daysEl.textContent = "00";
+
+        if(hoursEl)
+            hoursEl.textContent = "00";
+
+        if(minutesEl)
+            minutesEl.textContent = "00";
+
+        if(secondsEl)
+            secondsEl.textContent = "00";
+
+
+        const label =
+            document.querySelector(
+                ".countdown .section-title"
+            );
+
+
+        const sub =
+            document.querySelector(
+                ".countdown .section-subtitle"
+            );
+
+
+        if(label){
+
+            label.textContent =
+                "🔴 MISSION TIME HAS ENDED";
+
+        }
+
+
+        if(sub){
+
+            sub.textContent =
+                "Today's 24-hour mission has ended. Stay tuned for the next mission.";
+
+        }
+
+
         return;
+
     }
 
-    const days = Math.floor(distance / 86400000);
-    const hours = Math.floor((distance % 86400000) / 3600000);
-    const minutes = Math.floor((distance % 3600000) / 60000);
-    const seconds = Math.floor((distance % 60000) / 1000);
 
-    if(daysEl) daysEl.textContent = String(days).padStart(2,"0");
-    if(hoursEl) hoursEl.textContent = String(hours).padStart(2,"0");
-    if(minutesEl) minutesEl.textContent = String(minutes).padStart(2,"0");
-    if(secondsEl) secondsEl.textContent = String(seconds).padStart(2,"0");
+
+    /* ==========================
+       CALCULATE TIME
+    ========================== */
+
+    const days =
+        Math.floor(
+            distance / 86400000
+        );
+
+
+    const hours =
+        Math.floor(
+            (distance % 86400000)
+            / 3600000
+        );
+
+
+    const minutes =
+        Math.floor(
+            (distance % 3600000)
+            / 60000
+        );
+
+
+    const seconds =
+        Math.floor(
+            (distance % 60000)
+            / 1000
+        );
+
+
+
+    /* ==========================
+       DISPLAY TIME
+    ========================== */
+
+    if(daysEl){
+
+        daysEl.textContent =
+            String(days).padStart(2,"0");
+
+    }
+
+
+    if(hoursEl){
+
+        hoursEl.textContent =
+            String(hours).padStart(2,"0");
+
+    }
+
+
+    if(minutesEl){
+
+        minutesEl.textContent =
+            String(minutes).padStart(2,"0");
+
+    }
+
+
+    if(secondsEl){
+
+        secondsEl.textContent =
+            String(seconds).padStart(2,"0");
+
+    }
+
 }
 
+
 updateCountdown();
-setInterval(updateCountdown,1000);
+
+setInterval(
+    updateCountdown,
+    1000
+);
 
 
 
@@ -129,9 +247,11 @@ setInterval(updateCountdown,1000);
 ================================================== */
 
 
-const menuBtn = document.querySelector(".menu-btn");
+const menuBtn =
+    document.querySelector(".menu-btn");
 
-const navLinks = document.querySelector(".nav-links");
+const navLinks =
+    document.querySelector(".nav-links");
 
 
 
@@ -195,7 +315,7 @@ if(menuBtn && navLinks){
 
 
 const navbar =
-document.querySelector(".navbar");
+    document.querySelector(".navbar");
 
 
 window.addEventListener("scroll",()=>{
@@ -237,9 +357,9 @@ window.addEventListener("scroll",()=>{
 
 
 const backToTop =
-document.getElementById(
-    "backToTop"
-);
+    document.getElementById(
+        "backToTop"
+    );
 
 
 
@@ -300,9 +420,9 @@ if(backToTop){
 
 
 const revealElements =
-document.querySelectorAll(
-"section, .status-card, .mission-card, .rating-card, .event-card"
-);
+    document.querySelectorAll(
+        "section, .status-card, .mission-card, .rating-card, .event-card"
+    );
 
 
 
@@ -365,29 +485,32 @@ if("IntersectionObserver" in window){
 
 }
 
+
+
+
 /* ==========================
    WATCH PLATFORM POPUP
 ========================== */
 
 
 const platformPopup =
-document.getElementById(
-    "platformPopup"
-);
+    document.getElementById(
+        "platformPopup"
+    );
 
 
 
 const episodeButtons =
-document.querySelectorAll(
-    ".episode-btn"
-);
+    document.querySelectorAll(
+        ".episode-btn"
+    );
 
 
 
 const popupClose =
-document.querySelector(
-    ".popup-close"
-);
+    document.querySelector(
+        ".popup-close"
+    );
 
 
 
@@ -403,7 +526,8 @@ episodeButtons.forEach(button=>{
 
             if(platformPopup){
 
-                platformPopup.style.display = "flex";
+                platformPopup.style.display =
+                    "flex";
 
             }
 
@@ -428,7 +552,8 @@ if(popupClose){
         ()=>{
 
 
-            platformPopup.style.display = "none";
+            platformPopup.style.display =
+                "none";
 
 
         }
@@ -451,7 +576,8 @@ window.addEventListener(
         if(e.target === platformPopup){
 
 
-            platformPopup.style.display = "none";
+            platformPopup.style.display =
+                "none";
 
 
         }
@@ -460,6 +586,3 @@ window.addEventListener(
     }
 
 );
-
-
-
