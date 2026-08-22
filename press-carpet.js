@@ -13,7 +13,8 @@ const status = document.getElementById("status");
 let sourceImage = null;
 
 const communityLogo = new Image();
-communityLogo.src = "images/you-maniac-community-logo.png";
+communityLogo.src = "/images/you-maniac-community-logo.png";
+communityLogo.onerror = () => { communityLogo.onerror = null; communityLogo.src = "../images/you-maniac-community-logo.png"; };
 
 
 photoInput.addEventListener("change", () => {
