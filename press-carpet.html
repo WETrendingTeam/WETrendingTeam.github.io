@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Westie Press Tour | WETrendingTeam</title>
+<link rel="stylesheet" href="press-carpet.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+
+
+<header class="pc-header">
+  <a class="pc-back" href="campaign.html" aria-label="Back to Campaign Center">← <span>Back to Campaign</span></a>
+
+  <div class="pc-header-center">
+    <span>YOU MANIAC</span>
+    <strong>FAN PRESS TOUR</strong>
+  </div>
+
+  <div class="pc-header-left-logo">
+    <img src="images/you-maniac-community-logo.png" alt="YouManiac Community">
+  </div>
+
+  <div class="pc-header-right">
+    <img src="images/logo.png" alt="WETrendingTeam">
+    <div>
+      <strong>WETrendingTeam</strong>
+      <span>WESTIE PRESS TOUR</span>
+    </div>
+  </div>
+
+  <a class="pc-x" href="https://x.com/WETrendingTeam" target="_blank" rel="noopener noreferrer" aria-label="WETrendingTeam on X">
+    <i class="fa-brands fa-x-twitter"></i>
+  </a>
+</header>
+
+
+<main class="pc-main">
+  
+<section class="pc-intro">
+  <span class="pc-kicker">FAN PRESS TOUR • YOU MANIAC COMMUNITY</span>
+
+
+
+  <h1>Step onto the YouManiac Press Carpet</h1>
+
+  <p class="pc-description">
+    Create your own fan presstour photo with your favourite WilliamEst picture.
+    Upload, position, add your X username and download your press-carpet moment.
+  </p>
+
+  <div class="pc-tags">
+    <span>#YouManiacPressTour</span>
+    <span>#YouManiacSeries</span>
+    <span>#WilliamEst</span>
+    <span>#WestiePressTour</span>
+  </div>
+</section>
+
+
+  <section class="pc-layout">
+    <div class="pc-editor">
+      <div class="pc-section-head">
+        <div><small>01 / YOUR ENTRY</small><h2>Create your press photo</h2></div>
+        <button id="resetBtn" class="pc-reset" type="button">Reset</button>
+      </div>
+
+      <label class="pc-upload" for="photoInput">
+        <input id="photoInput" type="file" accept="image/*">
+        <i class="fa-solid fa-camera"></i>
+        <strong>Upload your WilliamEst photo</strong>
+        <span>JPG, PNG or WEBP · your photo stays on your device</span>
+      </label>
+
+      <div class="pc-controls">
+        <label><span>Zoom</span><input id="zoom" type="range" min="0.7" max="2.2" step="0.01" value="1"></label>
+        <label><span>Move left / right</span><input id="moveX" type="range" min="-180" max="180" value="0"></label>
+        <label><span>Move up / down</span><input id="moveY" type="range" min="-180" max="180" value="0"></label>
+      </div>
+
+      <div class="pc-fields">
+        <label><span>X username</span><input id="username" maxlength="30" placeholder="@yourusername"></label>
+        <label><span>Press tour stop</span>
+          <select id="stop">
+            <option>GLOBAL FAN PRESS TOUR</option>
+            <option>AFGHANISTAN STOP</option>
+            <option>ALBANIA STOP</option>
+            <option>ALGERIA STOP</option>
+            <option>ANDORRA STOP</option>
+            <option>ANGOLA STOP</option>
+            <option>ANTIGUA AND BARBUDA STOP</option>
+            <option>ARGENTINA STOP</option>
+            <option>ARMENIA STOP</option>
+            <option>AUSTRALIA STOP</option>
+            <option>AUSTRIA STOP</option>
+            <option>AZERBAIJAN STOP</option>
+            <option>BAHAMAS STOP</option>
+            <option>BAHRAIN STOP</option>
+            <option>BANGLADESH STOP</option>
+            <option>BARBADOS STOP</option>
+            <option>BELARUS STOP</option>
+            <option>BELGIUM STOP</option>
+            <option>BELIZE STOP</option>
+            <option>BENIN STOP</option>
+            <option>BHUTAN STOP</option>
+            <option>BOLIVIA STOP</option>
+            <option>BOSNIA AND HERZEGOVINA STOP</option>
+            <option>BOTSWANA STOP</option>
+            <option>BRAZIL STOP</option>
+            <option>BRUNEI STOP</option>
+            <option>BULGARIA STOP</option>
+            <option>BURKINA FASO STOP</option>
+            <option>BURUNDI STOP</option>
+            <option>CABO VERDE STOP</option>
+            <option>CAMBODIA STOP</option>
+            <option>CAMEROON STOP</option>
+            <option>CANADA STOP</option>
+            <option>CENTRAL AFRICAN REPUBLIC STOP</option>
+            <option>CHAD STOP</option>
+            <option>CHILE STOP</option>
+            <option>CHINA STOP</option>
+            <option>COLOMBIA STOP</option>
+            <option>COMOROS STOP</option>
+            <option>CONGO (REPUBLIC OF THE CONGO) STOP</option>
+            <option>COSTA RICA STOP</option>
+            <option>CÔTE D’IVOIRE STOP</option>
+            <option>CROATIA STOP</option>
+            <option>CUBA STOP</option>
+            <option>CYPRUS STOP</option>
+            <option>CZECHIA STOP</option>
+            <option>DEMOCRATIC REPUBLIC OF THE CONGO STOP</option>
+            <option>DENMARK STOP</option>
+            <option>DJIBOUTI STOP</option>
+            <option>DOMINICA STOP</option>
+            <option>DOMINICAN REPUBLIC STOP</option>
+            <option>ECUADOR STOP</option>
+            <option>EGYPT STOP</option>
+            <option>EL SALVADOR STOP</option>
+            <option>EQUATORIAL GUINEA STOP</option>
+            <option>ERITREA STOP</option>
+            <option>ESTONIA STOP</option>
+            <option>ESWATINI STOP</option>
+            <option>ETHIOPIA STOP</option>
+            <option>FIJI STOP</option>
+            <option>FINLAND STOP</option>
+            <option>FRANCE STOP</option>
+            <option>GABON STOP</option>
+            <option>GAMBIA STOP</option>
+            <option>GEORGIA STOP</option>
+            <option>GERMANY STOP</option>
+            <option>GHANA STOP</option>
+            <option>GREECE STOP</option>
+            <option>GRENADA STOP</option>
+            <option>GUATEMALA STOP</option>
+            <option>GUINEA STOP</option>
+            <option>GUINEA-BISSAU STOP</option>
+            <option>GUYANA STOP</option>
+            <option>HAITI STOP</option>
+            <option>HONDURAS STOP</option>
+            <option>HUNGARY STOP</option>
+            <option>ICELAND STOP</option>
+            <option>INDIA STOP</option>
+            <option>INDONESIA STOP</option>
+            <option>IRAN STOP</option>
+            <option>IRAQ STOP</option>
+            <option>IRELAND STOP</option>
+            <option>ISRAEL STOP</option>
+            <option>ITALY STOP</option>
+            <option>JAMAICA STOP</option>
+            <option>JAPAN STOP</option>
+            <option>JORDAN STOP</option>
+            <option>KAZAKHSTAN STOP</option>
+            <option>KENYA STOP</option>
+            <option>KIRIBATI STOP</option>
+            <option>KUWAIT STOP</option>
+            <option>KYRGYZSTAN STOP</option>
+            <option>LAOS STOP</option>
+            <option>LATVIA STOP</option>
+            <option>LEBANON STOP</option>
+            <option>LESOTHO STOP</option>
+            <option>LIBERIA STOP</option>
+            <option>LIBYA STOP</option>
+            <option>LIECHTENSTEIN STOP</option>
+            <option>LITHUANIA STOP</option>
+            <option>LUXEMBOURG STOP</option>
+            <option>MADAGASCAR STOP</option>
+            <option>MALAWI STOP</option>
+            <option>MALAYSIA STOP</option>
+            <option>MALDIVES STOP</option>
+            <option>MALI STOP</option>
+            <option>MALTA STOP</option>
+            <option>MARSHALL ISLANDS STOP</option>
+            <option>MAURITANIA STOP</option>
+            <option>MAURITIUS STOP</option>
+            <option>MEXICO STOP</option>
+            <option>MICRONESIA STOP</option>
+            <option>MOLDOVA STOP</option>
+            <option>MONACO STOP</option>
+            <option>MONGOLIA STOP</option>
+            <option>MONTENEGRO STOP</option>
+            <option>MOROCCO STOP</option>
+            <option>MOZAMBIQUE STOP</option>
+            <option>MYANMAR STOP</option>
+            <option>NAMIBIA STOP</option>
+            <option>NAURU STOP</option>
+            <option>NEPAL STOP</option>
+            <option>NETHERLANDS STOP</option>
+            <option>NEW ZEALAND STOP</option>
+            <option>NICARAGUA STOP</option>
+            <option>NIGER STOP</option>
+            <option>NIGERIA STOP</option>
+            <option>NORTH KOREA STOP</option>
+            <option>NORTH MACEDONIA STOP</option>
+            <option>NORWAY STOP</option>
+            <option>OMAN STOP</option>
+            <option>PAKISTAN STOP</option>
+            <option>PALAU STOP</option>
+            <option>PALESTINE STOP</option>
+            <option>PANAMA STOP</option>
+            <option>PAPUA NEW GUINEA STOP</option>
+            <option>PARAGUAY STOP</option>
+            <option>PERU STOP</option>
+            <option>PHILIPPINES STOP</option>
+            <option>POLAND STOP</option>
+            <option>PORTUGAL STOP</option>
+            <option>QATAR STOP</option>
+            <option>ROMANIA STOP</option>
+            <option>RUSSIA STOP</option>
+            <option>RWANDA STOP</option>
+            <option>SAINT KITTS AND NEVIS STOP</option>
+            <option>SAINT LUCIA STOP</option>
+            <option>SAINT VINCENT AND THE GRENADINES STOP</option>
+            <option>SAMOA STOP</option>
+            <option>SAN MARINO STOP</option>
+            <option>SÃO TOMÉ AND PRÍNCIPE STOP</option>
+            <option>SAUDI ARABIA STOP</option>
+            <option>SENEGAL STOP</option>
+            <option>SERBIA STOP</option>
+            <option>SEYCHELLES STOP</option>
+            <option>SIERRA LEONE STOP</option>
+            <option>SINGAPORE STOP</option>
+            <option>SLOVAKIA STOP</option>
+            <option>SLOVENIA STOP</option>
+            <option>SOLOMON ISLANDS STOP</option>
+            <option>SOMALIA STOP</option>
+            <option>SOUTH AFRICA STOP</option>
+            <option>SOUTH KOREA STOP</option>
+            <option>SOUTH SUDAN STOP</option>
+            <option>SPAIN STOP</option>
+            <option>SRI LANKA STOP</option>
+            <option>SUDAN STOP</option>
+            <option>SURINAME STOP</option>
+            <option>SWEDEN STOP</option>
+            <option>SWITZERLAND STOP</option>
+            <option>SYRIA STOP</option>
+            <option>TAIWAN STOP</option>
+            <option>TAJIKISTAN STOP</option>
+            <option>TANZANIA STOP</option>
+            <option>THAILAND STOP</option>
+            <option>TIMOR-LESTE STOP</option>
+            <option>TOGO STOP</option>
+            <option>TONGA STOP</option>
+            <option>TRINIDAD AND TOBAGO STOP</option>
+            <option>TUNISIA STOP</option>
+            <option>TÜRKIYE STOP</option>
+            <option>TURKMENISTAN STOP</option>
+            <option>TUVALU STOP</option>
+            <option>UGANDA STOP</option>
+            <option>UKRAINE STOP</option>
+            <option>UNITED ARAB EMIRATES STOP</option>
+            <option>UNITED KINGDOM STOP</option>
+            <option>UNITED STATES STOP</option>
+            <option>URUGUAY STOP</option>
+            <option>UZBEKISTAN STOP</option>
+            <option>VANUATU STOP</option>
+            <option>VATICAN CITY STOP</option>
+            <option>VENEZUELA STOP</option>
+            <option>VIETNAM STOP</option>
+            <option>YEMEN STOP</option>
+            <option>ZAMBIA STOP</option>
+            <option>ZIMBABWE STOP</option>
+            <option>WESTIE FAN EDITION</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="pc-actions">
+        <button id="downloadBtn" class="pc-primary" type="button"><i class="fa-solid fa-download"></i> Download press photo</button>
+        <button id="shareBtn" class="pc-secondary" type="button"><i class="fa-brands fa-x-twitter"></i> Post on X</button>
+      </div>
+      <p id="status" class="pc-status">Upload a photo to begin.</p>
+    </div>
+
+    <div class="pc-preview-wrap">
+      <div class="pc-preview-label"><span>02 / PRESS CARPET</span><b>LIVE PREVIEW</b></div>
+
+      <div class="pc-carpet" id="pressCarpet">
+        <div class="pc-glow"></div>
+        <img class="pc-carpet-logo" src="images/you-maniac-community-logo.png" alt="YouManiac">
+        <div class="pc-corner pc-corner-a">WILLIAMEST</div>
+        <div class="pc-corner pc-corner-b">YOU MANIAC<br><b>PRESS TOUR</b></div>
+
+        <div class="pc-photo-frame" id="photoFrame">
+          <div id="placeholder" class="pc-placeholder">
+            <strong>YM</strong><span>YOUR WILLIAMEST PHOTO</span>
+          </div>
+          <img id="previewImage" alt="WilliamEst fan press photo">
+        </div>
+
+        <div class="pc-footer">
+          <div><strong id="stopPreview">GLOBAL FAN PRESS TOUR</strong><span>OFFICIAL FAN EDITION</span></div>
+          <b id="usernamePreview">@yourusername</b>
+        </div>
+        <div class="pc-bigmark">YM</div>
+      </div>
+
+      <p class="pc-tip">Use the controls to get your photo positioned exactly how you want it.</p>
+    </div>
+  </section>
+
+  <section class="pc-how">
+    <span class="pc-kicker">HOW TO JOIN</span>
+    <div class="pc-steps">
+      <div><b>01</b><strong>Upload</strong><span>Choose your favourite WilliamEst photo.</span></div>
+      <div><b>02</b><strong>Customize</strong><span>Add your X username and position your photo.</span></div>
+      <div><b>03</b><strong>Post</strong><span>Download it, attach it to your X post and join the fan press tour.</span></div>
+    </div>
+  </section>
+</main>
+
+
+
+
+<footer class="pc-site-footer">
+  <div class="pc-footer-card">
+    <div class="pc-footer-top">
+      <div>
+        <span class="pc-footer-eyebrow">YOU MANIAC • FAN PRESS TOUR</span>
+        <h2>WETrendingTeam</h2>
+      </div>
+
+      <div class="pc-footer-social">
+        <span>Connect</span>
+        <div>
+          <a href="https://x.com/WETrendingTeam" target="_blank" rel="noopener noreferrer" aria-label="X"><i class="fab fa-x-twitter"></i></a>
+          <a href="https://instagram.com/WETrendingTeam" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://facebook.com/WETrendingTeam" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+          <a href="https://www.tiktok.com/@wetrendingteam3" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="pc-footer-bottom">
+      <span>© 2026 WETrendingTeam. All Rights Reserved.</span>
+      <span>Designed &amp; Developed by <a href="https://x.com/Mr_Queen00" target="_blank" rel="noopener noreferrer">@Mr_Queen00</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="press-carpet.js"></script>
+</body>
+</html>
