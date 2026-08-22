@@ -116,15 +116,115 @@ function requirePhoto(){
   document.querySelector(".pc-upload").scrollIntoView({behavior:"smooth",block:"center"});
   return false;
 }
-document.getElementById("downloadBtn").addEventListener("click",()=>{
-  if(!requirePhoto())return;
-  const link=document.createElement("a");link.download="westie-press-tour.png";link.href=canvas().toDataURL("image/png");link.click();
-  status.textContent="Downloaded! Attach the image to your X post.";
+
+document.getElementById("downloadBtn").addEventListener("click", async () => {
+    if (!requirePhoto()) return;
+
+    const c = canvas();
+
+    c.toBlob(async (blob) => {
+        if (!blob) {
+            status.textContent = "Unable to create the press photo.";
+            return;
+        }
+
+        const file = new File(
+            [blob],
+            "westie-press-tour.png",
+            { type: "image/png" }
+        );
+
+        /*
+         * iPhone / iPad:
+         * Open the native share sheet so the user can
+         * Save Image / Save to Files / AirDrop, etc.
+         */
+        if (
+            navigator.share &&
+            navigator.canShare &&
+            navigator.canShare({ files: [file] })
+        ) {
+            try {
+                await navigator.share({
+                    files: [file],
+                    title: "You Maniac Press Tour",
+                    text: "My You Maniac Press Tour photo"
+                });
+
+                status.textContent = "Press photo ready to save or share.";
+                return;
+            } catch (error) {
+                if (error.name === "AbortError") {
+                    status.textContent = "Share cancelled.";
+                    return;
+                }
+            }
+        }
+
+        /*
+         * Fallback for browsers that support normal downloads.
+         */
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = "westie-press-tour.png";
+
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+        status.textContent = "Downloaded! Attach the image to your X post.";
+    }, "image/png");
 });
-document.getElementById("shareBtn").addEventListener("click",()=>{
-  if(!requirePhoto())return;
-  const text=`Just stepped onto the Westie Press Carpet! 🎬📸\n\n${userName()}\n\n#YouManiacPressTour #YouManiacSeries #WilliamEst #WestiePressTour`;
-  window.open("https://twitter.com/intent/post?text="+encodeURIComponent(text),"_blank","noopener,noreferrer");
-  status.textContent="X opened — attach the downloaded press photo to your post.";
+
+
+document.getElementById("shareBtn").addEventListener("click", async () => {
+    if (!requirePhoto()) return;
+
+    const text =
+        `Just stepped onto the Westie Press Carpet! 🎬📸\n\n` +
+        `${userName()}\n\n` +
+        `#YouManiacPressTour #YouManiacSeries #WilliamEst #WestiePressTour`;
+
+    /*
+     * Try to open the X app first.
+     */
+    const xAppUrl =
+        "twitter://post?message=" + encodeURIComponent(text);
+
+    const xWebUrl =
+        "https://x.com/intent/post?text=" + encodeURIComponent(text);
+
+    let appOpened = false;
+
+    const visibilityHandler = () => {
+        if (document.hidden) {
+            appOpened = true;
+        }
+    };
+
+    document.addEventListener("visibilitychange", visibilityHandler);
+
+    window.location.href = xAppUrl;
+
+    /*
+     * If X app does not open, fall back to X web.
+     */
+    setTimeout(() => {
+        document.removeEventListener(
+            "visibilitychange",
+            visibilityHandler
+        );
+
+        if (!appOpened && !document.hidden) {
+            window.location.href = xWebUrl;
+        }
+    }, 1200);
+
+    status.textContent =
+        "Opening X… attach your downloaded press photo to the post.";
 });
-update();
+
