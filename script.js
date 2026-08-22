@@ -1,97 +1,49 @@
-/* ==================================================
-   WETrendingTeam v2.0
-   SCRIPT FILE
-================================================== */
-
-
 /* ==========================
-   LOADING SCREEN
+   COUNTDOWN — 10:00 AM THAILAND TIME
+   Thailand = UTC+7
 ========================== */
 
-window.addEventListener("load",()=>{
+function getNextThailand10AM() {
 
-    const loader = document.getElementById("loader");
+    const now = new Date();
 
-    setTimeout(()=>{
+    // Current time in Thailand
+    const thailandNow = new Date(
+        now.toLocaleString("en-US", {
+            timeZone: "Asia/Bangkok"
+        })
+    );
 
-        if(loader){
+    // Set target to 10:00 AM Thailand time
+    thailandNow.setHours(10, 0, 0, 0);
 
-            loader.style.opacity="0";
-            loader.style.visibility="hidden";
-
-        }
-
-    },2200);
-
-});
-
-
-
-/* ==========================
-   HERO SLIDESHOW
-========================== */
-
-const slides = document.querySelectorAll(".slide");
-
-let currentSlide = 0;
-
-
-function showSlide(index){
-
-    slides.forEach(slide=>{
-
-        slide.classList.remove("active");
-
-    });
-
-
-    if(slides[index]){
-
-        slides[index].classList.add("active");
-
+    // If 10:00 AM has already passed,
+    // countdown to tomorrow's 10:00 AM
+    if (new Date() >= thailandNow) {
+        thailandNow.setDate(thailandNow.getDate() + 1);
     }
 
+    // Convert Thailand target back to a UTC timestamp
+    const targetString =
+        thailandNow.getFullYear() +
+        "-" +
+        String(thailandNow.getMonth() + 1).padStart(2, "0") +
+        "-" +
+        String(thailandNow.getDate()).padStart(2, "0") +
+        "T10:00:00+07:00";
+
+    return new Date(targetString).getTime();
 }
 
 
-if(slides.length > 0){
-
-    setInterval(()=>{
-
-        currentSlide++;
-
-        if(currentSlide >= slides.length){
-
-            currentSlide = 0;
-
-        }
-
-        showSlide(currentSlide);
-
-    },5000);
-
-}
+let countdownTarget = getNextThailand10AM();
 
 
-
-
-/* ==========================
-   COUNTDOWN — 24 HOUR MISSION
-   Starts at 10:01 AM
-========================== */
-
-const missionStart = Date.UTC(2026, 7, 13, 9, 1, 0);
-
-const missionEnd =
-    missionStart + (24 * 60 * 60 * 1000);
-
-
-function updateCountdown(){
+function updateCountdown() {
 
     const now = Date.now();
 
-    const distance =
-        missionEnd - now;
+    let distance = countdownTarget - now;
 
 
     const daysEl =
@@ -107,23 +59,19 @@ function updateCountdown(){
         document.getElementById("seconds");
 
 
+    // When countdown reaches zero
+    if (distance <= 0) {
 
-    /* ==========================
-       MISSION ENDED
-    ========================== */
-
-    if(distance <= 0){
-
-        if(daysEl)
+        if (daysEl)
             daysEl.textContent = "00";
 
-        if(hoursEl)
+        if (hoursEl)
             hoursEl.textContent = "00";
 
-        if(minutesEl)
+        if (minutesEl)
             minutesEl.textContent = "00";
 
-        if(secondsEl)
+        if (secondsEl)
             secondsEl.textContent = "00";
 
 
@@ -132,25 +80,24 @@ function updateCountdown(){
                 ".countdown .section-title"
             );
 
-
         const sub =
             document.querySelector(
                 ".countdown .section-subtitle"
             );
 
 
-        if(label){
+        if (label) {
 
             label.textContent =
-                "🔴 MISSION TIME HAS ENDED";
+                "🎟️ TICKETS OPEN NOW";
 
         }
 
 
-        if(sub){
+        if (sub) {
 
             sub.textContent =
-                "Today's 24-hour mission has ended. Stay tuned for the next mission.";
+                "Tickets are now available. Get your tickets for YOU MANIAC Opening Night.";
 
         }
 
@@ -159,11 +106,6 @@ function updateCountdown(){
 
     }
 
-
-
-    /* ==========================
-       CALCULATE TIME
-    ========================== */
 
     const days =
         Math.floor(
@@ -173,416 +115,44 @@ function updateCountdown(){
 
     const hours =
         Math.floor(
-            (distance % 86400000)
-            / 3600000
+            (distance % 86400000) / 3600000
         );
 
 
     const minutes =
         Math.floor(
-            (distance % 3600000)
-            / 60000
+            (distance % 3600000) / 60000
         );
 
 
     const seconds =
         Math.floor(
-            (distance % 60000)
-            / 1000
+            (distance % 60000) / 1000
         );
 
 
-
-    /* ==========================
-       DISPLAY TIME
-    ========================== */
-
-    if(daysEl){
-
+    if (daysEl)
         daysEl.textContent =
-            String(days).padStart(2,"0");
-
-    }
+            String(days).padStart(2, "0");
 
 
-    if(hoursEl){
-
+    if (hoursEl)
         hoursEl.textContent =
-            String(hours).padStart(2,"0");
-
-    }
+            String(hours).padStart(2, "0");
 
 
-    if(minutesEl){
-
+    if (minutesEl)
         minutesEl.textContent =
-            String(minutes).padStart(2,"0");
-
-    }
+            String(minutes).padStart(2, "0");
 
 
-    if(secondsEl){
-
+    if (secondsEl)
         secondsEl.textContent =
-            String(seconds).padStart(2,"0");
-
-    }
+            String(seconds).padStart(2, "0");
 
 }
 
 
 updateCountdown();
 
-setInterval(
-    updateCountdown,
-    1000
-);
-
-
-
-
-/* ==================================================
-   PART 2
-   THEME + MOBILE MENU + NAVBAR
-================================================== */
-
-
-const menuBtn =
-    document.querySelector(".menu-btn");
-
-const navLinks =
-    document.querySelector(".nav-links");
-
-
-
-if(menuBtn && navLinks){
-
-
-    menuBtn.addEventListener("click",()=>{
-
-
-        navLinks.classList.toggle(
-            "mobile-active"
-        );
-
-
-        menuBtn.innerHTML =
-        navLinks.classList.contains(
-            "mobile-active"
-        )
-        ?
-        '<i class="fa-solid fa-xmark"></i>'
-        :
-        '<i class="fa-solid fa-bars"></i>';
-
-
-    });
-
-
-
-    document.querySelectorAll(
-        ".nav-links a"
-    )
-    .forEach(link=>{
-
-
-        link.addEventListener("click",()=>{
-
-
-            navLinks.classList.remove(
-                "mobile-active"
-            );
-
-
-            menuBtn.innerHTML =
-            '<i class="fa-solid fa-bars"></i>';
-
-
-        });
-
-
-    });
-
-
-}
-
-
-
-
-/* ==========================
-   NAVBAR SCROLL EFFECT
-========================== */
-
-
-const navbar =
-    document.querySelector(".navbar");
-
-
-window.addEventListener("scroll",()=>{
-
-
-    if(!navbar){
-
-        return;
-
-    }
-
-
-    if(window.scrollY > 80){
-
-        navbar.classList.add(
-            "scrolled"
-        );
-
-    }
-
-    else{
-
-        navbar.classList.remove(
-            "scrolled"
-        );
-
-    }
-
-
-});
-
-
-
-
-/* ==================================================
-   PART 3
-   BACK TO TOP + SCROLL ANIMATION
-================================================== */
-
-
-const backToTop =
-    document.getElementById(
-        "backToTop"
-    );
-
-
-
-if(backToTop){
-
-
-    window.addEventListener("scroll",()=>{
-
-
-        if(window.scrollY > 400){
-
-            backToTop.classList.add(
-                "show"
-            );
-
-        }
-
-        else{
-
-            backToTop.classList.remove(
-                "show"
-            );
-
-        }
-
-
-    });
-
-
-
-    backToTop.addEventListener(
-        "click",
-        ()=>{
-
-
-            window.scrollTo({
-
-                top:0,
-
-                behavior:"smooth"
-
-            });
-
-
-        }
-
-    );
-
-
-}
-
-
-
-
-/* ==========================
-   SCROLL REVEAL
-========================== */
-
-
-const revealElements =
-    document.querySelectorAll(
-        "section, .status-card, .mission-card, .rating-card, .event-card"
-    );
-
-
-
-if("IntersectionObserver" in window){
-
-
-    const revealObserver =
-    new IntersectionObserver(
-
-    (entries)=>{
-
-
-        entries.forEach(entry=>{
-
-
-            if(entry.isIntersecting){
-
-
-                entry.target.classList.add(
-                    "active"
-                );
-
-
-                revealObserver.unobserve(
-                    entry.target
-                );
-
-
-            }
-
-
-        });
-
-
-    },
-
-    {
-        threshold:.15
-    }
-
-    );
-
-
-
-    revealElements.forEach(element=>{
-
-
-        element.classList.add(
-            "reveal"
-        );
-
-
-        revealObserver.observe(
-            element
-        );
-
-
-    });
-
-
-}
-
-
-
-
-/* ==========================
-   WATCH PLATFORM POPUP
-========================== */
-
-
-const platformPopup =
-    document.getElementById(
-        "platformPopup"
-    );
-
-
-
-const episodeButtons =
-    document.querySelectorAll(
-        ".episode-btn"
-    );
-
-
-
-const popupClose =
-    document.querySelector(
-        ".popup-close"
-    );
-
-
-
-// OPEN POPUP
-
-episodeButtons.forEach(button=>{
-
-
-    button.addEventListener(
-        "click",
-        ()=>{
-
-
-            if(platformPopup){
-
-                platformPopup.style.display =
-                    "flex";
-
-            }
-
-
-        }
-
-    );
-
-
-});
-
-
-
-
-// CLOSE BUTTON
-
-if(popupClose){
-
-
-    popupClose.addEventListener(
-        "click",
-        ()=>{
-
-
-            platformPopup.style.display =
-                "none";
-
-
-        }
-
-    );
-
-
-}
-
-
-
-
-// CLOSE OUTSIDE POPUP
-
-window.addEventListener(
-    "click",
-    (e)=>{
-
-
-        if(e.target === platformPopup){
-
-
-            platformPopup.style.display =
-                "none";
-
-
-        }
-
-
-    }
-
-);
+setInterval(updateCountdown, 1000);
