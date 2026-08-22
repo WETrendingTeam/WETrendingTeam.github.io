@@ -5,3 +5,42 @@
 .activity-main{width:min(1000px,100%);margin:auto;padding:25px 20px 60px}.tour-back{display:inline-flex;align-items:center;gap:8px;color:#fff;background:var(--purple);padding:9px 13px;text-decoration:none;font-size:10px;font-weight:900;text-transform:uppercase;box-shadow:4px 4px 0 var(--violet)}.activity-head{text-align:center;padding:25px 0 30px}.activity-head h1{margin:0;font-size:clamp(32px,7vw,58px);line-height:.9}.activity-head p{max-width:650px;margin:15px auto;color:#746681;line-height:1.6;font-size:13px;font-weight:600}.activity-booth{position:relative;max-width:860px;margin:0 auto;padding:22px 18px 18px;border:3px solid var(--purple);border-radius:26px;overflow:hidden;box-shadow:10px 11px 0 var(--purple)}.activity-panel{position:relative;background:#fff;border:3px solid var(--purple);border-radius:22px;padding:24px;box-shadow:8px 9px 0 var(--purple)}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:grid;gap:7px}.field.full{grid-column:1/-1}.field label{font-size:10px;font-weight:900}.field input,.field select,.field textarea{width:100%;padding:13px 14px;border:2px solid #d8c9ea;border-radius:10px;background:#fcf9ff;outline:none;font:600 12px Poppins}.field textarea{min-height:120px}.activity-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:2px solid var(--purple);border-radius:10px;padding:12px 16px;background:var(--violet);color:#fff;font:900 11px Poppins;cursor:pointer;text-decoration:none;box-shadow:4px 4px 0 var(--purple)}.btn.alt{background:var(--yellow);color:var(--purple)}.question-list{display:grid;gap:16px}.question{border:2px solid var(--purple);border-radius:15px;padding:17px;background:#fffdf6;box-shadow:4px 4px 0 var(--yellow)}.choices{display:grid;gap:8px}.choice{display:flex;align-items:center;gap:9px;padding:10px 12px;border:2px solid #eadff3;border-radius:9px;background:#fff;font-size:11px;font-weight:700}.result{margin-top:20px;padding:17px;border:3px solid var(--purple);border-radius:12px;background:var(--red);color:#fff;font-size:13px;font-weight:900;display:none}.wall-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.wall-card{aspect-ratio:1/1.15;border:3px solid var(--purple);border-radius:13px;background:linear-gradient(145deg,#251043,#7137e8);padding:14px;display:flex;flex-direction:column;justify-content:space-between;color:#fff;overflow:hidden;box-shadow:5px 5px 0 var(--yellow)}.upload-wall{border:3px dashed var(--violet);border-radius:15px;padding:30px;text-align:center;margin-bottom:20px;background:#fffde9}.upload-wall input{display:none}.upload-wall label{cursor:pointer;font-size:12px;font-weight:900;color:var(--violet)}.tour-footer{text-align:center;padding-top:40px;color:#8f809e;font-size:9px;font-weight:700;letter-spacing:.12em}.tour-footer span{color:var(--violet)}
 @media(max-width:720px){.tour-poster-page{padding:0}.poster{min-height:auto;width:100%;padding:18px 16px 22px;border-width:1px;box-shadow:none}.poster-header{grid-template-columns:72px 1fr 72px;gap:8px}.corner-logo{width:68px;height:58px;border-width:3px;box-shadow:4px 5px 0 #05030a}.poster-title{padding-top:5px}.eyebrow{font-size:7px;margin-bottom:8px}.poster-title h1{font-size:clamp(34px,10vw,52px)}.tour-strip{font-size:7px;padding:7px 10px;margin-top:14px;white-space:nowrap}.poster-intro{margin:34px 2px 18px}.intro-copy{font-size:13px}.scribble{font-size:8px}.poster-main{grid-template-columns:1fr;gap:24px}.booth{min-height:88px}.booth h2{font-size:15px}.booth p{font-size:7px}.feature-photo{width:min(78vw,360px)}.opening-card{margin-top:38px}.opening-card div{font-size:14px}.opening-card strong{font-size:21px}.hashtags span{font-size:6px;padding:5px 7px}.poster footer{font-size:7px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.wall-grid{grid-template-columns:1fr 1fr}}
 @media(min-width:721px){.poster{aspect-ratio:210/297}}
+/* BACK TO WEBSITE BUTTON */
+.back-home {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  z-index: 9999;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 10px 16px;
+
+  background: #ffffff;
+  color: #24103b;
+
+  border: 2px solid #f4ef3a;
+  border-radius: 999px;
+
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+
+  box-shadow: 4px 4px 0 #000000;
+}
+
+.back-home:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+  .back-home {
+    top: 10px;
+    left: 10px;
+    padding: 8px 12px;
+    font-size: 11px;
+  }
+}
