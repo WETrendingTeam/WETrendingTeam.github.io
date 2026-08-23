@@ -87,7 +87,7 @@ if (slides.length > 0) {
 
    The countdown is fixed to:
 
-   23 August 2026
+   29 August 2026
    10:00 AM
    Thailand Time (UTC+7)
 
@@ -96,8 +96,7 @@ if (slides.length > 0) {
 
 
 const ticketSaleTime =
-    new Date("2026-08-23T10:00:00+07:00").getTime();
-
+    new Date("2026-08-29T19:30:00+07:00").getTime();
 
 
 function updateCountdown() {
@@ -173,17 +172,16 @@ function updateCountdown() {
 
         if (label) {
 
-            label.textContent =
-                "🎟️ TICKETS ARE NOW AVAILABLE";
+         label.textContent =
+    "PREMIER DAY";
 
         }
 
 
         if (sub) {
 
-            sub.textContent =
-                "Tickets for all seats are now available online at ThaiTicketMajor.";
-
+           sub.textContent =
+    "YOu Maniac Opening Night — 29 August 2026";
         }
 
 
