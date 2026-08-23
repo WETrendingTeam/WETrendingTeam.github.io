@@ -259,128 +259,224 @@ function updateCountdown() {
 }
 
 
-/* ==========================
-   START COUNTDOWN
-========================== */
-
-updateCountdown();
-
-setInterval(
-    updateCountdown,
-    1000
-);
-
-
-
-
 /* ==================================================
-   PART 2
-   THEME + MOBILE MENU + NAVBAR
+   EVENT COUNTDOWN
+   29 AUGUST 2026 — 7:30 PM
+   THAILAND TIME (UTC+7)
 ================================================== */
 
 
-const menuBtn =
-    document.querySelector(".menu-btn");
+/*
+   IMPORTANT:
+
+   The countdown is fixed to:
+
+   29 August 2026
+   7:30 PM Thailand Time (UTC+7)
+
+   It does NOT reset every day.
+*/
 
 
-const navLinks =
-    document.querySelector(".nav-links");
+const eventTime =
+    new Date("2026-08-29T19:30:00+07:00").getTime();
 
 
+function updateCountdown() {
 
-if (menuBtn && navLinks) {
+    const now = Date.now();
 
-
-    menuBtn.addEventListener("click", () => {
-
-
-        navLinks.classList.toggle(
-            "mobile-active"
-        );
+    const distance =
+        eventTime - now;
 
 
-        menuBtn.innerHTML =
-            navLinks.classList.contains(
-                "mobile-active"
-            )
-            ?
-            '<i class="fa-solid fa-xmark"></i>'
-            :
-            '<i class="fa-solid fa-bars"></i>';
+    /* ==========================
+       COUNTDOWN ELEMENTS
+    ========================== */
+
+    const daysEl =
+        document.getElementById("days");
+
+    const hoursEl =
+        document.getElementById("hours");
+
+    const minutesEl =
+        document.getElementById("minutes");
+
+    const secondsEl =
+        document.getElementById("seconds");
 
 
-    });
+    /* ==========================
+       EVENT DAY
+    ========================== */
+
+    if (distance <= 0) {
+
+        if (daysEl) {
+            daysEl.textContent = "00";
+        }
+
+        if (hoursEl) {
+            hoursEl.textContent = "00";
+        }
+
+        if (minutesEl) {
+            minutesEl.textContent = "00";
+        }
+
+        if (secondsEl) {
+            secondsEl.textContent = "00";
+        }
 
 
+        const label =
+            document.querySelector(
+                ".countdown .section-title"
+            );
 
-    document.querySelectorAll(
-        ".nav-links a"
-    )
-    .forEach(link => {
-
-
-        link.addEventListener("click", () => {
-
-
-            navLinks.classList.remove(
-                "mobile-active"
+        const sub =
+            document.querySelector(
+                ".countdown .section-subtitle"
             );
 
 
-            menuBtn.innerHTML =
-                '<i class="fa-solid fa-bars"></i>';
+        if (label) {
+
+            label.textContent =
+                "PREMIER DAY";
+
+        }
 
 
-        });
+        if (sub) {
 
+            sub.textContent =
+                "YOu Maniac Opening Night — 29 August 2026";
 
-    });
+        }
 
-
-}
-
-
-
-
-/* ==========================
-   NAVBAR SCROLL EFFECT
-========================== */
-
-
-const navbar =
-    document.querySelector(".navbar");
-
-
-window.addEventListener("scroll", () => {
-
-
-    if (!navbar) {
 
         return;
 
     }
 
 
-    if (window.scrollY > 80) {
+    /* ==========================
+       CALCULATE DAYS
+    ========================== */
 
-        navbar.classList.add(
-            "scrolled"
+    const days =
+        Math.floor(
+            distance /
+            (1000 * 60 * 60 * 24)
         );
+
+
+    /* ==========================
+       CALCULATE HOURS
+    ========================== */
+
+    const hours =
+        Math.floor(
+            (distance %
+            (1000 * 60 * 60 * 24))
+            /
+            (1000 * 60 * 60)
+        );
+
+
+    /* ==========================
+       CALCULATE MINUTES
+    ========================== */
+
+    const minutes =
+        Math.floor(
+            (distance %
+            (1000 * 60 * 60))
+            /
+            (1000 * 60)
+        );
+
+
+    /* ==========================
+       CALCULATE SECONDS
+    ========================== */
+
+    const seconds =
+        Math.floor(
+            (distance %
+            (1000 * 60))
+            /
+            1000
+        );
+
+
+    /* ==========================
+       DISPLAY DAYS
+    ========================== */
+
+    if (daysEl) {
+
+        daysEl.textContent =
+            String(days).padStart(2, "0");
 
     }
 
-    else {
 
-        navbar.classList.remove(
-            "scrolled"
-        );
+    /* ==========================
+       DISPLAY HOURS
+    ========================== */
+
+    if (hoursEl) {
+
+        hoursEl.textContent =
+            String(hours).padStart(2, "0");
 
     }
 
 
-});
+    /* ==========================
+       DISPLAY MINUTES
+    ========================== */
+
+    if (minutesEl) {
+
+        minutesEl.textContent =
+            String(minutes).padStart(2, "0");
+
+    }
 
 
+    /* ==========================
+       DISPLAY SECONDS
+    ========================== */
+
+    if (secondsEl) {
+
+        secondsEl.textContent =
+            String(seconds).padStart(2, "0");
+
+    }
+
+}
+
+
+/* ==========================
+   START COUNTDOWN
+========================== */
+
+updateCountdown();
+
+
+/* ==========================
+   UPDATE EVERY SECOND
+========================== */
+
+setInterval(
+    updateCountdown,
+    1000
+);
 
 
 /* ==================================================
