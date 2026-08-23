@@ -74,191 +74,6 @@ if (slides.length > 0) {
 
 
 
-
-/* ==================================================
-   TICKET COUNTDOWN
-   23 AUGUST 2026 — 10:00 AM
-   THAILAND TIME (UTC+7)
-================================================== */
-
-
-/*
-   IMPORTANT:
-
-   The countdown is fixed to:
-
-   29 August 2026
-   10:00 AM
-   Thailand Time (UTC+7)
-
-   It does NOT reset every day.
-*/
-
-
-const ticketSaleTime =
-    new Date("2026-08-29T19:30:00+07:00").getTime();
-
-
-function updateCountdown() {
-
-    const now = Date.now();
-
-    const distance =
-        ticketSaleTime - now;
-
-
-    /* ==========================
-       COUNTDOWN ELEMENTS
-    ========================== */
-
-    const daysEl =
-        document.getElementById("days");
-
-    const hoursEl =
-        document.getElementById("hours");
-
-    const minutesEl =
-        document.getElementById("minutes");
-
-    const secondsEl =
-        document.getElementById("seconds");
-
-
-    /* ==========================
-       TICKETS ARE AVAILABLE
-    ========================== */
-
-    if (distance <= 0) {
-
-        if (daysEl) {
-
-            daysEl.textContent = "00";
-
-        }
-
-
-        if (hoursEl) {
-
-            hoursEl.textContent = "00";
-
-        }
-
-
-        if (minutesEl) {
-
-            minutesEl.textContent = "00";
-
-        }
-
-
-        if (secondsEl) {
-
-            secondsEl.textContent = "00";
-
-        }
-
-
-        const label =
-            document.querySelector(
-                ".countdown .section-title"
-            );
-
-
-        const sub =
-            document.querySelector(
-                ".countdown .section-subtitle"
-            );
-
-
-        if (label) {
-
-         label.textContent =
-    "PREMIER DAY";
-
-        }
-
-
-        if (sub) {
-
-           sub.textContent =
-    "YOu Maniac Opening Night — 29 August 2026";
-        }
-
-
-        return;
-
-    }
-
-
-    /* ==========================
-       CALCULATE TIME REMAINING
-    ========================== */
-
-    const days =
-        Math.floor(
-            distance / (1000 * 60 * 60 * 24)
-        );
-
-
-    const hours =
-        Math.floor(
-            (distance % (1000 * 60 * 60 * 24))
-            / (1000 * 60 * 60)
-        );
-
-
-    const minutes =
-        Math.floor(
-            (distance % (1000 * 60 * 60))
-            / (1000 * 60)
-        );
-
-
-    const seconds =
-        Math.floor(
-            (distance % (1000 * 60))
-            / 1000
-        );
-
-
-    /* ==========================
-       DISPLAY COUNTDOWN
-    ========================== */
-
-    if (daysEl) {
-
-        daysEl.textContent =
-            String(days).padStart(2, "0");
-
-    }
-
-
-    if (hoursEl) {
-
-        hoursEl.textContent =
-            String(hours).padStart(2, "0");
-
-    }
-
-
-    if (minutesEl) {
-
-        minutesEl.textContent =
-            String(minutes).padStart(2, "0");
-
-    }
-
-
-    if (secondsEl) {
-
-        secondsEl.textContent =
-            String(seconds).padStart(2, "0");
-
-    }
-
-}
-
-
 /* ==================================================
    EVENT COUNTDOWN
    29 AUGUST 2026 — 7:30 PM
@@ -273,8 +88,6 @@ function updateCountdown() {
 
    29 August 2026
    7:30 PM Thailand Time (UTC+7)
-
-   It does NOT reset every day.
 */
 
 
@@ -295,16 +108,16 @@ function updateCountdown() {
     ========================== */
 
     const daysEl =
-        document.getElementById("days");
+        document.getElementById("eventDays");
 
     const hoursEl =
-        document.getElementById("hours");
+        document.getElementById("eventHours");
 
     const minutesEl =
-        document.getElementById("minutes");
+        document.getElementById("eventMinutes");
 
     const secondsEl =
-        document.getElementById("seconds");
+        document.getElementById("eventSeconds");
 
 
     /* ==========================
@@ -329,41 +142,12 @@ function updateCountdown() {
             secondsEl.textContent = "00";
         }
 
-
-        const label =
-            document.querySelector(
-                ".countdown .section-title"
-            );
-
-        const sub =
-            document.querySelector(
-                ".countdown .section-subtitle"
-            );
-
-
-        if (label) {
-
-            label.textContent =
-                "PREMIER DAY";
-
-        }
-
-
-        if (sub) {
-
-            sub.textContent =
-                "YOu Maniac Opening Night — 29 August 2026";
-
-        }
-
-
         return;
-
     }
 
 
     /* ==========================
-       CALCULATE DAYS
+       CALCULATE TIME
     ========================== */
 
     const days =
@@ -372,10 +156,6 @@ function updateCountdown() {
             (1000 * 60 * 60 * 24)
         );
 
-
-    /* ==========================
-       CALCULATE HOURS
-    ========================== */
 
     const hours =
         Math.floor(
@@ -386,10 +166,6 @@ function updateCountdown() {
         );
 
 
-    /* ==========================
-       CALCULATE MINUTES
-    ========================== */
-
     const minutes =
         Math.floor(
             (distance %
@@ -398,10 +174,6 @@ function updateCountdown() {
             (1000 * 60)
         );
 
-
-    /* ==========================
-       CALCULATE SECONDS
-    ========================== */
 
     const seconds =
         Math.floor(
@@ -477,8 +249,6 @@ setInterval(
     updateCountdown,
     1000
 );
-
-
 /* ==================================================
    PART 3
    BACK TO TOP + SCROLL ANIMATION
