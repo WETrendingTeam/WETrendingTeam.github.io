@@ -11,6 +11,11 @@ const usernamePreview = document.getElementById("usernamePreview");
 const status = document.getElementById("status");
 
 let sourceImage = null;
+let gestureState = null;
+let lastTapTime = 0;
+const DEFAULT_ZOOM = 1;
+const DEFAULT_X = 0;
+const DEFAULT_Y = 0;
 
 const communityLogo = new Image();
 communityLogo.src = "/images/you-maniac-community-logo.png";
@@ -68,6 +73,78 @@ function update() {
     usernamePreview.textContent = userName();
 }
 
+function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+}
+
+function setFitZoomRange() {
+    if (!sourceImage || !sourceImage.naturalWidth || !sourceImage.naturalHeight) {
+        return;
+    }
+
+    const frameWidth = 840;
+    const frameHeight = 920;
+    const cover = Math.max(
+        frameWidth / sourceImage.naturalWidth,
+        frameHeight / sourceImage.naturalHeight
+    );
+    const contain = Math.min(
+        frameWidth / sourceImage.naturalWidth,
+        frameHeight / sourceImage.naturalHeight
+    );
+
+    // Zoom is relative to the existing cover/fill calculation.
+    // FIT can legitimately be below 1 when the image is not tall enough to fill
+    // the frame without cropping.
+    const fitZoom = contain / cover;
+
+    zoom.min = Math.min(1, fitZoom).toFixed(4);
+}
+
+function resetCrop() {
+    zoom.value = DEFAULT_ZOOM;
+    moveX.value = DEFAULT_X;
+    moveY.value = DEFAULT_Y;
+    update();
+}
+
+function setCropMode(mode) {
+    if (!sourceImage) {
+        status.textContent = "Upload a photo first.";
+        return;
+    }
+
+    setFitZoomRange();
+
+    if (mode === "fit") {
+        const frameWidth = 840;
+        const frameHeight = 920;
+        const cover = Math.max(
+            frameWidth / sourceImage.naturalWidth,
+            frameHeight / sourceImage.naturalHeight
+        );
+        const contain = Math.min(
+            frameWidth / sourceImage.naturalWidth,
+            frameHeight / sourceImage.naturalHeight
+        );
+
+        zoom.value = (contain / cover).toFixed(4);
+    } else {
+        // FILL is the existing Press Carpet behaviour: cover the whole frame.
+        zoom.value = DEFAULT_ZOOM;
+    }
+
+    moveX.value = DEFAULT_X;
+    moveY.value = DEFAULT_Y;
+    update();
+}
+
+function setRangeValue(range, value) {
+    const min = parseFloat(range.min);
+    const max = parseFloat(range.max);
+    range.value = clamp(value, min, max);
+    range.dispatchEvent(new Event("input", { bubbles: true }));
+}
 
 [zoom, moveX, moveY, username, stop].forEach(el => {
     el.addEventListener("input", update);
@@ -83,9 +160,9 @@ document.getElementById("resetBtn").addEventListener("click", () => {
     previewImage.style.display = "none";
     placeholder.style.display = "grid";
 
-    zoom.value = 1;
-    moveX.value = 0;
-    moveY.value = 0;
+    zoom.value = DEFAULT_ZOOM;
+    moveX.value = DEFAULT_X;
+    moveY.value = DEFAULT_Y;
     username.value = "";
     stop.selectedIndex = 0;
 
@@ -93,6 +170,172 @@ document.getElementById("resetBtn").addEventListener("click", () => {
 
     status.textContent = "Upload a photo to begin.";
 });
+
+
+/* =========================================
+   TOUCH-FIRST PHOTO CONTROLS
+========================================= */
+
+const photoFrame = document.getElementById("photoFrame");
+const touchControls = document.getElementById("photoTouchControls");
+
+function pointerDistance(a, b) {
+    return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+}
+
+function photoPointerScale() {
+    if (!photoFrame || !photoFrame.clientWidth) return 1;
+    // The final artwork photo area is 840px wide.
+    return 840 / photoFrame.clientWidth;
+}
+
+function handlePhotoPointerDown(event) {
+    if (!sourceImage) return;
+
+    event.preventDefault();
+
+    if (!gestureState) {
+        gestureState = {
+            pointers: new Map(),
+            startX: 0,
+            startY: 0,
+            startMoveX: parseFloat(moveX.value) || 0,
+            startMoveY: parseFloat(moveY.value) || 0,
+            startZoom: parseFloat(zoom.value) || DEFAULT_ZOOM,
+            startDistance: 0,
+            moved: false
+        };
+    }
+
+    gestureState.pointers.set(event.pointerId, {
+        clientX: event.clientX,
+        clientY: event.clientY
+    });
+
+    const pointers = Array.from(gestureState.pointers.values());
+
+    if (pointers.length === 1) {
+        gestureState.startX = event.clientX;
+        gestureState.startY = event.clientY;
+        gestureState.startMoveX = parseFloat(moveX.value) || 0;
+        gestureState.startMoveY = parseFloat(moveY.value) || 0;
+        gestureState.startZoom = parseFloat(zoom.value) || DEFAULT_ZOOM;
+        gestureState.startDistance = 0;
+    } else if (pointers.length === 2) {
+        gestureState.startDistance = pointerDistance(pointers[0], pointers[1]);
+        gestureState.startZoom = parseFloat(zoom.value) || DEFAULT_ZOOM;
+    }
+
+    previewImage.setPointerCapture?.(event.pointerId);
+}
+
+function handlePhotoPointerMove(event) {
+    if (!gestureState || !gestureState.pointers.has(event.pointerId)) return;
+
+    event.preventDefault();
+
+    gestureState.pointers.set(event.pointerId, {
+        clientX: event.clientX,
+        clientY: event.clientY
+    });
+
+    const pointers = Array.from(gestureState.pointers.values());
+
+    if (pointers.length === 1) {
+        const scale = photoPointerScale();
+        const dx = (event.clientX - gestureState.startX) * scale;
+        const dy = (event.clientY - gestureState.startY) * scale;
+
+        setRangeValue(moveX, gestureState.startMoveX + dx);
+        setRangeValue(moveY, gestureState.startMoveY + dy);
+    } else if (pointers.length >= 2) {
+        const distance = pointerDistance(pointers[0], pointers[1]);
+
+        if (!gestureState.startDistance) {
+            gestureState.startDistance = distance;
+            gestureState.startZoom = parseFloat(zoom.value) || DEFAULT_ZOOM;
+        }
+
+        const nextZoom = gestureState.startZoom *
+            (distance / gestureState.startDistance);
+
+        setRangeValue(zoom, nextZoom);
+    }
+}
+
+function handlePhotoPointerUp(event) {
+    if (!gestureState) return;
+
+    gestureState.pointers.delete(event.pointerId);
+
+    try {
+        previewImage.releasePointerCapture?.(event.pointerId);
+    } catch (_) {}
+
+    if (gestureState.pointers.size === 0) {
+        const now = Date.now();
+        const wasTap = !gestureState.moved;
+
+        if (wasTap && now - lastTapTime < 320) {
+            resetCrop();
+            status.textContent = "Crop reset.";
+            lastTapTime = 0;
+        } else if (wasTap) {
+            lastTapTime = now;
+        } else {
+            lastTapTime = 0;
+        }
+
+        gestureState = null;
+    } else if (gestureState.pointers.size === 1) {
+        const remaining = Array.from(gestureState.pointers.values())[0];
+        gestureState.startX = remaining.clientX;
+        gestureState.startY = remaining.clientY;
+        gestureState.startMoveX = parseFloat(moveX.value) || 0;
+        gestureState.startMoveY = parseFloat(moveY.value) || 0;
+        gestureState.startZoom = parseFloat(zoom.value) || DEFAULT_ZOOM;
+        gestureState.startDistance = 0;
+    }
+}
+
+function markGestureMoved() {
+    if (!gestureState) return;
+    const pointers = Array.from(gestureState.pointers.values());
+    if (pointers.length >= 2) {
+        gestureState.moved = true;
+        return;
+    }
+    if (pointers.length === 1) {
+        const p = pointers[0];
+        const distance = Math.hypot(p.clientX - gestureState.startX, p.clientY - gestureState.startY);
+        if (distance > 6) gestureState.moved = true;
+    }
+}
+
+previewImage.addEventListener("pointerdown", handlePhotoPointerDown);
+previewImage.addEventListener("pointermove", event => {
+    if (gestureState) {
+        markGestureMoved();
+        handlePhotoPointerMove(event);
+    }
+});
+previewImage.addEventListener("pointerup", handlePhotoPointerUp);
+previewImage.addEventListener("pointercancel", handlePhotoPointerUp);
+
+if (touchControls) {
+    touchControls.querySelector('[data-crop-mode="fit"]')?.addEventListener("click", () => {
+        setCropMode("fit");
+    });
+
+    touchControls.querySelector('[data-crop-mode="fill"]')?.addEventListener("click", () => {
+        setCropMode("fill");
+    });
+
+    touchControls.querySelector('[data-crop-mode="reset"]')?.addEventListener("click", () => {
+        resetCrop();
+        status.textContent = "Crop reset.";
+    });
+}
 
 
 function canvas() {

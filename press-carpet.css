@@ -711,3 +711,80 @@ body { background: #fff; }
   .pc-footer-social > div { justify-content:center; }
   .pc-footer-bottom { flex-direction:column; }
 }
+
+
+/* =========================================================
+   PHOTO EDITOR — TOUCH-FIRST CONTROLS
+   The final Press Carpet artwork remains unchanged.
+========================================================= */
+.pc-photo-frame {
+  touch-action: none;
+}
+
+.pc-photo-frame img {
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  cursor: grab;
+}
+
+.pc-photo-frame img:active { cursor: grabbing; }
+
+.pc-touch-controls {
+  display: none;
+  width: min(100%, 420px);
+  margin: 12px auto 0;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+.pc-touch-controls button {
+  flex: 1;
+  min-height: 42px;
+  padding: 9px 14px;
+  border: 1px solid #d8c8ec;
+  border-radius: 999px;
+  background: #fff;
+  color: #6b35d9;
+  font: 700 12px/1 "Poppins", sans-serif;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pc-touch-controls button:last-child {
+  flex: 0 0 48px;
+  padding-inline: 10px;
+  font-size: 19px;
+}
+
+.pc-touch-controls button:active {
+  transform: scale(.98);
+}
+
+@media (pointer: coarse), (max-width: 700px) {
+  .pc-touch-controls { display: flex; }
+  .pc-tip { font-size: 10px; }
+}
+
+@media (max-width: 600px) {
+  .pc-preview-wrap { padding: 12px; }
+  .pc-carpet {
+    max-width: none;
+    width: 100%;
+  }
+  .pc-photo-frame {
+    left: 10%;
+    right: 10%;
+    top: 15%;
+    bottom: 16%;
+  }
+  .pc-controls { display: none; }
+  .pc-touch-controls { margin-top: 14px; }
+  .pc-touch-controls button { min-height: 46px; }
+  .pc-tip {
+    margin-top: 9px;
+    font-size: 10px;
+  }
+}
