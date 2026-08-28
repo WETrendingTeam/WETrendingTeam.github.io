@@ -1,4 +1,6 @@
 const { onRequest } = require("firebase-functions/v2/https");
+const { onSchedule } = require("firebase-functions/v2/scheduler");
+const { defineSecret } = require("firebase-functions/params");
 const { initializeApp } = require("firebase-admin/app");
 const { getAuth } = require("firebase-admin/auth");
 const {
@@ -12,6 +14,7 @@ const {
 initializeApp();
 
 const db = getFirestore();
+const YOUTUBE_API_KEY = defineSecret("YOUTUBE_API_KEY");
 
 
 function chunks(list, size) {
@@ -477,3 +480,101 @@ exports.sendNotification = onRequest(
 
   }
 );
+
+
+/* =========================================================
+   RED FLAG LIVE CHART TRACKER
+   Apple/iTunes feeds + YouTube Data API
+========================================================= */
+const RED_FLAG_VIDEO_ID = "V58V1a-qiiw";
+const RED_FLAG_TITLE = "Red Flag";
+const RED_FLAG_ARTISTS = ["William", "Est"];
+const RED_FLAG_COUNTRIES = [
+  ["us","United States","🇺🇸"],["gb","United Kingdom","🇬🇧"],["th","Thailand","🇹🇭"],["ph","Philippines","🇵🇭"],
+  ["id","Indonesia","🇮🇩"],["my","Malaysia","🇲🇾"],["sg","Singapore","🇸🇬"],["vn","Vietnam","🇻🇳"],
+  ["kr","South Korea","🇰🇷"],["jp","Japan","🇯🇵"],["tw","Taiwan","🇹🇼"],["hk","Hong Kong","🇭🇰"],
+  ["au","Australia","🇦🇺"],["nz","New Zealand","🇳🇿"],["ca","Canada","🇨🇦"],["de","Germany","🇩🇪"],
+  ["fr","France","🇫🇷"],["it","Italy","🇮🇹"],["es","Spain","🇪🇸"],["br","Brazil","🇧🇷"],
+  ["mx","Mexico","🇲🇽"],["nl","Netherlands","🇳🇱"],["se","Sweden","🇸🇪"],["no","Norway","🇳🇴"],
+  ["dk","Denmark","🇩🇰"],["fi","Finland","🇫🇮"],["ch","Switzerland","🇨🇭"],["at","Austria","🇦🇹"],
+  ["be","Belgium","🇧🇪"],["ie","Ireland","🇮🇪"],["za","South Africa","🇿🇦"],["ng","Nigeria","🇳🇬"],
+  ["in","India","🇮🇳"]
+];
+
+async function jsonFetch(url){
+  const response = await fetch(url, {headers:{"User-Agent":"WETrendingTeam-RedFlag-Tracker/1.0"}});
+  if(!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.json();
+}
+
+function normalize(s){ return String(s||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim(); }
+function isRedFlag(item){
+  const name=normalize(item.name || item.trackName || item["im:name"]?.label || "");
+  const artist=normalize(item.artistName || item["im:artist"]?.label || "");
+  return name === normalize(RED_FLAG_TITLE) && RED_FLAG_ARTISTS.some(a=>artist.includes(normalize(a)));
+}
+
+async function findItunesLink(country){
+  try{
+    const url=`https://itunes.apple.com/search?term=${encodeURIComponent("Red Flag William Est")}&country=${country}&media=music&entity=song&limit=10`;
+    const data=await jsonFetch(url);
+    const hit=(data.results||[]).find(isRedFlag);
+    return hit?.trackViewUrl || hit?.collectionViewUrl || null;
+  }catch(e){ return null; }
+}
+
+async function collectRedFlagData(){
+  const charts=[]; const buyLinks=[];
+  const previousSnap=await db.collection("redFlagLive").doc("current").get();
+  const previous=previousSnap.exists ? (previousSnap.data().charts||[]) : [];
+  const previousMap=new Map(previous.map(x=>[x.countryCode,x.position]));
+
+  await Promise.all(RED_FLAG_COUNTRIES.map(async ([code,country,flag])=>{
+    try{
+      const url=`https://itunes.apple.com/${code}/rss/topsongs/limit=200/explicit=true/json`;
+      const data=await jsonFetch(url);
+      const entries=data.feed?.entry||[];
+      const index=entries.findIndex(isRedFlag);
+      if(index>=0){
+        const position=index+1; const old=previousMap.get(code);
+        let movement="→ 0", movementClass="same";
+        if(old && position<old){movement=`↑ ${old-position}`;movementClass="up";}
+        if(old && position>old){movement=`↓ ${position-old}`;movementClass="down";}
+        charts.push({countryCode:code,country,flag,position,movement,movementClass,link:entries[index].link?.attributes?.href||entries[index].link?.[1]?.attributes?.href||null});
+      }
+      const link=await findItunesLink(code);
+      if(link) buyLinks.push({countryCode:code,country,flag,url:link});
+    }catch(e){ console.warn(`Red Flag chart ${code} failed`,e.message); }
+  }));
+
+  let youtube=null;
+  const key=YOUTUBE_API_KEY.value();
+  if(key){
+    try{
+      const data=await jsonFetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${RED_FLAG_VIDEO_ID}&key=${encodeURIComponent(key)}`);
+      const s=data.items?.[0]?.statistics;
+      if(s) youtube={views:Number(s.viewCount||0),likes:Number(s.likeCount||0),comments:Number(s.commentCount||0)};
+    }catch(e){ console.warn("Red Flag YouTube update failed",e.message); }
+  }
+
+  const payload={updatedAt:new Date().toISOString(),charts,buyLinks,youtube,source:{apple:"Apple/iTunes public chart feeds",youtube:"YouTube Data API"}};
+  await db.collection("redFlagLive").doc("current").set(payload,{merge:false});
+  return payload;
+}
+
+exports.refreshRedFlagCharts = onRequest({region:"us-central1",cors:true,secrets:[YOUTUBE_API_KEY]}, async (req,res)=>{
+  try{return res.status(200).json(await collectRedFlagData());}
+  catch(error){console.error("refreshRedFlagCharts error",error);return res.status(500).json({message:error.message||"Tracker update failed"});}
+});
+
+exports.redFlagLive = onRequest({region:"us-central1",cors:true}, async (req,res)=>{
+  try{
+    const snap=await db.collection("redFlagLive").doc("current").get();
+    if(!snap.exists) return res.status(200).json({updatedAt:null,charts:[],buyLinks:[],youtube:null});
+    return res.status(200).json(snap.data());
+  }catch(error){console.error("redFlagLive error",error);return res.status(500).json({message:error.message||"Tracker read failed"});}
+});
+
+exports.redFlagScheduledUpdate = onSchedule({schedule:"every 1 hours",timeZone:"Africa/Lagos",region:"us-central1",secrets:[YOUTUBE_API_KEY]}, async ()=>{
+  await collectRedFlagData();
+});
