@@ -175,6 +175,26 @@
         font-size: 14px !important;
     }
 }
+
+/* ==================================================
+   RED FLAG LIVE TRACKER HOME CARD
+================================================== */
+.redflag-home-card{
+    display:flex;align-items:stretch;gap:0;overflow:hidden;text-decoration:none;
+    width:100%;max-width:760px;margin:16px auto;border-radius:22px;
+    background:linear-gradient(135deg,#24121f 0%,#351525 48%,#6e1f31 100%);
+    box-shadow:0 14px 35px rgba(43,13,27,.20);color:#fff;
+    border:1px solid rgba(255,255,255,.12);transition:transform .25s,box-shadow .25s;
+}
+.redflag-home-card:hover{transform:translateY(-3px);box-shadow:0 18px 42px rgba(43,13,27,.27)}
+.redflag-home-art{width:38%;min-height:190px;background:#170e15;overflow:hidden}
+.redflag-home-art img{width:100%;height:100%;object-fit:cover}
+.redflag-home-copy{padding:22px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start}
+.redflag-live-pill{font-size:10px;font-weight:800;letter-spacing:1.5px;color:#f4d86b;margin-bottom:7px}
+.redflag-home-copy h2{margin:0 0 6px;font-size:25px;color:#fff}
+.redflag-home-copy p{margin:0 0 14px;font-size:12px;color:#eadde3;line-height:1.5}
+.redflag-open{display:inline-flex;align-items:center;padding:9px 14px;border-radius:999px;background:#d43c55;color:#fff;font-size:11px;font-weight:800}
+@media(max-width:600px){.redflag-home-card{width:calc(100% - 30px);margin:14px auto}.redflag-home-art{width:34%;min-height:170px}.redflag-home-copy{padding:16px}.redflag-home-copy h2{font-size:21px}.redflag-home-copy p{font-size:11px}.redflag-open{font-size:10px;padding:8px 11px}}
 </style>
 </head>
 
@@ -266,6 +286,18 @@
 
 
             </a>
+
+<a href="red-flag-tracker.html" class="redflag-home-card">
+    <div class="redflag-home-art">
+        <img src="images/red-flags.jpg" alt="Red Flag — William & Est">
+    </div>
+    <div class="redflag-home-copy">
+        <span class="redflag-live-pill">LIVE CHART TRACKER</span>
+        <h2>RED FLAG</h2>
+        <p>Track iTunes chart positions and YouTube performance.</p>
+        <span class="redflag-open">OPEN LIVE TRACKER →</span>
+    </div>
+</a>
 
 <div class="youmaniac-press-card">
 
