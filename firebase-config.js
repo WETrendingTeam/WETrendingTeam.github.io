@@ -1,52 +1,52 @@
-// ==========================================
-// WETrendingTeam Firebase Config
-// Production Firebase Configuration
-// ==========================================
+/* BALAD PRIVATE SCHOOLS — Firebase Configuration */
 
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 import {
- initializeApp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
- getFirestore
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-
-// ==========================================
-// FIREBASE CONFIGURATION
-// ==========================================
+  getMessaging,
+  isSupported
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-messaging.js";
 
 const firebaseConfig = {
- apiKey: "AIzaSyDY5F84tiRyDLNPBaBGpO5giwxlJ4q27Cg",
- authDomain: "wetrendingteam-1f8ce.firebaseapp.com",
- projectId: "wetrendingteam-1f8ce",
- storageBucket: "wetrendingteam-1f8ce.firebasestorage.app",
- messagingSenderId: "1072737815830",
- appId: "1:1072737815830:web:4fce8aa6e88680404e1437",
- measurementId: "G-21NRQ5TYPB"
+  apiKey: "AIzaSyCLU7CdFlCrLxGzRo0Z0PQOQ-6Y91ccj-M",
+  authDomain: "projectb-wetrending-space.firebaseapp.com",
+  projectId: "projectb-wetrending-space",
+  storageBucket: "projectb-wetrending-space.firebasestorage.app",
+  messagingSenderId: "106348539335",
+  appId: "1:106348539335:web:50ec676ce6d424a82c3de2"
 };
-
-
-// ==========================================
-// INITIALIZE FIREBASE
-// ==========================================
 
 const app = initializeApp(firebaseConfig);
 
-
-// ==========================================
-// FIRESTORE
-// ==========================================
-
+const auth = getAuth(app);
 const db = getFirestore(app);
 
+let messaging = null;
 
-// ==========================================
-// EXPORT
-// ==========================================
+async function getBaladMessaging() {
+  try {
+    if (!(await isSupported())) {
+      return null;
+    }
+
+    if (!messaging) {
+      messaging = getMessaging(app);
+    }
+
+    return messaging;
+  } catch (error) {
+    console.error("BALAD Firebase Messaging error:", error);
+    return null;
+  }
+}
 
 export {
- app,
- db,
- firebaseConfig
+  app,
+  auth,
+  db,
+  getBaladMessaging
 };
+
+console.log("BALAD Firebase connected successfully.");
+
