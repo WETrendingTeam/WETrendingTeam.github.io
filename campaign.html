@@ -179,12 +179,7 @@
 <li>
             <a href="#updates">Updates</a>
         </li>
-
-        <li>
-            <a href="#events">Events</a>
-        </li>
-
-    </ul>
+</ul>
 
 
     <div class="nav-actions">
@@ -298,7 +293,7 @@
 </h2>
 
         <p>
-Episode 1 is now live. Watch and rate YOU MANIAC.
+Episode 1 is now live. Episode 2 is next.
 
         </p>
 
@@ -314,7 +309,7 @@ Episode 1 is now live. Watch and rate YOU MANIAC.
 
             <span>
 
-                ⭐ EPISODE 1
+                ⭐ EPISODE 1 LIVE
 
             </span>
 
@@ -324,30 +319,15 @@ Episode 1 is now live. Watch and rate YOU MANIAC.
 
 </section>
 
-<!-- TICKET STATUS + COUNTDOWN -->
-
 <section class="ticket-section">
-
-  <!-- SOLD OUT POSTER -->
-  <div class="sold-out-event">
-
-    <img
-      src="images/sold-out-ticket.jpg"
-      alt="YOu Maniac Opening Night - SOLD OUT"
-      class="sold-out-ticket">
-
-  </div>
-
-
-  <!-- COUNTDOWN -->
-  <div class="countdown-area">
+<div class="countdown-area">
 
     <div class="countdown-title">
-    🎬 EP1 COUNTDOWN
+    🎬 EP2 COUNTDOWN
     </div>
 
     <p class="countdown-subtitle">
-      Countdown to YOu Maniac Premier
+      Countdown to YOU MANIAC Episode 2
     </p>
 
     <div class="countdown-grid">
@@ -376,6 +356,7 @@ Episode 1 is now live. Watch and rate YOU MANIAC.
 
   </div>
 
+</section>
 </section>
 
 
@@ -697,29 +678,6 @@ Episode 1 is now live. Watch and rate YOU MANIAC.
     </div>
 
 </section>
-
-
-
-<!-- =====================================================
-     RED FLAG OST — LIVE CAMPAIGN
-===================================================== -->
-<section class="redflag-campaign-section" id="redflag-live">
-  <div class="redflag-campaign-card">
-    <div class="redflag-campaign-art"><img src="images/red-flags.jpg" alt="Red Flag — William & Est"></div>
-    <div class="redflag-campaign-copy">
-      <span class="redflag-campaign-live">LIVE NOW</span>
-      <h2>RED FLAG</h2>
-      <p class="redflag-byline">William Jakrapatr × Est Supha · You Maniac OST</p>
-      <p>Red Flag is live. Watch the official MV, stream the OST, support the release and check the live chart tracker.</p>
-      <div class="redflag-campaign-actions">
-        <a href="https://youtu.be/V58V1a-qiiw?si=gTeQXcKKz0wcYjO6" target="_blank" rel="noopener" class="rf-btn rf-youtube">Watch YouTube</a>
-        <a href="https://open.spotify.com/track/51T3uWQSV9OinxPD95FgR2?si=PO8aUmDgRqyiKZhynRm35Q" target="_blank" rel="noopener" class="rf-btn rf-spotify">Stream Spotify</a>
-        <a href="red-flag-tracker.html" class="rf-btn rf-tracker">Live Chart Tracker</a>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ===========================
      LIVE CAMPAIGN MISSION
 ============================ -->
@@ -1315,6 +1273,27 @@ Episode 1 is now live. Watch and rate YOU MANIAC.
         item.href=links[i];item.target="_blank";item.rel="noopener noreferrer";
       }
     });
+  });
+})();
+</script>
+
+<script>
+(function(){
+  const target = new Date("2026-09-05T20:30:00+07:00").getTime();
+  function tick(){
+    let d=Math.max(0,target-Date.now());
+    const days=Math.floor(d/86400000); d%=86400000;
+    const hours=Math.floor(d/3600000); d%=3600000;
+    const minutes=Math.floor(d/60000); d%=60000;
+    const seconds=Math.floor(d/1000);
+    const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=String(v).padStart(2,"0")};
+    set("eventDays",days);set("eventHours",hours);set("eventMinutes",minutes);set("eventSeconds",seconds);
+  }
+  document.addEventListener("DOMContentLoaded",function(){
+    const t=document.querySelector(".countdown-title"),s=document.querySelector(".countdown-subtitle");
+    if(t)t.textContent="🎬 EP2 COUNTDOWN";
+    if(s)s.textContent="Countdown to YOU MANIAC Episode 2 • Saturday, September 5 • 8:30 PM Thailand Time";
+    tick();setInterval(tick,1000);
   });
 })();
 </script>
