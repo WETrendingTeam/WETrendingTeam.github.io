@@ -1,72 +1,495 @@
-/* BALAD PRIVATE SCHOOLS — SITE INTERACTIONS */
+/* ==================================================
+   WETrendingTeam v2.0
+   SCRIPT FILE
+================================================== */
 
-document.addEventListener("DOMContentLoaded", () => {
-  // Back button on internal pages only. The home/index page has nowhere to go back to.
-  if (!document.body.classList.contains("home-page") && !document.querySelector(".site-back-button")) {
-    const back = document.createElement("button");
-    back.type = "button";
-    back.className = "site-back-button";
-    back.setAttribute("aria-label", "Go back");
-    back.innerHTML = "&#8592; <span>Back</span>";
-    back.addEventListener("click", () => {
-      if (window.history.length > 1) window.history.back();
-      else window.location.href = "index.html";
-    });
-    document.body.appendChild(back);
-  }
 
-  // Mobile navigation fallback: keep the hamburger functional even if CSS/label behaviour is interrupted.
-  const menuToggle = document.getElementById("balad-menu-toggle");
-  const menuButton = document.querySelector(".menu-btn");
-  const mainNav = document.getElementById("balad-main-nav");
-  if (menuToggle && menuButton && mainNav) {
-    menuButton.addEventListener("click", (event) => {
-      event.preventDefault();
-      menuToggle.checked = !menuToggle.checked;
-    });
-    mainNav.querySelectorAll("a").forEach(link => {
-      link.addEventListener("click", () => { menuToggle.checked = false; });
-    });
-  }
+/* ==========================
+   LOADING SCREEN
+========================== */
 
-  if (!document.querySelector(".site-top-button")) {
-    const top = document.createElement("button");
-    top.type = "button";
-    top.className = "site-top-button";
-    top.setAttribute("aria-label", "Back to top");
-    top.innerHTML = "&#8593;";
-    top.addEventListener("click", () => window.scrollTo({top: 0, behavior: "smooth"}));
-    document.body.appendChild(top);
+window.addEventListener("load", () => {
 
-    const updateTop = () => {
-      top.classList.toggle("show", window.scrollY > 280);
-    };
-    window.addEventListener("scroll", updateTop, {passive: true});
-    updateTop();
-  }
-  document.querySelectorAll(".faq-item").forEach(item => {
-    const button = item.querySelector(".faq-question");
-    if (button) {
-      button.addEventListener("click", () => {
-        item.classList.toggle("active");
-      });
-    }
-  });
+    const loader = document.getElementById("loader");
 
-  document.querySelectorAll('a[href^="#"]').forEach(link => {
-    link.addEventListener("click", event => {
-      const id = link.getAttribute("href");
-      if (!id || id === "#") return;
+    setTimeout(() => {
 
-      const target = document.querySelector(id);
-      if (target) {
-        event.preventDefault();
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    });
-  });
+        if (loader) {
 
-  document.querySelectorAll("[data-year]").forEach(el => {
-    el.textContent = new Date().getFullYear();
-  });
+            loader.style.opacity = "0";
+            loader.style.visibility = "hidden";
+
+        }
+
+    }, 2200);
+
 });
+
+
+
+/* ==========================
+   HERO SLIDESHOW
+========================== */
+
+const slides = document.querySelectorAll(".slide");
+
+let currentSlide = 0;
+
+
+function showSlide(index) {
+
+    slides.forEach(slide => {
+
+        slide.classList.remove("active");
+
+    });
+
+
+    if (slides[index]) {
+
+        slides[index].classList.add("active");
+
+    }
+
+}
+
+
+if (slides.length > 0) {
+
+    setInterval(() => {
+
+        currentSlide++;
+
+        if (currentSlide >= slides.length) {
+
+            currentSlide = 0;
+
+        }
+
+        showSlide(currentSlide);
+
+    }, 5000);
+
+}
+
+
+
+/* ==================================================
+   EVENT COUNTDOWN
+   29 AUGUST 2026 — 7:30 PM
+   THAILAND TIME (UTC+7)
+================================================== */
+
+
+/*
+   IMPORTANT:
+
+   The countdown is fixed to:
+
+   29 August 2026
+   7:30 PM Thailand Time (UTC+7)
+*/
+
+
+const eventTime =
+    new Date("2026-08-29T19:30:00+07:00").getTime();
+
+
+function updateCountdown() {
+
+    const now = Date.now();
+
+    const distance =
+        eventTime - now;
+
+
+    /* ==========================
+       COUNTDOWN ELEMENTS
+    ========================== */
+
+    const daysEl =
+        document.getElementById("eventDays");
+
+    const hoursEl =
+        document.getElementById("eventHours");
+
+    const minutesEl =
+        document.getElementById("eventMinutes");
+
+    const secondsEl =
+        document.getElementById("eventSeconds");
+
+
+    /* ==========================
+       EVENT DAY
+    ========================== */
+
+    if (distance <= 0) {
+
+        if (daysEl) {
+            daysEl.textContent = "00";
+        }
+
+        if (hoursEl) {
+            hoursEl.textContent = "00";
+        }
+
+        if (minutesEl) {
+            minutesEl.textContent = "00";
+        }
+
+        if (secondsEl) {
+            secondsEl.textContent = "00";
+        }
+
+        return;
+    }
+
+
+    /* ==========================
+       CALCULATE TIME
+    ========================== */
+
+    const days =
+        Math.floor(
+            distance /
+            (1000 * 60 * 60 * 24)
+        );
+
+
+    const hours =
+        Math.floor(
+            (distance %
+            (1000 * 60 * 60 * 24))
+            /
+            (1000 * 60 * 60)
+        );
+
+
+    const minutes =
+        Math.floor(
+            (distance %
+            (1000 * 60 * 60))
+            /
+            (1000 * 60)
+        );
+
+
+    const seconds =
+        Math.floor(
+            (distance %
+            (1000 * 60))
+            /
+            1000
+        );
+
+
+    /* ==========================
+       DISPLAY DAYS
+    ========================== */
+
+    if (daysEl) {
+
+        daysEl.textContent =
+            String(days).padStart(2, "0");
+
+    }
+
+
+    /* ==========================
+       DISPLAY HOURS
+    ========================== */
+
+    if (hoursEl) {
+
+        hoursEl.textContent =
+            String(hours).padStart(2, "0");
+
+    }
+
+
+    /* ==========================
+       DISPLAY MINUTES
+    ========================== */
+
+    if (minutesEl) {
+
+        minutesEl.textContent =
+            String(minutes).padStart(2, "0");
+
+    }
+
+
+    /* ==========================
+       DISPLAY SECONDS
+    ========================== */
+
+    if (secondsEl) {
+
+        secondsEl.textContent =
+            String(seconds).padStart(2, "0");
+
+    }
+
+}
+
+
+/* ==========================
+   START COUNTDOWN
+========================== */
+
+updateCountdown();
+
+
+/* ==========================
+   UPDATE EVERY SECOND
+========================== */
+
+setInterval(
+    updateCountdown,
+    1000
+);
+/* ==================================================
+   PART 3
+   BACK TO TOP + SCROLL ANIMATION
+================================================== */
+
+
+const backToTop =
+    document.getElementById(
+        "backToTop"
+    );
+
+
+
+if (backToTop) {
+
+
+    window.addEventListener("scroll", () => {
+
+
+        if (window.scrollY > 400) {
+
+            backToTop.classList.add(
+                "show"
+            );
+
+        }
+
+        else {
+
+            backToTop.classList.remove(
+                "show"
+            );
+
+        }
+
+
+    });
+
+
+
+    backToTop.addEventListener(
+        "click",
+        () => {
+
+
+            window.scrollTo({
+
+                top: 0,
+
+                behavior: "smooth"
+
+            });
+
+
+        }
+
+    );
+
+
+}
+
+
+
+
+/* ==========================
+   SCROLL REVEAL
+========================== */
+
+
+const revealElements =
+    document.querySelectorAll(
+        "section, .status-card, .mission-card, .rating-card, .event-card"
+    );
+
+
+
+if ("IntersectionObserver" in window) {
+
+
+    const revealObserver =
+        new IntersectionObserver(
+
+            (entries) => {
+
+
+                entries.forEach(entry => {
+
+
+                    if (entry.isIntersecting) {
+
+
+                        entry.target.classList.add(
+                            "active"
+                        );
+
+
+                        revealObserver.unobserve(
+                            entry.target
+                        );
+
+
+                    }
+
+
+                });
+
+
+            },
+
+            {
+                threshold: .15
+            }
+
+        );
+
+
+
+    revealElements.forEach(element => {
+
+
+        element.classList.add(
+            "reveal"
+        );
+
+
+        revealObserver.observe(
+            element
+        );
+
+
+    });
+
+
+}
+
+
+
+
+/* ==========================
+   WATCH PLATFORM POPUP
+========================== */
+
+
+const platformPopup =
+    document.getElementById(
+        "platformPopup"
+    );
+
+
+const episodeButtons =
+    document.querySelectorAll(
+        ".episode-btn"
+    );
+
+
+const popupClose =
+    document.querySelector(
+        ".popup-close"
+    );
+
+
+
+/* ==========================
+   OPEN POPUP
+========================== */
+
+episodeButtons.forEach(button => {
+
+
+    button.addEventListener(
+        "click",
+        () => {
+
+
+            if (platformPopup) {
+
+                platformPopup.style.display =
+                    "flex";
+
+            }
+
+
+        }
+
+    );
+
+
+});
+
+
+
+
+/* ==========================
+   CLOSE BUTTON
+========================== */
+
+if (popupClose) {
+
+
+    popupClose.addEventListener(
+        "click",
+        () => {
+
+
+            if (platformPopup) {
+
+                platformPopup.style.display =
+                    "none";
+
+            }
+
+
+        }
+
+    );
+
+
+}
+
+
+
+
+/* ==========================
+   CLOSE OUTSIDE POPUP
+========================== */
+
+window.addEventListener(
+    "click",
+    (e) => {
+
+
+        if (e.target === platformPopup) {
+
+
+            platformPopup.style.display =
+                "none";
+
+
+        }
+
+
+    }
+
+);
