@@ -142,7 +142,7 @@ const CONTENT_DEFAULTS={
  releaseTime:"04:00 PM",quote:"“It was never just a game for me.”",quoteBy:"Lade",
  outfitTitle:"Fan Favourite",outfitImage:"images/characters/Both2.JPG",viralTitle:"The Moment",viralImage:"images/characters/Both3.JPG",
  trender:"",maniac:0,trender2:"",maniac2:0,trender3:"",maniac3:0,pollQuestion:"Who owned the YOU MANIAC trailer look?",
- poll1:"William",poll1pct:0,poll2:"Dean",poll2pct:0,poll3:"Both",poll3pct:0,pollVotes:0,
+ poll1:"Moth",poll1pct:0,poll2:"Dean",poll2pct:0,poll3:"Both",poll3pct:0,pollVotes:0,
  dean:0,moth:0,rating:"9.4",ratingsCount:5,posts:"4.12M",engagement:"7.5M",reach:"1.2B",countriesCount:"50+",countryList:"50+ countries",
  discussionPrompt:"What did you think of the YOU MANIAC trailer?",
  rules:"Keep discussions respectful or admin will remove you. You can join anonymously with a fan name. Let’s please be respectful to one another. We’re all here to support WilliamEst."
@@ -218,7 +218,7 @@ function bindMeter(id,valueId,labelId,fillId,thumbId){
  const move=e=>{if(dragging){setFromPointer(e.clientY);e.preventDefault()}};
  const up=()=>{dragging=false};
  col.addEventListener('pointerdown',down);col.addEventListener('pointermove',move);col.addEventListener('pointerup',up);col.addEventListener('pointercancel',up);
- col.addEventListener('keydown',e=>{if(e.key==='ArrowDown'||e.key==='ArrowRight'){input.value=Math.min(100,Number(input.value)+1);update()}if(e.key==='ArrowUp'||e.key==='ArrowLeft'){input.value=Math.max(0,Number(input.value)-1);update()}});
+ col.addEventListener('keydown',e=>{if(e.key==='ArrowUp'||e.key==='ArrowRight'){input.value=Math.min(100,Number(input.value)+1);update()}if(e.key==='ArrowDown'||e.key==='ArrowLeft'){input.value=Math.max(0,Number(input.value)-1);update()}});
  update();
 }
 
