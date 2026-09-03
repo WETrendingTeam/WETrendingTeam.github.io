@@ -984,3 +984,58 @@ body.trend-center-open {
     .hub-grid-3x3 .youmaniac-press-card h3{font-size:7px;margin-bottom:5px}
     .hub-grid-3x3 .youmaniac-press-card .press-tour-btn{font-size:6px;padding:4px 6px}
 }
+
+
+/* =========================================================
+   FINAL MOBILE HUB ARRANGEMENT FIX
+   Keep the Hub as a true 3 x 3 grid inside the phone viewport.
+   No horizontal scrolling / clipped third column.
+========================================================= */
+html, body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+@media (max-width: 600px) {
+    .hub-page {
+        width: 100%;
+        max-width: 100vw;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    .welcome-box {
+        width: 100%;
+        max-width: 100%;
+        padding-left: 8px;
+        padding-right: 8px;
+        overflow: visible;
+    }
+
+    .hub-buttons.hub-grid-3x3 {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding: 0 !important;
+        display: grid !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 6px !important;
+    }
+
+    .hub-grid-3x3 .hub-grid-item {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        min-height: 112px;
+        padding: 9px 5px !important;
+    }
+
+    .hub-grid-3x3 .redflag-home-card,
+    .hub-grid-3x3 .youmaniac-press-card,
+    .hub-grid-3x3 .hub-card {
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+}
