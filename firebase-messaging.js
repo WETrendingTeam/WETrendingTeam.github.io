@@ -112,7 +112,7 @@ onMessage(messaging, (payload) => {
   if ("Notification" in window && Notification.permission === "granted") {
     new Notification(title, {
       body,
-      icon: "./images/logo.png"
+      icon: "./images/brand/logo.png"
     });
   }
 });

@@ -12,7 +12,7 @@ const FILES_TO_CACHE = [
   "./campaign.html",
   "./hub.css",
   "./manifest.json",
-  "./images/logo.png"
+  "./images/brand/logo.png"
 ];
 
 // Install

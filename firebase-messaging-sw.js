@@ -64,7 +64,7 @@ messaging.onBackgroundMessage((payload) => {
  const icon =
  notification.icon ||
  data.icon ||
- "/images/logo.png";
+ "/images/brand/logo.png";
 
 
  self.registration.showNotification(

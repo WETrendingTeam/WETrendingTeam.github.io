@@ -18,8 +18,8 @@ const DEFAULT_X = 0;
 const DEFAULT_Y = 0;
 
 const communityLogo = new Image();
-communityLogo.src = "/images/you-maniac-community-logo.png";
-communityLogo.onerror = () => { communityLogo.onerror = null; communityLogo.src = "../images/you-maniac-community-logo.png"; };
+communityLogo.src = "/images/brand/you-maniac-community-logo.png";
+communityLogo.onerror = () => { communityLogo.onerror = null; communityLogo.src = "/images/brand/you-maniac-community-logo.png"; };
 
 
 photoInput.addEventListener("change", () => {
