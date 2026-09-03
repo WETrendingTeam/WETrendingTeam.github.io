@@ -3,158 +3,329 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Community | WETrendingTeam</title>
-<link rel="stylesheet" href="community.css">
-<script type="module" src="community.js"></script>
+<title>Community Center | WETrendingTeam</title>
+<link rel="stylesheet" href="community.css?v=20260903-v11">
+<script>
+(function(){
+  function init(){
+    const body=document.body, toggle=document.getElementById('themeToggle');
+    const modal=document.getElementById('episodeStatsModal'), behavior=document.getElementById('behaviorModal');
+    const poster=document.getElementById('modalEpisodePoster');
+    const stats={posts:'4.12M',engagement:'7.5M',reach:'1.2B',countries:'50+',rating:'9.4',xPosts:'4.12M',authors:'31.8K'};
+    function theme(mode){
+      body.classList.toggle('dark',mode==='dark'); body.classList.remove('light');
+            if(toggle){ toggle.innerHTML=mode==='light'?'☾ <span>Dark</span>':'☼ <span>Light</span>'; toggle.setAttribute('aria-label',mode==='light'?'Switch to dark mode':'Switch to light mode'); }
+    }
+    theme('light');
+    toggle&&toggle.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();theme(body.classList.contains('dark')?'light':'dark')});
+    function openStats(){
+      if(!modal)return;
+      modal.hidden=false; modal.style.display='grid'; modal.style.visibility='visible'; modal.style.pointerEvents='auto';
+      if(poster){poster.src='images/stats/EP01.JPG';poster.alt='YOU MANIAC Episode 1 statistics';}
+      const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v};
+      set('modalEpisodeTitle','EP 01');set('modalPosts',stats.posts);set('modalEngagement',stats.engagement);set('modalReach',stats.reach);set('modalCountries',stats.countries);set('modalXPosts',stats.xPosts);set('modalAuthors',stats.authors);set('modalRating','9.4');set('modalRatingsCount','5');
+    }
+    function closeStats(){if(modal){modal.hidden=true;modal.style.display='none';modal.style.pointerEvents='none'}}
+    document.querySelectorAll('#openEpisodeStats,#openEpisodeStats2').forEach(b=>b.addEventListener('click',function(e){e.preventDefault();openStats()}));
+    document.getElementById('closeEpisodeStats')?.addEventListener('click',closeStats);
+    modal?.addEventListener('click',e=>{if(e.target===modal)closeStats()});
+    document.getElementById('openBehavior')?.addEventListener('click',()=>{if(behavior){behavior.hidden=false;behavior.style.display='grid';behavior.style.pointerEvents='auto'}});
+    document.getElementById('closeBehavior')?.addEventListener('click',()=>{if(behavior){behavior.hidden=true;behavior.style.display='none';behavior.style.pointerEvents='none'}});
+    behavior?.addEventListener('click',e=>{if(e.target===behavior){behavior.hidden=true;behavior.style.display='none'}});
+    document.getElementById('videoToggle')?.addEventListener('click',function(){
+      const v=document.getElementById('communityHeroVideo'); if(!v)return;
+      if(v.paused){v.play().catch(()=>{});this.textContent='Pause'}else{v.pause();this.textContent='Play'}
+    });
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script><script type="module" src="community.js?v=20260903-v11"></script>
 </head>
 <body>
-<header class="community-top">
+<div class="page-shell">
+
+<header class="topbar">
   <a class="back" href="campaign.html" aria-label="Back to campaign">←</a>
-  <div class="brand">
-    <span>WETRENDINGTEAM</span>
-    <h1>Community</h1>
-    <p>Connect. Discuss. Share.</p>
+  <div class="brand-lockup">
+    <img src="images/brand/you-maniac-community-logo.png" alt="YOU MANIAC" class="brand-logo">
+    <div class="brand-copy">
+      <h1>Community Center</h1>
+      <p>More than a chat. Our home.</p>
+    </div>
   </div>
-  <a class="announcement" href="https://x.com/gmmtv/status/2087766162046329305?s=46" target="_blank" rel="noopener">Official announcement ↗</a>
+  <div class="top-tagline">CONNECT · CREATE · SUPPORT · TREND · CELEBRATE<br><em>For Westies · By Westies</em></div>
+  <div class="top-actions">
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to light mode">☼ <span>Light</span></button>
+    <a class="announcement" href="https://x.com/gmmtv/status/2087766162046329305?s=46" target="_blank" rel="noopener">Official announcement ↗</a>
+  </div>
 </header>
 
-<nav class="community-nav" aria-label="Community navigation">
-  <a class="active" href="#overview">Overview</a>
-  <a href="#features">#Features</a>
-  <a href="#polls">#Polls</a>
-  <a href="#results">#Results</a>
-  <a href="#discussions">#Discussions</a>
-</nav>
-
-<main id="overview">
-  <section class="overview-head">
-    <div>
-      <span class="eyebrow" id="cmLabel">COMMUNITY HUB • YOU MANIAC</span>
-      <h2 id="cmHeading">More than a chat.</h2>
-      <p id="cmIntro">Explore fan features, make choices, see campaign results, track where the fandom is trending and join the conversation.</p>
+<div class="workspace">
+  <aside class="left-rail">
+    <div class="rail-logo">WE<span>+</span></div>
+    <nav aria-label="Community sections" class="side-nav">
+      <a class="active" href="#home"><i>⌂</i>Home</a>
+      <a href="#episodes"><i>▣</i>Episodes</a>
+      <a href="#stats"><i>▥</i>Stats</a>
+        <a href="#discussions"><i>◌</i>Discussions</a>
+      <a href="#events"><i>◇</i>Events</a>
+      <a href="#awards"><i>☆</i>Awards</a>
+      <a href="#resources"><i>▤</i>Resources</a>
+      <a href="#profile"><i>○</i>Profile</a>
+    </nav>
+    <div class="rail-message">
+      <strong>Good things happen when Westies work together.</strong>
+      <span>#YouManiacSeries</span>
     </div>
-    <div class="release-box">
-      <span id="cmCampaign">YOU MANIAC</span>
-      <strong id="communityCountdown">04:00 PM</strong>
-      <small id="cmReleaseLabel">Thailand release time</small>
-    </div>
-  </section>
+  </aside>
 
-  <section class="mini-grid" id="features">
-    <div class="section-heading"><span>★</span><h2>#Features</h2><a href="#features">View</a></div>
-    <div class="feature-grid">
-      <article class="feature-card quote">
-        <span class="tag">QUOTE OF THE WEEK</span>
-        <h3 id="cmQuote">“It was never just a game for me.”</h3>
-        <small id="cmQuoteBy">— Lade</small>
-        <b>♥ 0</b>
+  <main id="home" class="main-content">
+    <nav class="community-nav" aria-label="Quick navigation">
+      <a class="active" href="#home">Home</a><a href="#episodes">Episodes</a><a href="#stats">Stats</a><a href="#discussions">Discussions</a><a href="#events">Events</a><a href="#awards">Awards</a><a href="#resources">Resources</a>
+    </nav>
+
+    <section class="hero-grid" id="episodes">
+      <article class="hero-video">
+        <video id="communityHeroVideo" autoplay muted loop playsinline preload="metadata" src="images/video/Flirty Dean.MP4"></video>
+        <div class="hero-shade"></div>
+        <div class="hero-copy">
+          <span class="hero-kicker">YOU MANIAC · COMMUNITY CENTER</span>
+          <h2>WATCH · SUPPORT · TREND · TOGETHER</h2>
+          <p>Westies' home for fan choices, episode moments, campaign results and real conversations.</p>
+          <button class="hero-btn" id="heroJoinCommunity" type="button">Join the conversation</button>
+        </div>
+        <button class="video-toggle" id="videoToggle" type="button">Pause</button>
       </article>
-      <article class="feature-card image-card">
-        <img id="cmOutfitImage" src="images/hero2.jpg" alt="Outfit of the episode">
-        <div><span class="tag">OUTFIT OF THE EPISODE</span><h3 id="cmOutfitTitle">Fan Favourite</h3><b>♥ 0</b></div>
+      <aside class="episode-card" id="nextEpisodeCard">
+        <span class="eyebrow">NEXT EPISODE</span>
+        <strong id="cmCampaign">YOU MANIAC</strong>
+        <div class="episode-title" id="communityCountdown">04:00 PM</div>
+        <small>Thailand release time</small>
+        <div class="episode-status"><i></i><span>COMMUNITY LIVE</span></div>
+      </aside>
+    </section>
+
+    <section class="dashboard-panel featured-panel" id="features">
+      <div class="panel-head"><div><span class="section-mark gold"></span><h2>Featured This Week</h2></div><a href="#features">View all</a></div>
+      <div class="feature-grid">
+        <article class="feature-card quote-card"><span class="tag">QUOTE OF THE WEEK</span><div class="quote-mark">“</div><h3 id="cmQuote">“It was never just a game for me.”</h3><small id="cmQuoteBy">— Lade</small><div class="card-meta"><span class="heart-dot"></span> Fan favourite</div></article>
+        <article class="feature-card media-card"><img id="cmOutfitImage" src="images/characters/Both2.JPG" alt="Outfit of the episode"><div class="media-body"><span class="tag">OUTFIT OF THE EPISODE</span><h3 id="cmOutfitTitle">Fan Favourite</h3><div class="card-meta"><span class="heart-dot"></span> OOTE</div></div></article>
+        <article class="feature-card media-card"><img id="cmViralImage" src="images/characters/Both3.JPG" alt="Most viral moment"><div class="media-body"><span class="tag">MOST VIRAL MOMENT</span><h3 id="cmViralTitle">The Moment</h3><div class="card-meta"><span class="heart-dot"></span> Viral this week</div></div></article>
+        <article class="feature-card song-card"><span class="tag">SONG RECOMMENDATION</span><button class="song-art" id="songArtPlay" type="button" aria-label="Open Red Flag official music video"><img src="https://img.youtube.com/vi/V58V1a-qiiw/hqdefault.jpg" alt="Red Flag official YouTube thumbnail" loading="lazy" onerror="this.style.display='none'"><span class="song-play-badge">▶</span></button><h3>Red Flag</h3><p>William Jakrapatr &amp; Est Supha</p><div class="song-actions"><a class="song-listen" href="https://youtu.be/V58V1a-qiiw?si=Ug1cY2p4lIJpA_VK" target="_blank" rel="noopener">Open on YouTube ↗</a></div><div class="card-meta">YOU MANIAC OST · Official MV</div></article>
+      </div>
+    </section>
+
+    <section class="dashboard-grid" id="stats">
+      <article class="dashboard-panel stats-panel">
+        <div class="panel-head"><div><span class="section-mark purple"></span><h2>Episode Stats</h2></div><button class="episode-select-btn" id="openEpisodeStats" type="button">EP 01 · View stats ↗</button></div>
+        <div class="stats-grid">
+          <div class="stat-box"><span>POSTS</span><strong id="cmPosts">4.12M</strong><em>X + campaign</em></div>
+          <div class="stat-box"><span>ENGAGEMENT</span><strong id="cmEngagement">7.5M</strong><em>total interactions</em></div>
+          <div class="stat-box"><span>REACH</span><strong id="cmReach">1.2B</strong><em>potential reach</em></div>
+          <div class="stat-box"><span>RATING</span><strong><b id="cmRating">9.4</b><small>/10</small></strong><em><span id="cmRatingsCount">5</span> platform scores</em></div>
+        </div>
+        <div class="country-head"><span>TOP TRENDING COUNTRIES</span><b id="cmCountries">50+</b></div>
+        <div class="country-strip" id="cmCountryList"><b>50+ countries</b></div>
+        <button class="text-action" id="openEpisodeStats2" type="button">Explore EP 01–EP 10 →</button>
       </article>
-      <article class="feature-card image-card">
-        <img id="cmViralImage" src="images/hero1.jpg" alt="Moment of the episode">
-        <div><span class="tag">MOST VIRAL MOMENT</span><h3 id="cmViralTitle">The Moment</h3><b>♥ 0</b></div>
+
+      <article class="dashboard-panel redflag-panel redflag-launcher" id="redflag">
+        <div class="panel-head"><div><span class="section-mark red"></span><h2>Red Flag Meter</h2></div><span class="live-label">FAN VOTE</span></div>
+        <p class="panel-note">Where do William and Dean land this week?</p>
+        <div class="redflag-preview">
+          <div class="rf-preview-title">YOU MANIAC <b>RED FLAG METER</b></div>
+          <div class="rf-preview-chars"><img src="images/characters/Dean.JPG" alt="Dean"><img src="images/characters/Moth.JPG" alt="Moth"></div>
+          <div class="rf-preview-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <span>Move the fan meter for each character</span>
+        </div>
+        <button class="primary-btn redflag-open-btn" id="openRedFlagMeter" type="button">Open Red Flag Meter →</button>
       </article>
-      <article class="feature-card">
-        <span class="tag">TOP TRENDER</span>
-        <h3 id="cmTrender">@Lade</h3>
-        <p>Maniac of the week</p>
-        <div class="progress"><i id="cmManiacBar" style="width:0%"></i></div>
-        <b><span id="cmManiac">0</span>% Maniac level</b>
+    </section>
+
+    <section class="dashboard-grid lower-grid">
+      <article class="dashboard-panel poll-panel" id="events">
+        <div class="panel-head"><div><span class="section-mark pink"></span><h2>Fan Choice</h2></div><span class="live-label">POLL</span></div>
+        <h3 id="cmPollQuestion">Who owned the YOU MANIAC trailer look?</h3>
+        <div class="poll-row" data-poll="1"><span id="cmPoll1">William</span><div><i><b id="cmPoll1Bar"></b></i></div><strong id="cmPoll1Pct">0%</strong></div>
+        <div class="poll-row" data-poll="2"><span id="cmPoll2">Dean</span><div><i><b id="cmPoll2Bar"></b></i></div><strong id="cmPoll2Pct">0%</strong></div>
+        <div class="poll-row" data-poll="3"><span id="cmPoll3">Both</span><div><i><b id="cmPoll3Bar"></b></i></div><strong id="cmPoll3Pct">0%</strong></div>
+        <div class="poll-footer"><span id="cmPollVotes">0</span> votes · fan choice updates</div>
       </article>
-    </div>
-  </section>
 
-  <section class="two-col" id="polls">
-    <div class="panel">
-      <div class="section-heading"><span>◉</span><h2>#Polls</h2></div>
-      <div class="poll">
-        <span class="tag">FAN CHOICE</span>
-        <h3 id="cmPollQuestion">What did you think of the YOU MANIAC trailer looks?</h3>
-        <div class="poll-row"><span id="cmPoll1">Look 1</span><i><b id="cmPoll1Bar" style="width:0%"></b></i><strong id="cmPoll1Pct">0%</strong></div>
-        <div class="poll-row"><span id="cmPoll2">Look 2</span><i><b id="cmPoll2Bar" style="width:0%"></b></i><strong id="cmPoll2Pct">0%</strong></div>
-        <div class="poll-row"><span id="cmPoll3">Look 3</span><i><b id="cmPoll3Bar" style="width:0%"></b></i><strong id="cmPoll3Pct">0%</strong></div>
-        <small><span id="cmPollVotes">0</span> votes</small>
+      <article class="dashboard-panel leaderboard-panel" id="awards">
+        <div class="panel-head"><div><span class="section-mark gold"></span><h2>Awards &amp; Leaderboard</h2></div><span class="live-label">THIS WEEK</span></div>
+        <div class="award-podium">
+          <div class="podium-card silver"><span class="medal">02</span><strong>—</strong><small>Waiting for community activity</small></div>
+          <div class="podium-card winner"><span class="crown">01</span><strong id="cmTrender">No Top Trender yet</strong><small>Top Trender · <b id="cmManiac">0</b>% Maniac level</small><i id="cmManiacBar"></i></div>
+          <div class="podium-card bronze"><span class="medal">03</span><strong>—</strong><small>Waiting for community activity</small></div>
+        </div>
+        <div class="leaderboard-foot"><span>Top Trender is managed from Community Manager.</span><button class="ghost-btn" type="button" onclick="document.getElementById('discussions').scrollIntoView({behavior:'smooth'})">Earn your spot →</button></div>
+      </article>
+    </section>
+
+    <section class="dashboard-panel discussions community-access" id="discussions">
+      <div class="panel-head"><div><span class="section-mark red"></span><h2>Community</h2></div><span class="live-label"><i class="live-dot"></i> OPEN</span></div>
+      <div class="community-access-grid">
+        <div class="discussion-prompt">
+          <span class="tag">WESTIES COMMUNITY</span><h3 id="cmDiscussionPrompt">Your space for YOU MANIAC fan activities.</h3>
+          <p>Join anonymously with a fan name to take part in fan choices, Red Flag voting and community activities.</p>
+          <button class="primary-btn" id="joinCommunityBtn" type="button">Join Community</button>
+          <div class="discussion-mini-stats"><b>Fan participation</b><span>Anonymous access</span></div>
+        </div>
+        <div class="community-no-comments">
+          <span class="tag">COMMUNITY ACTIVITY</span>
+          <h3>Keep the Community Center focused.</h3>
+          <p>Fan activities, voting and the Red Flag Meter are ready here. The Community Rules remain below.</p>
+          <a class="ghost-btn link-button" href="#fan-conversation">View Community Rules →</a>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <div class="panel">
-      <div class="section-heading"><span>⚑</span><h2>Red Flag Meters</h2></div>
-      <div class="meter-pair">
-        <div class="meter-card"><div><b>Dean</b><strong id="deanLabel">MAJOR RED FLAG</strong></div><input id="deanMeter" type="range" min="0" max="100" value="0"><small><b id="deanValue">72%</b> community placement</small></div>
-        <div class="meter-card"><div><b>Moth</b><strong id="mothLabel">CALL YOUR THERAPIST</strong></div><input id="mothMeter" type="range" min="0" max="100" value="0"><small><b id="mothValue">84%</b> community placement</small></div>
-      </div>
-      <button class="save-btn" id="saveMeters">Save My Placements</button>
-    </div>
-  </section>
-
-  <section class="panel results-panel" id="results">
-    <div class="section-heading"><span>▥</span><h2>#Results</h2><small>Episode data</small></div>
-    <div class="result-grid">
-      <div><span>CAMPAIGN RATING</span><b><span id="cmRating">0</span><span>/10</span></b><small><span id="cmRatingsCount">0</span> ratings</small></div>
-      <div><span>POSTS</span><b id="cmPosts">0</b><small>community + campaign</small></div>
-      <div><span>ENGAGEMENT</span><b id="cmEngagement">0</b><small>total interactions</small></div>
-      <div><span>POTENTIAL REACH</span><b id="cmReach">0</b><small>estimated</small></div>
-      <div><span>COUNTRIES</span><b id="cmCountries">0</b><small>trending in</small></div>
-    </div>
-    <div class="country-strip"><span>🌍 Trending in</span><div id="cmCountryList" style="display:contents"></div></div>
-  </section>
-
-  <section class="panel" id="discussions">
-    <div class="section-heading"><span>▣</span><h2>#Discussions</h2><span class="live-dot">● LIVE</span></div>
-    <div class="discussion-layout">
-      <div class="prompt-box">
-        <span class="tag">TALK WITH THE FANDOM</span>
-        <h3 id="cmDiscussionPrompt">What did you think of the YOU MANIAC trailer?</h3>
-        <p>Join anonymously with a fan name. You don't need a real account.</p>
-        <a href="#fan-conversation" class="prompt-btn">Join conversation ↓</a>
-      </div>
-      <div class="discussion-box">
-        <div class="discussion-head"><h3>Latest community</h3><span id="episodeCommentCount">0 comments</span></div>
-        <form class="comment-form" data-thread="episode">
-          <textarea maxlength="500" placeholder="Share your thoughts..." required></textarea>
-          <div class="form-row"><small>⚠️ Be respectful. Admin may remove disrespectful posts.</small><button type="submit">Post</button></div>
-        </form>
-        <div class="comments" id="episodeComments"><div class="empty">Loading community...</div></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="rules" id="fan-conversation">
-    <h3>⚠️ Community rules</h3>
-    <p id="cmRules"><b>Keep discussions respectful or admin will remove you.</b> You can join anonymously with a fan name. Let’s please be respectful to one another. We’re all here to support WilliamEst.</p>
-  </section>
+    <section class="bottom-banner" id="resources"><span>Same Series · Same Love · Stronger Together</span><b>YOU MANIAC × WILLIAMEST × WESTIES</b></section>
+    <section class="rules" id="fan-conversation"><div class="rule-icon"></div><div><strong>Community rules</strong><p id="cmRules">Keep discussions respectful or admin will remove you. You can join anonymously with a fan name. We’re all here to support WilliamEst.</p></div></section>
+  
+<nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="Mobile community navigation"><a href="#home">Home</a><a href="#episodes">Episodes</a><a href="#stats">Stats</a><a href="#events">Fan Choice</a><a href="#awards">Awards</a><a href="#fan-conversation">Rules</a></nav>
 </main>
 
-<div class="behavior-modal" id="behaviorModal" hidden>
-  <div class="behavior-card">
-    <button id="closeBehavior" aria-label="Close">×</button>
-    <span class="tag">CHARACTER BEHAVIOUR</span>
-    <h2 id="behaviorTitle">Dean</h2>
-    <div class="behavior-result" id="behaviorResult">MAJOR RED FLAG</div>
-    <p>Fans can judge both characters separately for this episode.</p>
+  <aside class="right-rail">
+    <section class="rail-card feature-list-card">
+      <h2>Key Features &amp; Suggestions</h2>
+      <ul>
+        <li>Episode filter for past stats</li><li>Dedicated episode views</li><li>Fan participation &amp; choices</li><li>Voting &amp; polls</li><li>Awards &amp; leaderboards</li><li>Quote of the Week</li><li>Outfit of the Episode</li><li>Most Viral Moment</li><li>Red Flag Meter</li><li>Red Flag character chart</li><li>Personal fan preferences</li><li>Notifications &amp; reminders</li><li>Anonymous fan access</li><li>Search &amp; filters</li><li>Safe &amp; respectful community</li>
+      </ul>
+    </section>
+    <section class="rail-card quick-links" id="profile">
+      <h2>Quick Links</h2>
+      <a href="campaign.html">Where to watch YOU MANIAC</a><a href="campaign.html">Series FAQ</a><a href="#episodes">Episode Guide</a><a href="#behavior">Character Profiles</a><a href="#stats">Trend Guide</a><a href="#fan-conversation">Community Rules</a>
+    </section>
+    <section class="rail-card extra-ideas">
+      <h2>Extra Ideas</h2>
+      <ul><li>Custom user badges &amp; levels</li><li>Unlockable achievements</li><li>Fan art &amp; edit gallery</li><li>Weekly challenges</li><li>Event countdowns</li><li>Dark / light mode</li><li>Multi-language support</li><li>Report &amp; moderation tools</li><li>Email / push notifications</li></ul>
+    </section>
+  </aside>
+</div>
+
+<nav class="mobile-bottom-nav" aria-label="Mobile navigation"><a href="#home">Home</a><a href="#features">Features</a><a href="#stats">Stats</a><a href="#discussions">Discuss</a><a href="#awards">Awards</a></nav>
+</div>
+
+<div class="episode-modal" id="episodeStatsModal" hidden>
+  <div class="episode-modal-card">
+    <button class="modal-close" id="closeEpisodeStats" type="button" aria-label="Close">×</button>
+    <div class="modal-kicker">YOU MANIAC · EPISODE STATS</div>
+    <div class="modal-title-row"><div><h2 id="modalEpisodeTitle">Episode 01</h2><p>Fandom performance and trending results</p></div><select id="episodePicker" aria-label="Select episode"></select></div>
+    <div class="episode-poster-wrap"><img id="modalEpisodePoster" src="images/stats/EP01.JPG" alt="Episode 01 poster statistics"></div>
+    <div class="modal-stat-grid"><div><span>POSTS</span><strong id="modalPosts">4.12M</strong></div><div><span>ENGAGEMENT</span><strong id="modalEngagement">7.5M</strong></div><div><span>REACH</span><strong id="modalReach">1.2B</strong></div><div><span>COUNTRIES</span><strong id="modalCountries">—</strong></div></div>
+    <div class="modal-section"><span class="modal-section-title">X POSTS · UNIQUE AUTHORS</span><div class="rating-line"><strong id="modalXPosts">4.12M</strong><span><b id="modalAuthors">31.8K</b> unique authors</span></div></div>
+    <div class="modal-section"><span class="modal-section-title">CAMPAIGN / HASHTAG BREAKDOWN</span><div class="modal-campaign" id="modalCampaignBreakdown"></div></div>
+    <div class="modal-section"><span class="modal-section-title">TRENDING COUNTRIES</span><div class="modal-country-list" id="modalCountryList"></div></div>
+    <div class="modal-section"><span class="modal-section-title">EPISODE RATING · 5 PLATFORMS</span><div class="rating-line"><strong id="modalRating">9.4/10</strong><span><b id="modalRatingsCount">5</b> platform scores</span></div><div class="platform-rating-grid" id="modalPlatformRatings"></div></div>
+    <div class="modal-nav"><button id="prevEpisode" type="button">← Previous</button><button id="nextEpisode" type="button">Next →</button></div>
+  </div>
+</div>
+
+<div class="behavior-modal redflag-modal" id="behaviorModal" hidden>
+  <div class="behavior-card redflag-meter-card">
+    <button id="closeBehavior" class="modal-close" aria-label="Close" type="button">×</button>
+    <div class="rf-modal-head"><div><span class="tag">YOU MANIAC</span><h2>RED FLAG METER</h2><p>Both characters. Both red flags.</p></div><span class="rf-episode">EPISODE 01</span></div>
+    <div class="rf-poster">
+      <div class="rf-poster-title">YOU MANIAC <b>RED FLAG METER</b></div>
+      <p class="rf-subtitle">WHERE DO THEY LAND THIS WEEK?</p>
+      <div class="rf-character-heads">
+        <div><img src="images/characters/Dean.JPG" alt="William"><b>WILLIAM</b></div>
+        <div><img src="images/characters/Moth.JPG" alt="Dean"><b>DEAN</b></div>
+      </div>
+      <div class="rf-meter-board">
+        <div class="rf-levels">
+          <div class="rf-level rf-pink"><span>⚑</span><b>INNOCENT... FOR NOW</b></div>
+          <div class="rf-level rf-purple"><span>◉</span><b>LIED A LITTLE</b></div>
+          <div class="rf-level rf-blue"><span>?</span><b>QUESTIONABLE CHOICES</b></div>
+          <div class="rf-level rf-green"><span>◎</span><b>EMOTIONALLY CONFUSING</b></div>
+          <div class="rf-level rf-yellow"><span>!</span><b>MAJOR RED FLAG</b></div>
+          <div class="rf-level rf-orange"><span>◈</span><b>CALL YOUR THERAPIST</b></div>
+          <div class="rf-level rf-red"><span>☠</span><b>YOU MANIAC.</b></div>
+        </div>
+        <div class="rf-sliders">
+          <div class="rf-slider-col"><input id="deanMeter" type="range" min="0" max="100" value="0" aria-label="William red flag placement"><output id="deanValue">0%</output><span id="deanLabel">INNOCENT — FOR NOW</span></div>
+          <div class="rf-slider-col"><input id="mothMeter" type="range" min="0" max="100" value="0" aria-label="Dean red flag placement"><output id="mothValue">0%</output><span id="mothLabel">INNOCENT — FOR NOW</span></div>
+        </div>
+      </div>
+      <div class="rf-comment-prompt">EPISODE ____ <b>WHERE DO THEY LAND THIS WEEK?</b><strong>FAN VOTE</strong><small>#YOUMANIAC · #WILLIAMEST</small></div>
+    </div>
+    <div class="redflag-actions"><button class="primary-btn" id="saveMeters" type="button">Save My Placements</button><button class="ghost-btn" id="openBehavior" type="button">View Character Result →</button></div>
+    <span class="save-note" id="meterSaved"></span>
+    <div class="behavior-result" id="behaviorResult">Move both sliders to choose your placements.</div>
   </div>
 </div>
 
 <script>
-const labels=[{m:14,t:"INNOCENT — FOR NOW"},{m:29,t:"LIED A LITTLE"},{m:49,t:"QUESTIONABLE CHOICES"},{m:64,t:"EMOTIONALLY CONFUSING"},{m:79,t:"MAJOR RED FLAG"},{m:91,t:"CALL YOUR THERAPIST"},{m:100,t:"YOU MANIAC"}];
-function meterText(v){return labels.find(x=>v<=x.m)?.t || labels[labels.length-1].t}
-function bindMeter(id,value,label){
- const input=document.getElementById(id), out=document.getElementById(value), text=document.getElementById(label);
- const update=()=>{out.textContent=input.value+"%";text.textContent=meterText(+input.value)};
- input.addEventListener("input",update); update();
-}
-bindMeter("deanMeter","deanValue","deanLabel"); bindMeter("mothMeter","mothValue","mothLabel");
-document.getElementById("saveMeters").onclick=()=>alert("Your Dean and Moth placements are saved locally for this preview. Admin publishing is handled in Community Manager.");
-const target=Date.UTC(2026,7,13,9);
-function communityTimer(){const d=target-Date.now();const e=document.getElementById("communityCountdown");if(!e)return;if(d<=0){e.textContent="LIVE NOW";return}const h=Math.floor(d/36e5),m=Math.floor(d%36e5/6e4),s=Math.floor(d%6e4/1e3);e.textContent=[h,m,s].map(x=>String(x).padStart(2,"0")).join(":")}
-communityTimer();setInterval(communityTimer,1000);
-document.querySelectorAll(".community-nav a").forEach(a=>a.addEventListener("click",()=>{document.querySelectorAll(".community-nav a").forEach(x=>x.classList.remove("active"));a.classList.add("active")}));
+/* Community interaction safety net: these controls must work even if Firebase/module startup is delayed. */
+(function(){
+  function boot(){
+    const body=document.body;
+    const go=(id)=>document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});
+    // Navigation: native anchors + active state, with a delegated fallback.
+    document.querySelectorAll('.side-nav a,.community-nav a,.mobile-bottom-nav a').forEach(a=>{
+      if(a.dataset.navBound)return; a.dataset.navBound='1';
+      a.addEventListener('click',function(e){
+        const href=this.getAttribute('href')||'';
+        if(href.startsWith('#')){e.preventDefault();go(href.slice(1));
+          document.querySelectorAll('.side-nav a,.community-nav a').forEach(x=>x.classList.remove('active'));
+          document.querySelectorAll('.side-nav a,.community-nav a').forEach(x=>{if(x.getAttribute('href')===href)x.classList.add('active')});
+        }
+      });
+    });
+    // Hero video: tapping the video itself toggles playback; button does too.
+    const video=document.getElementById('communityHeroVideo');
+    const vt=document.getElementById('videoToggle');
+    if(video&&!video.dataset.tapBound){
+      video.dataset.tapBound='1';
+      video.addEventListener('click',()=>{ if(video.paused) video.play().catch(()=>{}); else video.pause(); if(vt)vt.textContent=video.paused?'Play':'Pause'; });
+    }
+    // Song thumbnail opens the official YouTube video.
+    const song=document.getElementById('songArtPlay');
+    if(song&&!song.dataset.bound){song.dataset.bound='1';song.addEventListener('click',()=>window.open('https://youtu.be/V58V1a-qiiw?si=Ug1cY2p4lIJpA_VK','_blank') || (location.href='https://youtu.be/V58V1a-qiiw?si=Ug1cY2p4lIJpA_VK'));}
+    // Community gate fallback. If module is available, use its ensureUser; otherwise create the same gate locally.
+    function fallbackGate(){
+      if(document.getElementById('communityNameGate'))return;
+      const overlay=document.createElement('div'); overlay.id='communityNameGate'; overlay.className='community-gate';
+      overlay.innerHTML='<div class="community-gate-card"><span class="tag">WESTIES COMMUNITY</span><h2>Join Community</h2><p>Choose a fan name or continue anonymously. No public comment feed is used on this page.</p><input id="fallbackCommunityName" maxlength="30" placeholder="Your fan name (optional)" autocomplete="nickname"><div class="gate-actions"><button type="button" class="gate-skip">Continue as Fan</button><button type="button" class="gate-join">Join Community</button></div><small>Your fan name is stored only on this device.</small></div>';
+      document.body.appendChild(overlay);
+      const input=overlay.querySelector('#fallbackCommunityName');
+      const finish=(v)=>{localStorage.setItem('wtCommunityName',(String(v||'').trim().slice(0,30)||'Fan'));overlay.remove();showToast('You are in the Westies Community.');};
+      overlay.querySelector('.gate-skip').onclick=()=>finish('Fan');
+      overlay.querySelector('.gate-join').onclick=()=>finish(input.value);
+      input.onkeydown=e=>{if(e.key==='Enter')finish(input.value)};
+      setTimeout(()=>input.focus(),50);
+    }
+    async function join(){
+      // Joining this page is intentionally local and independent of Firebase.
+      // Firebase is not required for the visible Community Center controls.
+      fallbackGate();
+    }
+    ['heroJoinCommunity','joinCommunityBtn'].forEach(id=>{const b=document.getElementById(id);if(b&&!b.dataset.bound){b.dataset.bound='1';b.addEventListener('click',join)}});
+    function showToast(message){
+      let t=document.getElementById('communityToast');
+      if(!t){t=document.createElement('div');t.id='communityToast';t.className='community-toast';document.body.appendChild(t)}
+      t.textContent=message;t.classList.add('show');clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),2400);
+    }
+    // Red Flag Meter: native range controls are reliable on iOS and desktop.
+    const meterLabels=[['INNOCENT — FOR NOW',14],['LIED A LITTLE',29],['QUESTIONABLE CHOICES',49],['EMOTIONALLY CONFUSING',64],['MAJOR RED FLAG',79],['CALL YOUR THERAPIST',91],['YOU MANIAC',100]];
+    function meterText(v){for(const [t,m] of meterLabels)if(v<=m)return t;return 'YOU MANIAC'}
+    function bindMeter(id,outId,labelId){
+      const input=document.getElementById(id),out=document.getElementById(outId),lab=document.getElementById(labelId);
+      if(!input||input.dataset.bound)return; input.dataset.bound='1';
+      const update=()=>{const v=Math.max(0,Math.min(100,Number(input.value)||0));if(out)out.textContent=v+'%';if(lab)lab.textContent=meterText(v)};
+      input.addEventListener('input',update);input.addEventListener('change',update);update();
+    }
+    bindMeter('deanMeter','deanValue','deanLabel');bindMeter('mothMeter','mothValue','mothLabel');
+    document.getElementById('saveMeters')?.addEventListener('click',()=>{const v={william:+document.getElementById('deanMeter').value,dean:+document.getElementById('mothMeter').value};localStorage.setItem('wtRedFlagPlacements',JSON.stringify(v));const n=document.getElementById('meterSaved');if(n)n.textContent='Saved on this device.';showToast('Red Flag placements saved.');});
+    try{const v=JSON.parse(localStorage.getItem('wtRedFlagPlacements')||'null');if(v){if(document.getElementById('deanMeter'))document.getElementById('deanMeter').value=Number(v.william)||0;if(document.getElementById('mothMeter'))document.getElementById('mothMeter').value=Number(v.dean)||0;document.getElementById('deanMeter')?.dispatchEvent(new Event('input'));document.getElementById('mothMeter')?.dispatchEvent(new Event('input'));}}catch{}
+    // Fan Choice: one vote per device; starting from 0 means the selected option immediately becomes 100%.
+    const rows=[...document.querySelectorAll('.poll-row[data-poll]')];
+    if(rows.length&&!document.body.dataset.pollFallback){document.body.dataset.pollFallback='1';const key='wtCommunityPollVote';const saved=localStorage.getItem(key);const vote=i=>{if(localStorage.getItem(key)!==null)return;localStorage.setItem(key,String(i));rows.forEach((r,j)=>{const pct=j===i?100:0;r.querySelector('b').style.width=pct+'%';r.querySelector('strong').textContent=pct+'%';r.classList.toggle('voted',j===i)});const f=document.getElementById('cmPollVotes');if(f)f.textContent='1';};rows.forEach((r,i)=>r.addEventListener('click',()=>vote(i)));if(saved!==null&&rows[Number(saved)]){rows.forEach((r,j)=>{const pct=j===Number(saved)?100:0;r.querySelector('b').style.width=pct+'%';r.querySelector('strong').textContent=pct+'%';r.classList.toggle('voted',j===Number(saved))});const f=document.getElementById('cmPollVotes');if(f)f.textContent='1';}}
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+})();
 </script>
-
-
-
 </body>
 </html>
