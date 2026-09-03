@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Community Center | WETrendingTeam</title>
-<link rel="stylesheet" href="community.css?v=20260903-v11">
+<link rel="stylesheet" href="community.css?v=20260903-v12">
 <script>
 (function(){
   function init(){
@@ -17,7 +17,7 @@
             if(toggle){ toggle.innerHTML=mode==='light'?'☾ <span>Dark</span>':'☼ <span>Light</span>'; toggle.setAttribute('aria-label',mode==='light'?'Switch to dark mode':'Switch to light mode'); }
     }
     theme('light');
-    toggle&&toggle.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();theme(body.classList.contains('dark')?'light':'dark')});
+    if(toggle&&!toggle.dataset.themeBound){toggle.dataset.themeBound='1';toggle.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();const next=body.classList.contains('dark')?'light':'dark';theme(next);try{localStorage.setItem('wtCommunityTheme',next)}catch{}})}
     function openStats(){
       if(!modal)return;
       modal.hidden=false; modal.style.display='grid'; modal.style.visibility='visible'; modal.style.pointerEvents='auto';
@@ -39,7 +39,7 @@
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
-</script><script type="module" src="community.js?v=20260903-v11"></script>
+</script><script type="module" src="community.js?v=20260903-v12"></script>
 </head>
 <body>
 <div class="page-shell">
@@ -98,9 +98,9 @@
       </article>
       <aside class="episode-card" id="nextEpisodeCard">
         <span class="eyebrow">NEXT EPISODE</span>
-        <strong id="cmCampaign">YOU MANIAC</strong>
-        <div class="episode-title" id="communityCountdown">04:00 PM</div>
-        <small>Thailand release time</small>
+        <strong id="cmCampaign">YOU MANIAC · EPISODE 02</strong>
+        <div class="episode-title" id="communityCountdown">SEPTEMBER 5</div>
+        <small>Saturday · Thailand release</small>
         <div class="episode-status"><i></i><span>COMMUNITY LIVE</span></div>
       </aside>
     </section>
@@ -134,8 +134,15 @@
         <p class="panel-note">Where do William and Dean land this week?</p>
         <div class="redflag-preview">
           <div class="rf-preview-title">YOU MANIAC <b>RED FLAG METER</b></div>
-          <div class="rf-preview-chars"><img src="images/characters/Dean.JPG" alt="Dean"><img src="images/characters/Moth.JPG" alt="Moth"></div>
-          <div class="rf-preview-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="rf-preview-sub">BOTH CHARACTERS · BOTH RED FLAGS</div>
+          <div class="rf-preview-heads">
+            <div><img src="images/characters/Moth.JPG" alt="Moth"><b>MOTH</b></div>
+            <div><img src="images/characters/Dean.JPG" alt="Dean"><b>DEAN</b></div>
+          </div>
+          <div class="rf-preview-board">
+            <div class="rf-preview-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="rf-mini-lines"><span></span><span></span></div>
+          </div>
           <span>Move the fan meter for each character</span>
         </div>
         <button class="primary-btn redflag-open-btn" id="openRedFlagMeter" type="button">Open Red Flag Meter →</button>
@@ -231,8 +238,8 @@
       <div class="rf-poster-title">YOU MANIAC <b>RED FLAG METER</b></div>
       <p class="rf-subtitle">WHERE DO THEY LAND THIS WEEK?</p>
       <div class="rf-character-heads">
-        <div><img src="images/characters/Dean.JPG" alt="William"><b>WILLIAM</b></div>
-        <div><img src="images/characters/Moth.JPG" alt="Dean"><b>DEAN</b></div>
+        <div><img src="images/characters/Moth.JPG" alt="Moth"><b>MOTH</b></div>
+        <div><img src="images/characters/Dean.JPG" alt="Dean"><b>DEAN</b></div>
       </div>
       <div class="rf-meter-board">
         <div class="rf-levels">
@@ -245,8 +252,18 @@
           <div class="rf-level rf-red"><span>☠</span><b>YOU MANIAC.</b></div>
         </div>
         <div class="rf-sliders">
-          <div class="rf-slider-col"><input id="deanMeter" type="range" min="0" max="100" value="0" aria-label="William red flag placement"><output id="deanValue">0%</output><span id="deanLabel">INNOCENT — FOR NOW</span></div>
-          <div class="rf-slider-col"><input id="mothMeter" type="range" min="0" max="100" value="0" aria-label="Dean red flag placement"><output id="mothValue">0%</output><span id="mothLabel">INNOCENT — FOR NOW</span></div>
+          <div class="rf-slider-col" data-meter="moth">
+            <div class="rf-slider-line"><span class="rf-slider-thumb" id="mothThumb"></span></div>
+            <input id="mothMeter" type="range" min="0" max="100" value="0" aria-label="Moth red flag placement">
+            <output id="mothValue">0%</output>
+            <span id="mothLabel">INNOCENT — FOR NOW</span>
+          </div>
+          <div class="rf-slider-col" data-meter="dean">
+            <div class="rf-slider-line"><span class="rf-slider-thumb" id="deanThumb"></span></div>
+            <input id="deanMeter" type="range" min="0" max="100" value="0" aria-label="Dean red flag placement">
+            <output id="deanValue">0%</output>
+            <span id="deanLabel">INNOCENT — FOR NOW</span>
+          </div>
         </div>
       </div>
       <div class="rf-comment-prompt">EPISODE ____ <b>WHERE DO THEY LAND THIS WEEK?</b><strong>FAN VOTE</strong><small>#YOUMANIAC · #WILLIAMEST</small></div>
@@ -308,18 +325,21 @@
       if(!t){t=document.createElement('div');t.id='communityToast';t.className='community-toast';document.body.appendChild(t)}
       t.textContent=message;t.classList.add('show');clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),2400);
     }
-    // Red Flag Meter: native range controls are reliable on iOS and desktop.
+    // Red Flag Meter: custom vertical drag fallback so the circle always stays on the line.
     const meterLabels=[['INNOCENT — FOR NOW',14],['LIED A LITTLE',29],['QUESTIONABLE CHOICES',49],['EMOTIONALLY CONFUSING',64],['MAJOR RED FLAG',79],['CALL YOUR THERAPIST',91],['YOU MANIAC',100]];
     function meterText(v){for(const [t,m] of meterLabels)if(v<=m)return t;return 'YOU MANIAC'}
-    function bindMeter(id,outId,labelId){
-      const input=document.getElementById(id),out=document.getElementById(outId),lab=document.getElementById(labelId);
-      if(!input||input.dataset.bound)return; input.dataset.bound='1';
-      const update=()=>{const v=Math.max(0,Math.min(100,Number(input.value)||0));if(out)out.textContent=v+'%';if(lab)lab.textContent=meterText(v)};
-      input.addEventListener('input',update);input.addEventListener('change',update);update();
+    function bindSafeMeter(id,outId,labelId){
+      const input=document.getElementById(id),out=document.getElementById(outId),lab=document.getElementById(labelId),col=input?.closest('.rf-slider-col'),line=col?.querySelector('.rf-slider-line'),thumb=col?.querySelector('.rf-slider-thumb');
+      if(!input||!col||!line||!thumb||input.dataset.safeBound)return; input.dataset.safeBound='1';
+      const update=()=>{const v=Math.max(0,Math.min(100,Number(input.value)||0));if(out)out.textContent=v+'%';if(lab)lab.textContent=meterText(v);thumb.style.bottom=`calc(${v}% - 12px)`};
+      const set=(y)=>{const r=line.getBoundingClientRect();input.value=Math.round(Math.max(0,Math.min(1,(r.bottom-y)/r.height))*100);update()};
+      col.addEventListener('pointerdown',e=>{col.setPointerCapture?.(e.pointerId);set(e.clientY);e.preventDefault()});
+      col.addEventListener('pointermove',e=>{if(e.buttons)set(e.clientY)});col.addEventListener('keydown',e=>{if(e.key==='ArrowUp'||e.key==='ArrowRight'){input.value=Math.min(100,+input.value+1);update()}if(e.key==='ArrowDown'||e.key==='ArrowLeft'){input.value=Math.max(0,+input.value-1);update()}});
+      update();
     }
-    bindMeter('deanMeter','deanValue','deanLabel');bindMeter('mothMeter','mothValue','mothLabel');
-    document.getElementById('saveMeters')?.addEventListener('click',()=>{const v={william:+document.getElementById('deanMeter').value,dean:+document.getElementById('mothMeter').value};localStorage.setItem('wtRedFlagPlacements',JSON.stringify(v));const n=document.getElementById('meterSaved');if(n)n.textContent='Saved on this device.';showToast('Red Flag placements saved.');});
-    try{const v=JSON.parse(localStorage.getItem('wtRedFlagPlacements')||'null');if(v){if(document.getElementById('deanMeter'))document.getElementById('deanMeter').value=Number(v.william)||0;if(document.getElementById('mothMeter'))document.getElementById('mothMeter').value=Number(v.dean)||0;document.getElementById('deanMeter')?.dispatchEvent(new Event('input'));document.getElementById('mothMeter')?.dispatchEvent(new Event('input'));}}catch{}
+    bindSafeMeter('mothMeter','mothValue','mothLabel');bindSafeMeter('deanMeter','deanValue','deanLabel');
+    document.getElementById('saveMeters')?.addEventListener('click',()=>{const v={moth:+document.getElementById('mothMeter').value,dean:+document.getElementById('deanMeter').value};localStorage.setItem('wtRedFlagPlacements',JSON.stringify(v));const n=document.getElementById('meterSaved');if(n)n.textContent='Saved on this device.';showToast('Red Flag placements saved.');});
+    try{const v=JSON.parse(localStorage.getItem('wtRedFlagPlacements')||'null');if(v){if(document.getElementById('mothMeter'))document.getElementById('mothMeter').value=Number(v.moth)||0;if(document.getElementById('deanMeter'))document.getElementById('deanMeter').value=Number(v.dean)||0;document.getElementById('mothMeter')?.dispatchEvent(new Event('input'));document.getElementById('deanMeter')?.dispatchEvent(new Event('input'));}}catch{}
     // Fan Choice: one vote per device; starting from 0 means the selected option immediately becomes 100%.
     const rows=[...document.querySelectorAll('.poll-row[data-poll]')];
     if(rows.length&&!document.body.dataset.pollFallback){document.body.dataset.pollFallback='1';const key='wtCommunityPollVote';const saved=localStorage.getItem(key);const vote=i=>{if(localStorage.getItem(key)!==null)return;localStorage.setItem(key,String(i));rows.forEach((r,j)=>{const pct=j===i?100:0;r.querySelector('b').style.width=pct+'%';r.querySelector('strong').textContent=pct+'%';r.classList.toggle('voted',j===i)});const f=document.getElementById('cmPollVotes');if(f)f.textContent='1';};rows.forEach((r,i)=>r.addEventListener('click',()=>vote(i)));if(saved!==null&&rows[Number(saved)]){rows.forEach((r,j)=>{const pct=j===Number(saved)?100:0;r.querySelector('b').style.width=pct+'%';r.querySelector('strong').textContent=pct+'%';r.classList.toggle('voted',j===Number(saved))});const f=document.getElementById('cmPollVotes');if(f)f.textContent='1';}}

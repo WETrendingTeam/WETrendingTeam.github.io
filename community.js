@@ -154,7 +154,7 @@ function applyCommunityContent(raw){
  // Community reset: never resurrect old demo leaderboard/poll values from Manager data.
  if(d.trender==="@Lade"||d.trender==="@westieforce"||d.trender==="@maniacsquad")d.trender="";
  d.pollQuestion=CONTENT_DEFAULTS.pollQuestion;d.poll1=CONTENT_DEFAULTS.poll1;d.poll2=CONTENT_DEFAULTS.poll2;d.poll3=CONTENT_DEFAULTS.poll3;d.poll1pct=0;d.poll2pct=0;d.poll3pct=0;d.pollVotes=0;
- d.rating="9.4";d.ratingsCount=5;d.countriesCount="50+";d.countryList="50+ countries";
+ d.rating="9.4";d.ratingsCount=5;d.posts="4.12M";d.engagement="7.5M";d.reach="1.2B";d.countriesCount="50+";d.countryList="50+ countries";
  setText("cmCampaign",d.campaign);setText("communityCountdown",d.releaseTime);
  setText("cmQuote",d.quote);setText("cmQuoteBy",`— ${d.quoteBy}`);
  setText("cmOutfitTitle",d.outfitTitle);setImage("cmOutfitImage",d.outfitImage,"Outfit of the episode");
@@ -184,37 +184,51 @@ const labels=[
 ];
 function meterText(v){return labels.find(x=>v<=x.m)?.t||labels[labels.length-1].t}
 function bindMeter(id,valueId,labelId,fillId,thumbId){
- const input=document.getElementById(id),out=document.getElementById(valueId),text=document.getElementById(labelId),fill=document.getElementById(fillId),thumb=document.getElementById(thumbId);
- const track=fill?.parentElement;
- if(!input||!track)return;
+ const input=document.getElementById(id),out=document.getElementById(valueId),text=document.getElementById(labelId);
+ const col=input?.closest('.rf-slider-col'), line=col?.querySelector('.rf-slider-line'), thumb=col?.querySelector('.rf-slider-thumb');
+ if(!input||!col||!line||!thumb)return;
  const update=()=>{
   const v=Math.max(0,Math.min(100,Number(input.value)||0));
-  out.textContent=`${v}%`;text.textContent=meterText(v);fill.style.width=`${v}%`;thumb.style.left=`${v}%`;
+  if(out)out.textContent=`${v}%`;
+  if(text)text.textContent=meterText(v);
+  thumb.style.bottom=`calc(${v}% - 12px)`;
  };
- const setFromPointer=(clientX)=>{const r=track.getBoundingClientRect();input.value=Math.round(Math.max(0,Math.min(1,(clientX-r.left)/r.width))*100);input.dispatchEvent(new Event("input"))};
- input.addEventListener("input",update);
- track.addEventListener("pointerdown",e=>{setFromPointer(e.clientX);track.setPointerCapture?.(e.pointerId)});
- track.addEventListener("pointermove",e=>{if(e.buttons)setFromPointer(e.clientX)});
- thumb.addEventListener("keydown",e=>{if(e.key==="ArrowLeft"||e.key==="ArrowDown"){input.value=Math.max(0,Number(input.value)-1);update()}if(e.key==="ArrowRight"||e.key==="ArrowUp"){input.value=Math.min(100,Number(input.value)+1);update()}});
- thumb.addEventListener("click",()=>thumb.focus());
+ const setFromPointer=(clientY)=>{
+  const r=line.getBoundingClientRect();
+  const ratio=Math.max(0,Math.min(1,(r.bottom-clientY)/r.height));
+  input.value=Math.round(ratio*100);
+  input.dispatchEvent(new Event('input',{bubbles:true}));
+ };
+ input.addEventListener('input',update);input.addEventListener('change',update);
+ let dragging=false;
+ const down=e=>{dragging=true;col.setPointerCapture?.(e.pointerId);setFromPointer(e.clientY);e.preventDefault()};
+ const move=e=>{if(dragging){setFromPointer(e.clientY);e.preventDefault()}};
+ const up=()=>{dragging=false};
+ col.addEventListener('pointerdown',down);col.addEventListener('pointermove',move);col.addEventListener('pointerup',up);col.addEventListener('pointercancel',up);
+ col.addEventListener('keydown',e=>{if(e.key==='ArrowUp'||e.key==='ArrowRight'){input.value=Math.min(100,Number(input.value)+1);update()}if(e.key==='ArrowDown'||e.key==='ArrowLeft'){input.value=Math.max(0,Number(input.value)-1);update()}});
  update();
 }
 
-
-document.getElementById("saveMeters")?.addEventListener("click",()=>{
- const values={william:Number(document.getElementById("deanMeter")?.value||0),dean:Number(document.getElementById("mothMeter")?.value||0)};
- localStorage.setItem("wtRedFlagPlacements",JSON.stringify(values));
- const note=document.getElementById("meterSaved");if(note)note.textContent="Saved on this device.";
-});
+// v12: reset only the Red Flag Meter UI once so old William/Dean values cannot mislabel Moth/Dean.
+try{
+ const RF_UI_VERSION='2026-09-03-v12';
+ if(localStorage.getItem('wtRedFlagUIVersion')!==RF_UI_VERSION){localStorage.removeItem('wtRedFlagPlacements');localStorage.setItem('wtRedFlagUIVersion',RF_UI_VERSION)}
+}catch{}
+bindMeter('mothMeter','mothValue','mothLabel');bindMeter('deanMeter','deanValue','deanLabel');
 function loadLocalMeters(){
- try{
-  const v=JSON.parse(localStorage.getItem("wtRedFlagPlacements")||"null");if(!v)return;
-  const a=document.getElementById("deanMeter"),b=document.getElementById("mothMeter");
-  if(a&&Number.isFinite(v.william))a.value=v.william;if(b&&Number.isFinite(v.dean))b.value=v.dean;
-  a?.dispatchEvent(new Event("input"));b?.dispatchEvent(new Event("input"));
+ try{const v=JSON.parse(localStorage.getItem('wtRedFlagPlacements')||'null');if(!v)return;
+  const moth=document.getElementById('mothMeter'),dean=document.getElementById('deanMeter');
+  if(moth&&Number.isFinite(v.moth))moth.value=v.moth;if(dean&&Number.isFinite(v.dean))dean.value=v.dean;
+  moth?.dispatchEvent(new Event('input'));dean?.dispatchEvent(new Event('input'));
  }catch{}
 }
 loadLocalMeters();
+
+document.getElementById('saveMeters')?.addEventListener('click',()=>{
+ const values={moth:Number(document.getElementById('mothMeter')?.value||0),dean:Number(document.getElementById('deanMeter')?.value||0)};
+ localStorage.setItem('wtRedFlagPlacements',JSON.stringify(values));
+ const note=document.getElementById('meterSaved');if(note)note.textContent='Saved on this device.';
+});
 
 // Fan Choice interaction is handled by the DOM safety net in community.html.
 
@@ -231,8 +245,10 @@ function applyTheme(mode){
     themeToggle.setAttribute("aria-label",mode==="light"?'Switch to dark mode':'Switch to light mode');
   }
 }
-applyTheme("light");
-themeToggle?.addEventListener("click",()=>applyTheme(document.body.classList.contains("dark")?"light":"dark"));
+let savedTheme="light";
+try{savedTheme=localStorage.getItem("wtCommunityTheme")==="dark"?"dark":"light"}catch{}
+applyTheme(savedTheme);
+if(themeToggle&&!themeToggle.dataset.themeBound){themeToggle.dataset.themeBound="1";themeToggle.addEventListener("click",()=>{const next=document.body.classList.contains("dark")?"light":"dark";applyTheme(next);try{localStorage.setItem("wtCommunityTheme",next)}catch{}})}
 
 const episodeStats={
   1:{posts:"4.12M",engagement:"7.5M",reach:"1.2B",countries:"50+",rating:"9.4",ratings:5,countryList:["50+ countries"],xPosts:"4.12M",uniqueAuthors:"31.8K",platformRatings:[{name:"IMDb",score:"9.2"},{name:"MyDramaList",score:"8.3"},{name:"TMDB",score:"10.0"},{name:"Viki",score:"9.8"},{name:"iQIYI",score:"9.9"}],campaign:[
@@ -269,7 +285,7 @@ document.querySelectorAll(".community-nav a").forEach(a=>a.addEventListener("cli
 
 const behaviorModal=document.getElementById("behaviorModal");
 document.getElementById("openRedFlagMeter")?.addEventListener("click",()=>{if(behaviorModal)behaviorModal.hidden=false;});
-document.getElementById("openBehavior")?.addEventListener("click",()=>{ const w=Number(document.getElementById("deanMeter")?.value||0),d=Number(document.getElementById("mothMeter")?.value||0); setText("behaviorResult",`William: ${meterText(w)} · Dean: ${meterText(d)}`); });
+document.getElementById("openBehavior")?.addEventListener("click",()=>{ const m=Number(document.getElementById("mothMeter")?.value||0),d=Number(document.getElementById("deanMeter")?.value||0); setText("behaviorResult",`Moth: ${meterText(m)} · Dean: ${meterText(d)}`); });
 document.getElementById("closeBehavior")?.addEventListener("click",()=>{if(behaviorModal)behaviorModal.hidden=true});
 behaviorModal?.addEventListener("click",e=>{if(e.target===behaviorModal)behaviorModal.hidden=true});
 
