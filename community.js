@@ -141,14 +141,23 @@ const CONTENT_DEFAULTS={
  intro:"Explore fan features, make choices, see campaign results, track where the fandom is trending and join the conversation.",
  releaseTime:"04:00 PM",quote:"“It was never just a game for me.”",quoteBy:"Lade",
  outfitTitle:"Fan Favourite",outfitImage:"images/characters/Both2.JPG",viralTitle:"The Moment",viralImage:"images/characters/Both3.JPG",
- trender:"",maniac:0,pollQuestion:"Who owned the YOU MANIAC trailer look?",
+ trender:"",maniac:0,trender2:"",maniac2:0,trender3:"",maniac3:0,pollQuestion:"Who owned the YOU MANIAC trailer look?",
  poll1:"William",poll1pct:0,poll2:"Dean",poll2pct:0,poll3:"Both",poll3pct:0,pollVotes:0,
  dean:0,moth:0,rating:"9.4",ratingsCount:5,posts:"4.12M",engagement:"7.5M",reach:"1.2B",countriesCount:"50+",countryList:"50+ countries",
  discussionPrompt:"What did you think of the YOU MANIAC trailer?",
  rules:"Keep discussions respectful or admin will remove you. You can join anonymously with a fan name. Let’s please be respectful to one another. We’re all here to support WilliamEst."
 };
 function setText(id,value){const e=document.getElementById(id);if(e)e.textContent=value??""}
-function setImage(id,url,alt){const e=document.getElementById(id);if(e&&url){e.src=url;e.alt=alt||""}}
+function setImage(id,url,alt){
+ const e=document.getElementById(id);if(!e)return;
+ const defaults={cmOutfitImage:"images/characters/Both2.JPG",cmViralImage:"images/characters/Both3.JPG"};
+ const fallback=defaults[id]||"";
+ const value=String(url||"").trim()||fallback;
+ e.alt=alt||"";
+ e.dataset.fallback=fallback;
+ e.onerror=()=>{if(fallback&&e.src!==new URL(fallback,location.href).href){e.onerror=null;e.src=fallback}};
+ e.src=value;
+}
 function applyCommunityContent(raw){
  const d={...CONTENT_DEFAULTS,...(raw||{})};
  // Community reset: never resurrect old demo leaderboard/poll values from Manager data.
@@ -159,8 +168,12 @@ function applyCommunityContent(raw){
  setText("cmQuote",d.quote);setText("cmQuoteBy",`— ${d.quoteBy}`);
  setText("cmOutfitTitle",d.outfitTitle);setImage("cmOutfitImage",d.outfitImage,"Outfit of the episode");
  setText("cmViralTitle",d.viralTitle);setImage("cmViralImage",d.viralImage,"Most viral moment");
- setText("cmTrender",d.trender||"No Top Trender yet");setText("cmManiac",d.maniac);
- const mb=document.getElementById("cmManiacBar");if(mb)mb.style.width=`${d.maniac}%`;
+ setText("cmTrender",d.trender||"No Top Trender yet");setText("cmManiac",d.maniac||0);
+ setText("cmTrender2",d.trender2||"—");setText("cmManiac2",d.maniac2||0);
+ setText("cmTrender3",d.trender3||"—");setText("cmManiac3",d.maniac3||0);
+ const mb=document.getElementById("cmManiacBar");if(mb)mb.style.width=`${Math.max(0,Math.min(100,Number(d.maniac)||0))}%`;
+ const mb2=document.getElementById("cmManiacBar2");if(mb2)mb2.style.width=`${Math.max(0,Math.min(100,Number(d.maniac2)||0))}%`;
+ const mb3=document.getElementById("cmManiacBar3");if(mb3)mb3.style.width=`${Math.max(0,Math.min(100,Number(d.maniac3)||0))}%`;
  setText("cmPollQuestion",d.pollQuestion);
  [["cmPoll1",d.poll1,"cmPoll1Pct","cmPoll1Bar",d.poll1pct],["cmPoll2",d.poll2,"cmPoll2Pct","cmPoll2Bar",d.poll2pct],["cmPoll3",d.poll3,"cmPoll3Pct","cmPoll3Bar",d.poll3pct]].forEach(([n,o,p,b,v])=>{setText(n,o);setText(p,`${v}%`);const e=document.getElementById(b);if(e)e.style.width=`${v}%`});
  let localVote=null;try{const raw=localStorage.getItem("wtCommunityPollVote");if(raw!==null)localVote=Number(raw)}catch{}
@@ -191,11 +204,11 @@ function bindMeter(id,valueId,labelId,fillId,thumbId){
   const v=Math.max(0,Math.min(100,Number(input.value)||0));
   if(out)out.textContent=`${v}%`;
   if(text)text.textContent=meterText(v);
-  thumb.style.bottom=`calc(${v}% - 13.5px)`;
+  thumb.style.top=`calc(${v}% - 13.5px)`;
  };
  const setFromPointer=(clientY)=>{
   const r=line.getBoundingClientRect();
-  const ratio=Math.max(0,Math.min(1,(r.bottom-clientY)/r.height));
+  const ratio=Math.max(0,Math.min(1,(clientY-r.top)/r.height));
   input.value=Math.round(ratio*100);
   input.dispatchEvent(new Event('input',{bubbles:true}));
  };
@@ -205,7 +218,7 @@ function bindMeter(id,valueId,labelId,fillId,thumbId){
  const move=e=>{if(dragging){setFromPointer(e.clientY);e.preventDefault()}};
  const up=()=>{dragging=false};
  col.addEventListener('pointerdown',down);col.addEventListener('pointermove',move);col.addEventListener('pointerup',up);col.addEventListener('pointercancel',up);
- col.addEventListener('keydown',e=>{if(e.key==='ArrowUp'||e.key==='ArrowRight'){input.value=Math.min(100,Number(input.value)+1);update()}if(e.key==='ArrowDown'||e.key==='ArrowLeft'){input.value=Math.max(0,Number(input.value)-1);update()}});
+ col.addEventListener('keydown',e=>{if(e.key==='ArrowDown'||e.key==='ArrowRight'){input.value=Math.min(100,Number(input.value)+1);update()}if(e.key==='ArrowUp'||e.key==='ArrowLeft'){input.value=Math.max(0,Number(input.value)-1);update()}});
  update();
 }
 

@@ -142,7 +142,7 @@
 
       <article class="dashboard-panel redflag-panel redflag-launcher" id="redflag">
         <div class="panel-head"><div><span class="section-mark red"></span><h2>Red Flag Meter</h2></div><span class="live-label">FAN VOTE</span></div>
-        <p class="panel-note">Where do William and Dean land this week?</p>
+        <p class="panel-note">Where do Moth and Dean land this week?</p>
         <div class="redflag-preview">
           <div class="rf-preview-title">YOU MANIAC <b>RED FLAG METER</b></div>
           <div class="rf-preview-sub">BOTH CHARACTERS · BOTH RED FLAGS</div>
@@ -173,9 +173,9 @@
       <article class="dashboard-panel leaderboard-panel" id="awards">
         <div class="panel-head"><div><span class="section-mark gold"></span><h2>Awards &amp; Leaderboard</h2></div><span class="live-label">THIS WEEK</span></div>
         <div class="award-podium">
-          <div class="podium-card silver"><span class="medal">02</span><strong>—</strong><small>Waiting for community activity</small></div>
+          <div class="podium-card silver"><span class="medal">02</span><strong id="cmTrender2">—</strong><small>Top Trender · <b id="cmManiac2">0</b>% Maniac level</small><i id="cmManiacBar2"></i></div>
           <div class="podium-card winner"><span class="crown">01</span><strong id="cmTrender">No Top Trender yet</strong><small>Top Trender · <b id="cmManiac">0</b>% Maniac level</small><i id="cmManiacBar"></i></div>
-          <div class="podium-card bronze"><span class="medal">03</span><strong>—</strong><small>Waiting for community activity</small></div>
+          <div class="podium-card bronze"><span class="medal">03</span><strong id="cmTrender3">—</strong><small>Top Trender · <b id="cmManiac3">0</b>% Maniac level</small><i id="cmManiacBar3"></i></div>
         </div>
         <div class="leaderboard-foot"><span>Top Trender is managed from Community Manager.</span><button class="ghost-btn" type="button" onclick="document.getElementById('discussions').scrollIntoView({behavior:'smooth'})">Earn your spot →</button></div>
       </article>
@@ -355,10 +355,10 @@
     function bindSafeMeter(id,outId,labelId){
       const input=document.getElementById(id),out=document.getElementById(outId),lab=document.getElementById(labelId),col=input?.closest('.rf-slider-col'),line=col?.querySelector('.rf-slider-line'),thumb=col?.querySelector('.rf-slider-thumb');
       if(!input||!col||!line||!thumb||input.dataset.safeBound)return; input.dataset.safeBound='1';
-      const update=()=>{const v=Math.max(0,Math.min(100,Number(input.value)||0));if(out)out.textContent=v+'%';if(lab)lab.textContent=meterText(v);thumb.style.bottom=`calc(${v}% - 12px)`};
-      const set=(y)=>{const r=line.getBoundingClientRect();input.value=Math.round(Math.max(0,Math.min(1,(r.bottom-y)/r.height))*100);update()};
+      const update=()=>{const v=Math.max(0,Math.min(100,Number(input.value)||0));if(out)out.textContent=v+'%';if(lab)lab.textContent=meterText(v);thumb.style.top=`calc(${v}% - 12px)`};
+      const set=(y)=>{const r=line.getBoundingClientRect();input.value=Math.round(Math.max(0,Math.min(1,(y-r.top)/r.height))*100);update()};
       col.addEventListener('pointerdown',e=>{col.setPointerCapture?.(e.pointerId);set(e.clientY);e.preventDefault()});
-      col.addEventListener('pointermove',e=>{if(e.buttons)set(e.clientY)});col.addEventListener('keydown',e=>{if(e.key==='ArrowUp'||e.key==='ArrowRight'){input.value=Math.min(100,+input.value+1);update()}if(e.key==='ArrowDown'||e.key==='ArrowLeft'){input.value=Math.max(0,+input.value-1);update()}});
+      col.addEventListener('pointermove',e=>{if(e.buttons)set(e.clientY)});col.addEventListener('keydown',e=>{if(e.key==='ArrowDown'||e.key==='ArrowRight'){input.value=Math.min(100,+input.value+1);update()}if(e.key==='ArrowUp'||e.key==='ArrowLeft'){input.value=Math.max(0,+input.value-1);update()}});
       update();
     }
     bindSafeMeter('mothMeter','mothValue','mothLabel');bindSafeMeter('deanMeter','deanValue','deanLabel');
