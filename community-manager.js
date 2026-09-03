@@ -1,8 +1,10 @@
 import { app, db } from "./firebase-config.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 import { doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const auth = getAuth(app);
+const storage = getStorage(app);
 const DEFAULTS = {
   label:"COMMUNITY HUB • YOU MANIAC",
   campaign:"YOU MANIAC",
@@ -17,6 +19,10 @@ const DEFAULTS = {
   viralImage:"images/heroes/hero1.jpg",
   trender:"",
   maniac:0,
+  trender2:"",
+  maniac2:0,
+  trender3:"",
+  maniac3:0,
   pollQuestion:"Fan Choice will open soon.",
   poll1:"Coming soon", poll1pct:0,
   poll2:"Coming soon", poll2pct:0,
@@ -66,6 +72,7 @@ function refreshPreview() {
   $("previewBox").innerHTML =
     `<b>${escapeHtml(d.label)}</b><br>${escapeHtml(d.heading)}<br>`+
     `<strong>${escapeHtml(d.campaign)}</strong> · Dean ${d.dean}% · Moth ${d.moth}%<br>`+
+    `Top Trenders: ${escapeHtml(d.trender||"—")} · ${escapeHtml(d.trender2||"—")} · ${escapeHtml(d.trender3||"—")}<br>`+
     `Quote: ${escapeHtml(d.quote)} — ${escapeHtml(d.quoteBy)}<br>`+
     `Poll: ${escapeHtml(d.pollQuestion)} · ${d.pollVotes} votes<br>`+
     `Discussion: ${escapeHtml(d.discussionPrompt)}`;
@@ -73,6 +80,37 @@ function refreshPreview() {
 function escapeHtml(s) {
   return String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
+
+async function uploadCommunityPoster(kind){
+  const fileEl = $(kind === "outfit" ? "outfitFile" : "viralFile");
+  const urlEl = $(kind === "outfit" ? "outfitImage" : "viralImage");
+  const statusEl = $(kind === "outfit" ? "outfitUploadStatus" : "viralUploadStatus");
+  const file = fileEl?.files?.[0];
+  if(!file){ setStatus(`Choose the ${kind === "outfit" ? "Outfit" : "Viral Moment"} poster first.`); return; }
+  if(!file.type.startsWith("image/")){ setStatus("Please choose an image file."); return; }
+  if(file.size > 8 * 1024 * 1024){ setStatus("Image is too large. Please keep it under 8 MB."); return; }
+  try{
+    const ext=(file.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"") || "jpg";
+    const path=`community/${kind}-${Date.now()}.${ext}`;
+    statusEl.textContent="Uploading…";
+    const storageRef=ref(storage,path);
+    await uploadBytes(storageRef,file,{contentType:file.type,cacheControl:"public,max-age=31536000"});
+    const url=await getDownloadURL(storageRef);
+    urlEl.value=url;
+    refreshPreview();
+    statusEl.textContent="Uploaded. Save Draft or Publish to use it.";
+    setStatus(`${kind === "outfit" ? "Outfit" : "Viral Moment"} poster uploaded.`,true);
+  }catch(e){
+    console.error(e);
+    statusEl.textContent="Upload failed.";
+    setStatus(`Upload failed: ${e.message}`);
+  }
+}
+
+document.querySelectorAll(".upload-image").forEach(btn=>{
+  btn.addEventListener("click",()=>uploadCommunityPoster(btn.dataset.target));
+});
+
 async function loadDoc(path) {
   const snap=await getDoc(doc(db,"communityContent",path));
   return snap.exists() ? snap.data() : null;

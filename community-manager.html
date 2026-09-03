@@ -50,11 +50,15 @@ input,textarea{width:100%;border:1px solid #dfe4ee;border-radius:8px;padding:9px
         <div class="full"><label>Quote</label><textarea id="quote"></textarea></div>
         <div><label>Quote by</label><input id="quoteBy"></div>
         <div><label>Outfit title</label><input id="outfitTitle"></div>
-        <div><label>Outfit image URL</label><input id="outfitImage" placeholder="https://... or images/your-image.jpg"></div>
+        <div><label>Outfit image URL</label><input id="outfitImage" placeholder="https://... or images/your-image.jpg"><input id="outfitFile" type="file" accept="image/*" style="margin-top:6px"><button type="button" class="upload-image" data-target="outfit" style="margin-top:6px;background:#8b4dcc;color:#fff">Upload Outfit Poster</button><span id="outfitUploadStatus" class="help"></span></div>
         <div><label>Viral moment title</label><input id="viralTitle"></div>
-        <div><label>Viral moment image URL</label><input id="viralImage" placeholder="https://... or images/your-image.jpg"></div>
-        <div><label>Top Trender / Maniac name</label><input id="trender"></div>
-        <div><label>Maniac level %</label><input id="maniac" type="number" min="0" max="100"></div>
+        <div><label>Viral moment image URL</label><input id="viralImage" placeholder="https://... or images/your-image.jpg"><input id="viralFile" type="file" accept="image/*" style="margin-top:6px"><button type="button" class="upload-image" data-target="viral" style="margin-top:6px;background:#8b4dcc;color:#fff">Upload Viral Poster</button><span id="viralUploadStatus" class="help"></span></div>
+        <div><label>Top Trender #1 / Maniac name</label><input id="trender" placeholder="@fanname"></div>
+        <div><label>#1 Maniac level %</label><input id="maniac" type="number" min="0" max="100"></div>
+        <div><label>Top Trender #2 / Maniac name</label><input id="trender2" placeholder="@fanname"></div>
+        <div><label>#2 Maniac level %</label><input id="maniac2" type="number" min="0" max="100"></div>
+        <div><label>Top Trender #3 / Maniac name</label><input id="trender3" placeholder="@fanname"></div>
+        <div><label>#3 Maniac level %</label><input id="maniac3" type="number" min="0" max="100"></div>
       </div>
     </section>
 

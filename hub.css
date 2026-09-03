@@ -885,3 +885,102 @@ body.trend-center-open {
         padding: 16px;
     }
 }
+
+/* =========================================================
+   MAIN HUB — 3 × 3 COMPACT PREVIEW
+   Community is now a primary Hub section.
+========================================================= */
+.hub-buttons.hub-grid-3x3{
+    width:min(920px,94vw);
+    max-width:none;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:12px;
+    align-items:stretch;
+}
+.hub-grid-3x3 .hub-grid-item{
+    width:100%;
+    min-width:0;
+    min-height:145px;
+    margin:0;
+    padding:17px 13px;
+    border-radius:18px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    text-decoration:none;
+    color:#fff;
+    overflow:hidden;
+}
+.hub-grid-3x3 .hub-card-kicker{
+    display:block;
+    font-size:9px;
+    font-weight:900;
+    letter-spacing:.12em;
+    opacity:.75;
+    margin-bottom:6px;
+}
+.hub-grid-3x3 .hub-grid-item h2{font-size:17px;margin:5px 0 6px;line-height:1.1}
+.hub-grid-3x3 .hub-grid-item p{font-size:10px;line-height:1.4;margin:0;opacity:.82}
+.hub-grid-3x3 .hub-grid-item small{display:block;margin-top:9px;font-size:9px;font-weight:900;opacity:.9}
+.hub-grid-3x3 .community-hub-card{border:2px solid #8b4dcc;background:rgba(38,14,55,.78);box-shadow:0 8px 25px rgba(139,77,204,.22)}
+.hub-grid-3x3 .campaign{border:2px solid rgba(80,160,255,.8)}
+.hub-grid-3x3 .trend{border:2px solid rgba(255,0,60,.85);cursor:pointer}
+.hub-grid-3x3 .episodes-hub-card{border:2px solid #d9df35;background:rgba(25,17,28,.76)}
+.hub-grid-3x3 .stats-hub-card{border:2px solid #ff2c55;background:rgba(25,17,28,.76)}
+.hub-grid-3x3 .resources-hub-card{border:2px solid #8b4dcc;background:rgba(25,17,28,.76)}
+.hub-grid-3x3 .weplus-hub-card{border:2px solid #fff;background:rgba(25,17,28,.76)}
+.hub-grid-3x3 .redflag-home-card{
+    display:flex;
+    flex-direction:row;
+    align-items:stretch;
+    padding:0;
+    background:rgba(55,7,24,.92);
+    border:2px solid #d82935;
+    box-shadow:0 8px 25px rgba(0,0,0,.25);
+}
+.hub-grid-3x3 .redflag-home-art{width:38%;min-width:38%;height:auto}
+.hub-grid-3x3 .redflag-home-art img{width:100%;height:100%;object-fit:cover;display:block}
+.hub-grid-3x3 .redflag-home-copy{padding:12px 10px;text-align:left;display:flex;flex-direction:column;justify-content:center;min-width:0}
+.hub-grid-3x3 .redflag-home-copy h2{font-size:17px;margin:4px 0}
+.hub-grid-3x3 .redflag-home-copy p{font-size:9px;line-height:1.3;margin:0}
+.hub-grid-3x3 .redflag-open{font-size:8px;margin-top:7px;font-weight:900}
+.hub-grid-3x3 .redflag-live-pill{font-size:7px;font-weight:900;letter-spacing:.08em}
+.hub-grid-3x3 .youmaniac-press-card{
+    background:rgba(25,17,28,.94);
+    border:2px solid #8b4dcc;
+    box-shadow:0 8px 25px rgba(0,0,0,.25),inset 0 0 25px rgba(139,77,204,.12);
+    color:#fff;
+}
+.hub-grid-3x3 .youmaniac-press-card .press-logo-wrap{width:42px!important;height:42px!important;margin:0 auto 7px!important}
+.hub-grid-3x3 .youmaniac-press-card .press-card-label{font-size:7px;letter-spacing:.1em}
+.hub-grid-3x3 .youmaniac-press-card h2{font-size:17px;margin:4px 0}
+.hub-grid-3x3 .youmaniac-press-card h3{font-size:10px;margin:0 0 8px;color:#d9df35}
+.hub-grid-3x3 .youmaniac-press-card .press-tour-btn{font-size:8px;font-weight:900;color:#111;background:#d9df35;border-radius:999px;padding:6px 10px}
+.hub-grid-3x3 .hub-grid-item:hover{transform:translateY(-3px)}
+
+@media(max-width:600px){
+    .hub-page{align-items:flex-start;overflow-y:auto;padding:20px 0 28px}
+    .welcome-box{width:100%;max-width:100%;padding:14px 10px 22px}
+    .welcome-box .hub-logo{width:62px;margin-bottom:12px}
+    .welcome-box h1{font-size:24px;margin-bottom:8px}
+    .welcome-box > p{font-size:12px;margin-bottom:18px}
+    .hub-buttons.hub-grid-3x3{width:100%;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+    .hub-grid-3x3 .hub-grid-item{min-height:118px;padding:10px 6px;border-radius:13px}
+    .hub-grid-3x3 .hub-grid-item h2{font-size:11px;margin:4px 0}
+    .hub-grid-3x3 .hub-grid-item p{font-size:7.5px;line-height:1.3}
+    .hub-grid-3x3 .hub-grid-item small{font-size:7px;margin-top:6px}
+    .hub-grid-3x3 .hub-card-kicker{font-size:7px;margin-bottom:2px}
+    .hub-grid-3x3 .redflag-home-copy{padding:8px 6px}
+    .hub-grid-3x3 .redflag-home-copy h2{font-size:11px}
+    .hub-grid-3x3 .redflag-home-copy p{font-size:7px}
+    .hub-grid-3x3 .redflag-live-pill,.hub-grid-3x3 .redflag-open{font-size:6px}
+    .hub-grid-3x3 .youmaniac-press-card .press-logo-wrap{width:28px!important;height:28px!important;margin-bottom:4px!important}
+    .hub-grid-3x3 .youmaniac-press-card .press-card-label{font-size:5px}
+    .hub-grid-3x3 .youmaniac-press-card h2{font-size:11px}
+    .hub-grid-3x3 .youmaniac-press-card h3{font-size:7px;margin-bottom:5px}
+    .hub-grid-3x3 .youmaniac-press-card .press-tour-btn{font-size:6px;padding:4px 6px}
+}
