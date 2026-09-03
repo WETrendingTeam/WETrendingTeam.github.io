@@ -1288,3 +1288,185 @@ body.trend-center-open {
         font-size:10px !important;
     }
 }
+
+
+/* =========================================================
+   WETrendingTeam HUB — FINAL POLISH
+   ONLY affects the 3x3 Hub grid on the Index page.
+   Existing working cards/features are preserved.
+========================================================= */
+
+.hub-page .welcome-box > .hub-buttons.hub-grid-3x3{
+    width:min(500px, calc(100vw - 28px)) !important;
+    max-width:500px !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    margin-top:0 !important;
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    grid-auto-rows:112px !important;
+    gap:7px !important;
+    box-sizing:border-box !important;
+    transform:none !important;
+    position:relative !important;
+    left:auto !important;
+    overflow:visible !important;
+}
+
+.hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .hub-grid-item{
+    width:100% !important;
+    min-width:0 !important;
+    max-width:none !important;
+    height:112px !important;
+    min-height:112px !important;
+    margin:0 !important;
+    padding:8px 6px !important;
+    box-sizing:border-box !important;
+    overflow:hidden !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+    text-align:center !important;
+}
+
+.hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .hub-grid-item h2{
+    width:100% !important;
+    max-width:100% !important;
+    margin:3px 0 3px !important;
+    font-size:10.5px !important;
+    line-height:1.08 !important;
+    overflow-wrap:anywhere !important;
+    word-break:normal !important;
+}
+
+.hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .hub-grid-item p{
+    width:100% !important;
+    max-width:100% !important;
+    margin:0 !important;
+    font-size:6.5px !important;
+    line-height:1.22 !important;
+    overflow-wrap:anywhere !important;
+}
+
+.hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .hub-grid-item small{
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    width:auto !important;
+    max-width:94% !important;
+    min-height:18px !important;
+    margin:5px auto 0 !important;
+    padding:3px 7px !important;
+    border:1px solid rgba(255,255,255,.24) !important;
+    border-radius:999px !important;
+    background:rgba(255,255,255,.08) !important;
+    box-shadow:0 2px 8px rgba(0,0,0,.18) !important;
+    font-size:5.8px !important;
+    line-height:1 !important;
+    font-weight:800 !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+}
+
+/* Keep the working Red Flag card intact; only make its copy fit. */
+.hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .redflag-home-card{
+    padding:0 !important;
+}
+.hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .redflag-home-card .redflag-home-art{
+    width:38% !important;
+    min-width:38% !important;
+}
+.hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .redflag-home-card .redflag-home-copy{
+    min-width:0 !important;
+    padding:7px 5px !important;
+}
+.hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .redflag-home-card .redflag-home-copy h2{
+    font-size:10px !important;
+    line-height:1.05 !important;
+    white-space:normal !important;
+}
+.hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .redflag-home-card .redflag-home-copy p{
+    font-size:6px !important;
+    line-height:1.15 !important;
+    white-space:normal !important;
+}
+
+/* Small readjustment for the You Maniac press card. */
+.hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .youmaniac-press-card{
+    padding:7px 5px !important;
+}
+.hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .youmaniac-press-card .press-logo-wrap{
+    width:24px !important;
+    height:24px !important;
+    margin:0 auto 3px !important;
+}
+.hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .youmaniac-press-card .press-card-label{
+    font-size:4.8px !important;
+    line-height:1 !important;
+}
+.hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .youmaniac-press-card h2{
+    font-size:10px !important;
+    line-height:1 !important;
+    margin:3px 0 !important;
+    white-space:normal !important;
+}
+.hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .youmaniac-press-card h3{
+    font-size:6.5px !important;
+    line-height:1 !important;
+    margin:2px 0 4px !important;
+}
+.hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .youmaniac-press-card .press-tour-btn{
+    font-size:5.5px !important;
+    line-height:1 !important;
+    padding:4px 7px !important;
+    white-space:nowrap !important;
+}
+
+/* These three are not functional yet: present them clearly as Coming Soon. */
+.hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .hub-grid-item:nth-child(7),
+.hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .hub-grid-item:nth-child(8),
+.hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .hub-grid-item:nth-child(9){
+    cursor:default !important;
+    pointer-events:none !important;
+}
+.hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .hub-grid-item:nth-child(7) small,
+.hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .hub-grid-item:nth-child(8) small,
+.hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .hub-grid-item:nth-child(9) small{
+    font-size:0 !important;
+    padding:3px 8px !important;
+}
+.hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .hub-grid-item:nth-child(7) small::after,
+.hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .hub-grid-item:nth-child(8) small::after,
+.hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .hub-grid-item:nth-child(9) small::after{
+    content:"COMING SOON";
+    font-size:5.8px;
+    letter-spacing:.06em;
+}
+
+/* Prevent any older Hub width rule from re-expanding the grid. */
+.hub-page .hub-buttons.hub-grid-3x3,
+.hub-page .welcome-box .hub-buttons.hub-grid-3x3{
+    box-sizing:border-box !important;
+}
+
+@media(max-width:360px){
+    .hub-page .welcome-box > .hub-buttons.hub-grid-3x3{
+        width:calc(100vw - 18px) !important;
+        max-width:calc(100vw - 18px) !important;
+        grid-auto-rows:105px !important;
+        gap:5px !important;
+    }
+    .hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .hub-grid-item{
+        height:105px !important;
+        min-height:105px !important;
+        padding:7px 4px !important;
+    }
+    .hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .hub-grid-item h2{
+        font-size:9.5px !important;
+    }
+    .hub-page .welcome-box > .hub-buttons.hub-grid-3x3 > .hub-grid-item p{
+        font-size:6px !important;
+    }
+}
