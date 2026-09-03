@@ -155,7 +155,7 @@ function applyCommunityContent(raw){
  if(d.trender==="@Lade"||d.trender==="@westieforce"||d.trender==="@maniacsquad")d.trender="";
  d.pollQuestion=CONTENT_DEFAULTS.pollQuestion;d.poll1=CONTENT_DEFAULTS.poll1;d.poll2=CONTENT_DEFAULTS.poll2;d.poll3=CONTENT_DEFAULTS.poll3;d.poll1pct=0;d.poll2pct=0;d.poll3pct=0;d.pollVotes=0;
  d.rating="9.4";d.ratingsCount=5;d.posts="4.12M";d.engagement="7.5M";d.reach="1.2B";d.countriesCount="50+";d.countryList="50+ countries";
- setText("cmCampaign",d.campaign);setText("communityCountdown",d.releaseTime);
+ setText("cmCampaign","YOU MANIAC · EPISODE 02");setText("communityCountdown","SEPTEMBER 5");
  setText("cmQuote",d.quote);setText("cmQuoteBy",`— ${d.quoteBy}`);
  setText("cmOutfitTitle",d.outfitTitle);setImage("cmOutfitImage",d.outfitImage,"Outfit of the episode");
  setText("cmViralTitle",d.viralTitle);setImage("cmViralImage",d.viralImage,"Most viral moment");
@@ -191,7 +191,7 @@ function bindMeter(id,valueId,labelId,fillId,thumbId){
   const v=Math.max(0,Math.min(100,Number(input.value)||0));
   if(out)out.textContent=`${v}%`;
   if(text)text.textContent=meterText(v);
-  thumb.style.bottom=`calc(${v}% - 12px)`;
+  thumb.style.bottom=`calc(${v}% - 13.5px)`;
  };
  const setFromPointer=(clientY)=>{
   const r=line.getBoundingClientRect();

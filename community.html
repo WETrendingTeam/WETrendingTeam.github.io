@@ -13,11 +13,22 @@
     const poster=document.getElementById('modalEpisodePoster');
     const stats={posts:'4.12M',engagement:'7.5M',reach:'1.2B',countries:'50+',rating:'9.4',xPosts:'4.12M',authors:'31.8K'};
     function theme(mode){
+      mode=mode==='dark'?'dark':'light';
       body.classList.toggle('dark',mode==='dark'); body.classList.remove('light');
-            if(toggle){ toggle.innerHTML=mode==='light'?'☾ <span>Dark</span>':'☼ <span>Light</span>'; toggle.setAttribute('aria-label',mode==='light'?'Switch to dark mode':'Switch to light mode'); }
+      if(toggle){ toggle.innerHTML=mode==='light'?'☾ <span>Dark</span>':'☼ <span>Light</span>'; toggle.setAttribute('aria-label',mode==='light'?'Switch to dark mode':'Switch to light mode'); toggle.dataset.currentTheme=mode; }
     }
+    // Always open Community in light mode; the button itself controls the switch.
     theme('light');
-    if(toggle&&!toggle.dataset.themeBound){toggle.dataset.themeBound='1';toggle.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();const next=body.classList.contains('dark')?'light':'dark';theme(next);try{localStorage.setItem('wtCommunityTheme',next)}catch{}})}
+    if(toggle&&!toggle.dataset.themeBound){
+      toggle.dataset.themeBound='1';
+      toggle.type='button';
+      toggle.addEventListener('click',function(e){
+        e.preventDefault(); e.stopPropagation();
+        const next=body.classList.contains('dark')?'light':'dark';
+        theme(next);
+        try{localStorage.setItem('wtCommunityTheme',next)}catch{}
+      },{passive:false});
+    }
     function openStats(){
       if(!modal)return;
       modal.hidden=false; modal.style.display='grid'; modal.style.visibility='visible'; modal.style.pointerEvents='auto';
@@ -39,7 +50,7 @@
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
-</script><script type="module" src="community.js?v=20260903-v12"></script>
+</script><script type="module" src="community.js?v=20260903-v13"></script>
 </head>
 <body>
 <div class="page-shell">
@@ -280,6 +291,19 @@
   function boot(){
     const body=document.body;
     const go=(id)=>document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});
+    // Theme fallback: always provide a direct tap handler even if module startup is delayed.
+    const themeBtn=document.getElementById('themeToggle');
+    if(themeBtn&&!themeBtn.dataset.safeThemeBound){
+      themeBtn.dataset.safeThemeBound='1';
+      themeBtn.addEventListener('click',function(e){
+        e.preventDefault(); e.stopImmediatePropagation();
+        const dark=!document.body.classList.contains('dark');
+        document.body.classList.toggle('dark',dark);
+        this.innerHTML=dark?'☼ <span>Light</span>':'☾ <span>Dark</span>';
+        this.setAttribute('aria-label',dark?'Switch to light mode':'Switch to dark mode');
+        try{localStorage.setItem('wtCommunityTheme',dark?'dark':'light')}catch{}
+      },true);
+    }
     // Navigation: native anchors + active state, with a delegated fallback.
     document.querySelectorAll('.side-nav a,.community-nav a,.mobile-bottom-nav a').forEach(a=>{
       if(a.dataset.navBound)return; a.dataset.navBound='1';

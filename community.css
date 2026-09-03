@@ -20,3 +20,134 @@
 .episode-modal[hidden],.behavior-modal[hidden],.community-gate[hidden]{display:none!important;visibility:hidden!important;pointer-events:none!important}
 .theme-toggle{position:relative;z-index:30;pointer-events:auto;cursor:pointer}
 @media(max-width:560px){.rf-poster-title{font-size:20px}.rf-poster-title b{font-size:24px}.rf-meter-board{grid-template-columns:minmax(0,1fr) 112px;min-height:405px;gap:8px}.rf-level{height:50px;padding:6px 8px;gap:5px}.rf-level span{width:20px;font-size:15px}.rf-level b{font-size:7px}.rf-character-heads{padding-left:42%;gap:12px}.rf-character-heads img{width:42px;height:42px}.rf-sliders{gap:14px;padding:0 4px}.rf-slider-col>span:not(.rf-slider-thumb){width:88px;font-size:5px}.community-access-grid{grid-template-columns:1fr}}
+
+/* v13 Community-only Red Flag layout correction */
+.redflag-preview{
+  min-height:215px;
+  padding:11px 10px 9px;
+}
+.rf-preview-title{font-size:12px;line-height:1.05}
+.rf-preview-title b{font-size:15px;margin-top:2px}
+.rf-preview-sub{font-size:5px;margin-top:3px}
+.rf-preview-board{
+  position:relative;
+  left:auto;right:auto;bottom:auto;
+  height:126px;
+  margin-top:7px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 74px;
+  gap:8px;
+}
+.rf-preview-bars{gap:2px}
+.rf-preview-bars i{height:15px}
+.rf-mini-lines{
+  position:relative;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  padding-top:27px;
+}
+.rf-mini-lines span{
+  position:relative;
+  height:99px;
+  border-left:2px solid #fff;
+}
+.rf-mini-lines span:after{
+  width:14px;height:14px;
+}
+.rf-preview-heads{
+  position:absolute;
+  right:10px;
+  top:41px;
+  width:74px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  z-index:4;
+}
+.rf-preview-heads>div{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:1px;
+}
+.rf-preview-heads img{width:30px;height:30px}
+.rf-preview-heads b{font-size:5px;letter-spacing:.8px}
+.redflag-preview>span{
+  bottom:6px;left:10px;font-size:5px;
+}
+
+/* Full meter: heads line up exactly above their own slider columns. */
+.rf-character-heads{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 90px 90px;
+  gap:0;
+  padding:0;
+  margin:0 0 5px;
+}
+.rf-character-heads:before{content:"";display:block}
+.rf-character-heads>div{min-width:0}
+.rf-character-heads img{width:46px;height:46px}
+.rf-character-heads b{font-size:8px;letter-spacing:1px}
+.rf-meter-board{
+  grid-template-columns:minmax(0,1fr) 180px;
+  gap:12px;
+  min-height:450px;
+}
+.rf-sliders{
+  grid-template-columns:90px 90px;
+  gap:0;
+  padding:0;
+}
+.rf-slider-col{
+  width:90px;
+  touch-action:none;
+  cursor:ns-resize;
+}
+.rf-slider-line{
+  top:0;
+  bottom:43px;
+  width:3px;
+}
+.rf-slider-thumb{
+  width:27px;height:27px;
+  margin:0;
+  z-index:5;
+}
+.rf-slider-col output{bottom:14px}
+.rf-slider-col>span:not(.rf-slider-thumb){bottom:0;width:86px;font-size:5.5px;line-height:1.15}
+.rf-slider-col input[type=range]{pointer-events:none}
+.theme-toggle{
+  touch-action:manipulation!important;
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* Keep the two character photos/names away from the meter title on narrow screens. */
+@media(max-width:560px){
+  .rf-poster{padding:13px 10px 10px}
+  .rf-poster-title{font-size:19px}
+  .rf-poster-title b{font-size:23px}
+  .rf-subtitle{margin:7px 0 8px;font-size:7px}
+  .rf-character-heads{
+    grid-template-columns:minmax(0,1fr) 56px 56px;
+  }
+  .rf-character-heads img{width:40px;height:40px}
+  .rf-character-heads b{font-size:7px}
+  .rf-meter-board{
+    grid-template-columns:minmax(0,1fr) 112px;
+    gap:8px;
+    min-height:405px;
+  }
+  .rf-sliders{grid-template-columns:56px 56px}
+  .rf-slider-col{width:56px}
+  .rf-slider-col output{bottom:14px;font-size:8px}
+  .rf-slider-col>span:not(.rf-slider-thumb){width:54px;font-size:4.5px}
+  .redflag-preview{min-height:190px}
+  .rf-preview-board{height:104px;grid-template-columns:minmax(0,1fr) 64px}
+  .rf-preview-heads{width:64px;right:8px;top:38px;gap:7px}
+  .rf-preview-heads img{width:27px;height:27px}
+  .rf-preview-heads b{font-size:4.5px}
+  .rf-mini-lines{gap:7px;padding-top:24px}
+  .rf-mini-lines span{height:80px}
+  .rf-preview-bars i{height:12px}
+}
