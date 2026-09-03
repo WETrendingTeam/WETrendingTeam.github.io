@@ -987,51 +987,37 @@ body.trend-center-open {
 
 
 /* =========================================================
-   HUB 3x3 — TRUE CENTERED MOBILE ARRANGEMENT
-   This override is intentionally limited to the Hub grid.
+   HUB — FIX THE ACTUAL MOBILE GRID CONTAINER
+   The previous width was viewport-based and could exceed the
+   centered welcome box. Keep the complete 3x3 inside the box.
 ========================================================= */
 @media screen and (max-width: 600px) {
-    .hub-page {
-        width: 100vw !important;
-        max-width: 100vw !important;
-        overflow-x: hidden !important;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-    }
-
     .welcome-box {
-        width: 100vw !important;
-        max-width: 100vw !important;
-        margin: 0 auto !important;
-        padding-left: 12px !important;
-        padding-right: 12px !important;
+        width: 100% !important;
+        max-width: 520px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        box-sizing: border-box !important;
     }
 
     .hub-buttons.hub-grid-3x3 {
-        box-sizing: border-box !important;
-        width: 100% !important;
-        max-width: none !important;
+        display: grid !important;
+        width: min(100%, 500px) !important;
+        max-width: 500px !important;
         margin-left: auto !important;
         margin-right: auto !important;
         padding: 0 !important;
-        display: grid !important;
+        box-sizing: border-box !important;
         grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
         gap: 7px !important;
         justify-content: center !important;
-        align-items: stretch !important;
     }
 
-    .hub-buttons.hub-grid-3x3 > .hub-grid-item {
-        box-sizing: border-box !important;
-        width: 100% !important;
+    .hub-buttons.hub-grid-3x3 > * {
         min-width: 0 !important;
+        width: 100% !important;
         max-width: none !important;
         margin: 0 !important;
-    }
-
-    .hub-buttons.hub-grid-3x3 > .redflag-home-card {
-        width: 100% !important;
-        min-width: 0 !important;
-        max-width: none !important;
+        box-sizing: border-box !important;
     }
 }
