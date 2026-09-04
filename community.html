@@ -181,20 +181,23 @@
       </article>
     </section>
 
-    <section class="dashboard-panel discussions community-access" id="discussions">
+    <section class="dashboard-panel discussions" id="discussions">
       <div class="panel-head"><div><span class="section-mark red"></span><h2>Community</h2></div><span class="live-label"><i class="live-dot"></i> OPEN</span></div>
-      <div class="community-access-grid">
+      <div class="discussion-grid">
         <div class="discussion-prompt">
-          <span class="tag">WESTIES COMMUNITY</span><h3 id="cmDiscussionPrompt">Your space for YOU MANIAC fan activities.</h3>
-          <p>Join anonymously with a fan name to take part in fan choices, Red Flag voting and community activities.</p>
+          <span class="tag">WESTIES COMMUNITY</span>
+          <h3 id="cmDiscussionPrompt">Your space for YOU MANIAC fan activities.</h3>
+          <p>Join anonymously with a fan name, share your thoughts, reply to other fans and react to posts.</p>
           <button class="primary-btn" id="joinCommunityBtn" type="button">Join Community</button>
-          <div class="discussion-mini-stats"><b>Fan participation</b><span>Anonymous access</span></div>
+          <div class="discussion-mini-stats"><b id="episodeCommentCount">0 comments</b><span id="episodeReactionCount">0 reactions</span></div>
         </div>
-        <div class="community-no-comments">
-          <span class="tag">COMMUNITY ACTIVITY</span>
-          <h3>Keep the Community Center focused.</h3>
-          <p>Fan activities, voting and the Red Flag Meter are ready here. The Community Rules remain below.</p>
-          <a class="ghost-btn link-button" href="#fan-conversation">View Community Rules →</a>
+        <div class="discussion-feed">
+          <div class="discussion-head"><strong>Latest community</strong><span>Respect · Support · No harassment</span></div>
+          <form class="comment-form" data-thread="episode">
+            <textarea maxlength="500" placeholder="Share your thoughts..." required></textarea>
+            <div class="form-row"><small>Choose a fan name when you join. Admin may remove disrespectful posts.</small><button type="submit">Post</button></div>
+          </form>
+          <div class="comments" id="episodeComments"><div class="empty">Loading community...</div></div>
         </div>
       </div>
     </section>
@@ -202,7 +205,7 @@
     <section class="bottom-banner" id="resources"><span>Same Series · Same Love · Stronger Together</span><b>YOU MANIAC × WILLIAMEST × WESTIES</b></section>
     <section class="rules" id="fan-conversation"><div class="rule-icon"></div><div><strong>Community rules</strong><p id="cmRules">Keep discussions respectful or admin will remove you. You can join anonymously with a fan name. We’re all here to support WilliamEst.</p></div></section>
   
-<nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="Mobile community navigation"><a href="#home">Home</a><a href="#episodes">Episodes</a><a href="#stats">Stats</a><a href="#events">Fan Choice</a><a href="#awards">Awards</a><a href="#fan-conversation">Rules</a></nav>
+
 </main>
 
   <aside class="right-rail">
@@ -214,7 +217,7 @@
     </section>
     <section class="rail-card quick-links" id="profile">
       <h2>Quick Links</h2>
-      <a href="campaign.html">Where to watch YOU MANIAC</a><a href="campaign.html">Series FAQ</a><a href="#episodes">Episode Guide</a><a href="#behavior">Character Profiles</a><a href="#stats">Trend Guide</a><a href="#fan-conversation">Community Rules</a>
+      <a href="campaign.html">Where to watch YOU MANIAC</a><a href="campaign.html">Series FAQ</a><a href="#episodes">Episode Guide</a><a href="#behavior">Character Profiles</a><a href="#stats">Trend Guide</a>
     </section>
     <section class="rail-card extra-ideas">
       <h2>Extra Ideas</h2>
@@ -329,7 +332,7 @@
     function fallbackGate(){
       if(document.getElementById('communityNameGate'))return;
       const overlay=document.createElement('div'); overlay.id='communityNameGate'; overlay.className='community-gate';
-      overlay.innerHTML='<div class="community-gate-card"><span class="tag">WESTIES COMMUNITY</span><h2>Join Community</h2><p>Choose a fan name or continue anonymously. No public comment feed is used on this page.</p><input id="fallbackCommunityName" maxlength="30" placeholder="Your fan name (optional)" autocomplete="nickname"><div class="gate-actions"><button type="button" class="gate-skip">Continue as Fan</button><button type="button" class="gate-join">Join Community</button></div><small>Your fan name is stored only on this device.</small></div>';
+      overlay.innerHTML='<div class="community-gate-card"><span class="tag">WESTIES COMMUNITY</span><h2>Join Community</h2><p>Choose a fan name or continue anonymously. You can post, reply and react with your fan name.</p><input id="fallbackCommunityName" maxlength="30" placeholder="Your fan name (optional)" autocomplete="nickname"><div class="gate-actions"><button type="button" class="gate-skip">Continue as Fan</button><button type="button" class="gate-join">Join Community</button></div><small>Your fan name is stored only on this device and is used for your community posts.</small></div>';
       document.body.appendChild(overlay);
       const input=overlay.querySelector('#fallbackCommunityName');
       const finish=(v)=>{localStorage.setItem('wtCommunityName',(String(v||'').trim().slice(0,30)||'Fan'));overlay.remove();showToast('You are in the Westies Community.');};
@@ -358,7 +361,7 @@
       const update=()=>{const v=Math.max(0,Math.min(100,Number(input.value)||0));if(out)out.textContent=v+'%';if(lab)lab.textContent=meterText(v);thumb.style.top=`calc(${v}% - 12px)`};
       const set=(y)=>{const r=line.getBoundingClientRect();input.value=Math.round(Math.max(0,Math.min(1,(y-r.top)/r.height))*100);update()};
       col.addEventListener('pointerdown',e=>{col.setPointerCapture?.(e.pointerId);set(e.clientY);e.preventDefault()});
-      col.addEventListener('pointermove',e=>{if(e.buttons)set(e.clientY)});col.addEventListener('keydown',e=>{if(e.key==='ArrowDown'||e.key==='ArrowRight'){input.value=Math.min(100,+input.value+1);update()}if(e.key==='ArrowUp'||e.key==='ArrowLeft'){input.value=Math.max(0,+input.value-1);update()}});
+      col.addEventListener('pointermove',e=>{if(e.buttons)set(e.clientY)});col.addEventListener('keydown',e=>{if(e.key==='ArrowUp'||e.key==='ArrowRight'){input.value=Math.min(100,+input.value+1);update()}if(e.key==='ArrowDown'||e.key==='ArrowLeft'){input.value=Math.max(0,+input.value-1);update()}});
       update();
     }
     bindSafeMeter('mothMeter','mothValue','mothLabel');bindSafeMeter('deanMeter','deanValue','deanLabel');
