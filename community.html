@@ -11,7 +11,7 @@
     const body=document.body, toggle=document.getElementById('themeToggle');
     const modal=document.getElementById('episodeStatsModal'), behavior=document.getElementById('behaviorModal');
     const poster=document.getElementById('modalEpisodePoster');
-    const stats={posts:'4.12M',engagement:'7.5M',reach:'1.2B',countries:'50+',rating:'9.4',xPosts:'4.12M',authors:'31.8K'};
+    const stats={posts:'4.12M',engagement:'7.5M',reach:'1.2B',countries:'60+',rating:'9.4',xPosts:'4.12M',authors:'31.8K'};
     function theme(mode){
       mode=mode==='dark'?'dark':'light';
       body.classList.toggle('dark',mode==='dark'); body.classList.remove('light');
@@ -29,6 +29,7 @@
         try{localStorage.setItem('wtCommunityTheme',next)}catch{}
       },{passive:false});
     }
+    function revealCountryList(){const e=document.getElementById('cmCountryList');if(e)e.style.display='';}
     function openStats(){
       if(!modal)return;
       modal.hidden=false; modal.style.display='grid'; modal.style.visibility='visible'; modal.style.pointerEvents='auto';
@@ -37,7 +38,7 @@
       set('modalEpisodeTitle','EP 01');set('modalPosts',stats.posts);set('modalEngagement',stats.engagement);set('modalReach',stats.reach);set('modalCountries',stats.countries);set('modalXPosts',stats.xPosts);set('modalAuthors',stats.authors);set('modalRating','9.4');set('modalRatingsCount','5');
     }
     function closeStats(){if(modal){modal.hidden=true;modal.style.display='none';modal.style.pointerEvents='none'}}
-    document.querySelectorAll('#openEpisodeStats,#openEpisodeStats2').forEach(b=>b.addEventListener('click',function(e){e.preventDefault();openStats()}));
+    document.querySelectorAll('#openEpisodeStats,#openEpisodeStats2').forEach(b=>b.addEventListener('click',function(e){e.preventDefault();revealCountryList();openStats()}));
     document.getElementById('closeEpisodeStats')?.addEventListener('click',closeStats);
     modal?.addEventListener('click',e=>{if(e.target===modal)closeStats()});
     document.getElementById('openBehavior')?.addEventListener('click',()=>{if(behavior){behavior.hidden=false;behavior.style.display='grid';behavior.style.pointerEvents='auto'}});
@@ -51,7 +52,12 @@
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script><script type="module" src="community.js?v=20260903-v13"></script>
-</head>
+<style id="fan-episode-toggle-style">
+.fan-episode-toggle{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 14px}
+.fan-episode-tab{border:1px solid rgba(0,0,0,.12);background:rgba(255,255,255,.8);border-radius:999px;padding:7px 11px;font:700 11px/1 inherit;cursor:pointer}
+.fan-episode-tab.active{background:#111;color:#fff;border-color:#111}
+.fan-poll-option{cursor:pointer}
+</style><style id="community-country-list-hidden">#cmCountryList{display:none}</style></head>
 <body>
 <div class="page-shell">
 
@@ -119,7 +125,7 @@
     <section class="dashboard-panel featured-panel" id="features">
       <div class="panel-head"><div><span class="section-mark gold"></span><h2>Featured This Week</h2></div><a href="#features">View all</a></div>
       <div class="feature-grid">
-        <article class="feature-card quote-card"><span class="tag">QUOTE OF THE WEEK</span><div class="quote-mark">“</div><h3 id="cmQuote">“It was never just a game for me.”</h3><small id="cmQuoteBy">— Lade</small><div class="card-meta"><span class="heart-dot"></span> Fan favourite</div></article>
+        <article class="feature-card quote-card"><span class="tag">QUOTE OF THE WEEK</span><div class="quote-mark">“</div><h3 id="cmQuote">“Well, tell your friend I’m into men. But I’m just not into him.”</h3><small id="cmQuoteBy">— MOTH</small><div class="card-meta"><span class="heart-dot"></span> Fan favourite</div></article>
         <article class="feature-card media-card"><img id="cmOutfitImage" src="images/characters/Both2.JPG" alt="Outfit of the episode"><div class="media-body"><span class="tag">OUTFIT OF THE EPISODE</span><h3 id="cmOutfitTitle">Fan Favourite</h3><div class="card-meta"><span class="heart-dot"></span> OOTE</div></div></article>
         <article class="feature-card media-card"><img id="cmViralImage" src="images/characters/Both3.JPG" alt="Most viral moment"><div class="media-body"><span class="tag">MOST VIRAL MOMENT</span><h3 id="cmViralTitle">The Moment</h3><div class="card-meta"><span class="heart-dot"></span> Viral this week</div></div></article>
         <article class="feature-card song-card"><span class="tag">SONG RECOMMENDATION</span><button class="song-art" id="songArtPlay" type="button" aria-label="Open Red Flag official music video"><img src="https://img.youtube.com/vi/V58V1a-qiiw/hqdefault.jpg" alt="Red Flag official YouTube thumbnail" loading="lazy" onerror="this.style.display='none'"><span class="song-play-badge">▶</span></button><h3>Red Flag</h3><p>William Jakrapatr &amp; Est Supha</p><div class="song-actions"><a class="song-listen" href="https://youtu.be/V58V1a-qiiw?si=Ug1cY2p4lIJpA_VK" target="_blank" rel="noopener">Open on YouTube ↗</a></div><div class="card-meta">YOU MANIAC OST · Official MV</div></article>
@@ -135,8 +141,8 @@
           <div class="stat-box"><span>REACH</span><strong id="cmReach">1.2B</strong><em>potential reach</em></div>
           <div class="stat-box"><span>RATING</span><strong><b id="cmRating">9.4</b><small>/10</small></strong><em><span id="cmRatingsCount">5</span> platform scores</em></div>
         </div>
-        <div class="country-head"><span>TOP TRENDING COUNTRIES</span><b id="cmCountries">50+</b></div>
-        <div class="country-strip" id="cmCountryList"><b>50+ countries</b></div>
+        <div class="country-head"><span>TOP TRENDING COUNTRIES</span>p+</b></div>
+        <div class="country-strip" id="cmCountryList" style="display:none"><b>60+ countries</b></div>
         <button class="text-action" id="openEpisodeStats2" type="button">Explore EP 01–EP 10 →</button>
       </article>
 
@@ -163,20 +169,18 @@
     <section class="dashboard-grid lower-grid">
       <article class="dashboard-panel poll-panel" id="events">
         <div class="panel-head"><div><span class="section-mark pink"></span><h2>Fan Choice</h2></div><span class="live-label">POLL</span></div>
-        <h3 id="cmPollQuestion">Who owned the YOU MANIAC trailer look?</h3>
+        <div class="fan-episode-toggle" id="fanPollEpisodes" role="tablist" aria-label="Fan Choice episode">
+          <button type="button" class="fan-episode-tab active" data-episode="1" role="tab" aria-selected="true">EP01</button>
+          <button type="button" class="fan-episode-tab" data-episode="2" role="tab" aria-selected="false">EP02</button>
+          <button type="button" class="fan-episode-tab" data-episode="3" role="tab" aria-selected="false">EP03</button>
+          <button type="button" class="fan-episode-tab" data-episode="4" role="tab" aria-selected="false">EP04</button>
+          <button type="button" class="fan-episode-tab" data-episode="5" role="tab" aria-selected="false">EP05</button>
+        </div>
+        <h3 id="cmPollQuestion">Which team are you for EP01?</h3>
         <div class="fan-poll-intro" id="fanPollIntro">Choose one. Vote once. Results appear after you vote.</div>
-        <div class="poll-row fan-poll-option" data-poll="1" role="button" tabindex="0" aria-label="Vote for Moth">
-          <span class="poll-choice"><i class="poll-radio"></i><b id="cmPoll1">Moth</b></span>
-          <div class="poll-track"><i><b id="cmPoll1Bar"></b></i></div><strong id="cmPoll1Pct">—</strong>
-        </div>
-        <div class="poll-row fan-poll-option" data-poll="2" role="button" tabindex="0" aria-label="Vote for Dean">
-          <span class="poll-choice"><i class="poll-radio"></i><b id="cmPoll2">Dean</b></span>
-          <div class="poll-track"><i><b id="cmPoll2Bar"></b></i></div><strong id="cmPoll2Pct">—</strong>
-        </div>
-        <div class="poll-row fan-poll-option" data-poll="3" role="button" tabindex="0" aria-label="Vote for Both">
-          <span class="poll-choice"><i class="poll-radio"></i><b id="cmPoll3">Both</b></span>
-          <div class="poll-track"><i><b id="cmPoll3Bar"></b></i></div><strong id="cmPoll3Pct">—</strong>
-        </div>
+        <div class="poll-row fan-poll-option" data-poll="1" role="button" tabindex="0"><span id="cmPoll1">#TeamMoth</span><div><i><b id="cmPoll1Bar"></b></i></div><strong id="cmPoll1Pct">—</strong></div>
+        <div class="poll-row fan-poll-option" data-poll="2" role="button" tabindex="0"><span id="cmPoll2">#TeamDean</span><div><i><b id="cmPoll2Bar"></b></i></div><strong id="cmPoll2Pct">—</strong></div>
+        <div class="poll-row fan-poll-option" data-poll="3" role="button" tabindex="0"><span id="cmPoll3">#DeanMoth</span><div><i><b id="cmPoll3Bar"></b></i></div><strong id="cmPoll3Pct">—</strong></div>
         <div class="poll-status" id="fanPollStatus">No vote yet</div>
         <div class="poll-footer"><span id="cmPollVotes">0</span> votes · results update live</div>
       </article>
@@ -299,24 +303,6 @@
   </div>
 </div>
 
-<style>
-.fan-poll-intro{font-size:11px;color:#777;margin:-3px 0 8px}
-.fan-poll-option{cursor:pointer;display:grid!important;grid-template-columns:88px 1fr 38px!important;align-items:center;gap:8px;padding:8px 6px!important;border:1px solid #eee;border-radius:10px;margin:5px 0;background:#fff;transition:.18s ease}
-.fan-poll-option:hover{border-color:#d9b9ff;transform:translateY(-1px)}
-.fan-poll-option.selected{border-color:#ef2341;box-shadow:0 0 0 2px rgba(239,35,65,.08);background:#fff8fa}
-.fan-poll-option.disabled{cursor:default;pointer-events:none}
-.poll-choice{display:flex;align-items:center;gap:6px;font-size:12px;min-width:0}
-.poll-choice b{white-space:nowrap}
-.poll-radio{width:13px;height:13px;border:1.5px solid #bbb;border-radius:50%;display:inline-block;flex:0 0 13px;background:#fff}
-.fan-poll-option.selected .poll-radio{border:4px solid #ef2341}
-.poll-track{min-width:0}
-.poll-track i{display:block;height:9px;border-radius:99px;background:#f1edf5;overflow:hidden}
-.poll-track i b{display:block;width:0;height:100%;border-radius:99px;background:#ef2341;transition:width .35s ease}
-.fan-poll-option strong{font-size:11px;text-align:right;min-width:34px}
-.poll-status{font-size:10px;font-weight:700;margin:7px 0 2px;min-height:14px;color:#666}
-@media(max-width:420px){.fan-poll-option{grid-template-columns:76px 1fr 34px!important}.poll-choice{font-size:11px}}
-</style>
-
 <script>
 /* Community interaction safety net: these controls must work even if Firebase/module startup is delayed. */
 (function(){
@@ -396,7 +382,9 @@
     bindSafeMeter('mothMeter','mothValue','mothLabel');bindSafeMeter('deanMeter','deanValue','deanLabel');
     document.getElementById('saveMeters')?.addEventListener('click',()=>{const v={moth:+document.getElementById('mothMeter').value,dean:+document.getElementById('deanMeter').value};localStorage.setItem('wtRedFlagPlacements',JSON.stringify(v));const n=document.getElementById('meterSaved');if(n)n.textContent='Saved on this device.';showToast('Red Flag placements saved.');});
     try{const v=JSON.parse(localStorage.getItem('wtRedFlagPlacements')||'null');if(v){if(document.getElementById('mothMeter'))document.getElementById('mothMeter').value=Number(v.moth)||0;if(document.getElementById('deanMeter'))document.getElementById('deanMeter').value=Number(v.dean)||0;document.getElementById('mothMeter')?.dispatchEvent(new Event('input'));document.getElementById('deanMeter')?.dispatchEvent(new Event('input'));}}catch{}
-    // Fan Choice voting is handled by community.js so results can be shared across fans.
+    // Fan Choice: one vote per device; starting from 0 means the selected option immediately becomes 100%.
+    const rows=[...document.querySelectorAll('.poll-row[data-poll]')];
+    if(rows.length&&!document.body.dataset.pollFallback){document.body.dataset.pollFallback='1';const key='wtCommunityPollVote';const saved=localStorage.getItem(key);const vote=i=>{if(localStorage.getItem(key)!==null)return;localStorage.setItem(key,String(i));rows.forEach((r,j)=>{const pct=j===i?100:0;r.querySelector('b').style.width=pct+'%';r.querySelector('strong').textContent=pct+'%';r.classList.toggle('voted',j===i)});const f=document.getElementById('cmPollVotes');if(f)f.textContent='1';};rows.forEach((r,i)=>r.addEventListener('click',()=>vote(i)));if(saved!==null&&rows[Number(saved)]){rows.forEach((r,j)=>{const pct=j===Number(saved)?100:0;r.querySelector('b').style.width=pct+'%';r.querySelector('strong').textContent=pct+'%';r.classList.toggle('voted',j===Number(saved))});const f=document.getElementById('cmPollVotes');if(f)f.textContent='1';}}
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();

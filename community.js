@@ -91,9 +91,8 @@ async function toggleReaction(thread,id,button){
 function render(thread,snap){
   const root=document.getElementById(cfg[thread].list); if(!root)return;
   root.innerHTML="";
-  const commentDocs=[]; snap.forEach(ds=>{if(ds.data()?.type!=="fanPollVote")commentDocs.push(ds);});
-  if(!commentDocs.length){root.innerHTML=`<div class="empty">No comments yet. Be the first to join the conversation.</div>`;return;}
-  commentDocs.forEach(ds=>{
+  if(snap.empty){root.innerHTML=`<div class="empty">No comments yet. Be the first to join the conversation.</div>`;return;}
+  snap.forEach(ds=>{
     const d=ds.data(), id=ds.id, card=document.createElement("article");card.className="comment";
     card.innerHTML=`<div class="comment-avatar">${esc((d.displayName||"F")[0].toUpperCase())}</div><div class="comment-body"><div class="comment-head"><strong>${esc(d.displayName||"Fan")}</strong><span>${time(d.createdAt)}</span></div><div class="comment-text">${esc(d.text||"")}</div><div class="comment-actions"><button type="button" class="reaction-btn">♥ <span>${Number(d.reactionCount||0)}</span></button><button type="button" class="reply-open-btn">↩ Reply</button></div><div class="reply-compose" hidden><textarea maxlength="500" placeholder="Reply to this fan..."></textarea><button type="button">Post Reply</button></div></div>`;
     const reaction=card.querySelector(".reaction-btn");reaction.onclick=async()=>{try{await toggleReaction(thread,id,reaction);}catch(e){alert(friendlyAuthError(e));}};
@@ -106,74 +105,7 @@ function render(thread,snap){
 
 function listen(thread){
   const c=cfg[thread],q=query(collection(db,c.comments),orderBy("createdAt","desc"));
-  onSnapshot(q,snap=>{render(thread,snap);let comments=0,reactions=0;snap.forEach(d=>{if(d.data()?.type==="fanPollVote")return;comments++;reactions+=Number(d.data().reactionCount||0);});const count=document.getElementById(c.count);if(count)count.textContent=`${comments} comment${comments===1?"":"s"}`;const r=document.getElementById(c.reaction);if(r)r.textContent=`${reactions} reaction${reactions===1?"":"s"}`;},e=>{const root=document.getElementById(c.list);if(root)root.innerHTML=`<div class="empty">Community could not load: ${esc(e.message||"Firestore permission error.")}</div>`;});
-}
-
-const FAN_POLL_ID="youManiacTrailerLook";
-const FAN_POLL_COLLECTION="communityEpisodeComments";
-const FAN_POLL_OPTIONS=["Moth","Dean","Both"];
-let fanPollCounts=[0,0,0], fanPollVoted=false, fanPollListenerStarted=false;
-
-function pollRows(){return [...document.querySelectorAll(".fan-poll-option[data-poll]")];}
-function pollSetStatus(text){const el=document.getElementById("fanPollStatus");if(el)el.textContent=text;}
-function renderFanPoll(){
-  const rows=pollRows(); if(!rows.length)return;
-  const total=fanPollCounts.reduce((a,b)=>a+b,0);
-  rows.forEach((row,i)=>{
-    const bar=row.querySelector(`#cmPoll${i+1}Bar`), pct=row.querySelector(`#cmPoll${i+1}Pct`), radio=row.querySelector(".poll-radio");
-    const value=total?Math.round((fanPollCounts[i]/total)*100):0;
-    if(bar)bar.style.width=(fanPollVoted?value:0)+"%";
-    if(pct)pct.textContent=fanPollVoted?value+"%":"—";
-    row.classList.toggle("selected", fanPollVoted && Number(row.dataset.poll)-1===Number(localStorage.getItem("wtCommunityPollVote")));
-    row.classList.toggle("disabled",fanPollVoted);
-    if(radio)radio.setAttribute("aria-hidden","true");
-  });
-  const votes=document.getElementById("cmPollVotes"); if(votes)votes.textContent=total;
-  if(fanPollVoted){
-    const winner=Math.max(...fanPollCounts), winners=FAN_POLL_OPTIONS.filter((_,i)=>fanPollCounts[i]===winner);
-    pollSetStatus(winner>0 ? (winners.length===1?`${winners[0]} is leading · ${winner} vote${winner===1?"":"s"}`:`It’s a tie · ${winner} vote${winner===1?"":"s"}`) : "Vote recorded");
-  }else pollSetStatus("Vote to see the live results.");
-}
-
-function startFanPoll(){
-  if(fanPollListenerStarted)return; fanPollListenerStarted=true;
-  const rows=pollRows(); if(!rows.length)return;
-  const local=localStorage.getItem("wtCommunityPollVote");
-  fanPollVoted=local!==null && rows.some(r=>Number(r.dataset.poll)-1===Number(local));
-  renderFanPoll();
-  const q=query(collection(db,FAN_POLL_COLLECTION),orderBy("createdAt","asc"));
-  onSnapshot(q,snap=>{
-    fanPollCounts=[0,0,0];
-    snap.forEach(ds=>{
-      const d=ds.data();
-      if(d.type!=="fanPollVote" || d.pollId!==FAN_POLL_ID)return;
-      const i=Number(d.option)-1;if(i>=0&&i<3)fanPollCounts[i]++;
-      if(user && ds.id===`__poll__${user.uid}`){
-        fanPollVoted=true;localStorage.setItem("wtCommunityPollVote",String(i));
-      }
-    });
-    renderFanPoll();
-  },e=>{console.warn("Fan poll could not load:",e);pollSetStatus("Voting is temporarily unavailable. Please try again.");});
-
-  const choose=async row=>{
-    if(fanPollVoted)return;
-    const option=Number(row.dataset.poll);
-    if(option<1||option>3)return;
-    try{
-      const u=await ensureUser({askName:true});
-      const voteRef=doc(db,FAN_POLL_COLLECTION,`__poll__${u.uid}`);
-      const existing=await getDoc(voteRef);
-      if(existing.exists()){
-        fanPollVoted=true;localStorage.setItem("wtCommunityPollVote",String(Number(existing.data().option)-1));renderFanPoll();return;
-      }
-      row.classList.add("selected");
-      pollSetStatus("Recording your vote…");
-      await setDoc(voteRef,{type:"fanPollVote",pollId:FAN_POLL_ID,option,uid:u.uid,createdAt:serverTimestamp()},{merge:false});
-      fanPollVoted=true;localStorage.setItem("wtCommunityPollVote",String(option-1));
-      renderFanPoll();
-    }catch(e){console.error(e);pollSetStatus(`Vote could not be recorded: ${friendlyAuthError(e)}`);}
-  };
-  rows.forEach(row=>{row.addEventListener("click",()=>choose(row));row.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();choose(row);}});});
+  onSnapshot(q,snap=>{render(thread,snap);const count=document.getElementById(c.count);if(count)count.textContent=`${snap.size} comment${snap.size===1?"":"s"}`;let reactions=0;snap.forEach(d=>reactions+=Number(d.data().reactionCount||0));const r=document.getElementById(c.reaction);if(r)r.textContent=`${reactions} reaction${reactions===1?"":"s"}`;},e=>{const root=document.getElementById(c.list);if(root)root.innerHTML=`<div class="empty">Community could not load: ${esc(e.message||"Firestore permission error.")}</div>`;});
 }
 
 document.querySelectorAll(".comment-form").forEach(form=>form.addEventListener("submit",async e=>{
@@ -192,35 +124,22 @@ const CONTENT_DEFAULTS={
   releaseTime:"04:00 PM",quote:"“It was never just a game for me.”",quoteBy:"Lade",
   outfitTitle:"Fan Favourite",outfitImage:"images/hero2.jpg",viralTitle:"The Moment",viralImage:"images/hero1.jpg",
   trender:"@Lade",maniac:0,pollQuestion:"What did you think of the YOU MANIAC trailer looks?",
-  poll1:"Moth",poll1pct:0,poll2:"Dean",poll2pct:0,poll3:"Both",poll3pct:0,pollVotes:0,
+  poll1:"Look 1",poll1pct:0,poll2:"Look 2",poll2pct:0,poll3:"Look 3",poll3pct:0,pollVotes:0,
   dean:0,moth:0,rating:0,ratingsCount:0,posts:0,engagement:0,reach:0,countriesCount:0,countryList:"",
   discussionPrompt:"What did you think of the YOU MANIAC trailer?",
   rules:"Keep discussions respectful or admin will remove you. You can join anonymously with a fan name. Let’s please be respectful to one another. We’re all here to support WilliamEst."
 };
-// Official EP01/EP02 values: these must not be overwritten by stale Community Manager data.
-const OFFICIAL_EP01 = {
-  posts:"4.12M", engagement:"7.5M", reach:"1.2B", rating:"9.4", ratingsCount:"5", countries:"50+"
-};
-const OFFICIAL_EP02 = { campaign:"YOU MANIAC · EPISODE 02", date:"SEPTEMBER 5", sub:"Saturday · Thailand release" };
 function setText(id,value){const e=document.getElementById(id);if(e)e.textContent=value??"";}
 function setImage(id,url,alt){const e=document.getElementById(id);if(e&&url){e.src=url;e.alt=alt||"";}}
 function applyCommunityContent(raw){
   const d={...CONTENT_DEFAULTS,...(raw||{})};
-  setText("cmLabel",d.label);
-  // Episode schedule is controlled by the Community page, not old Manager content.
-  setText("cmCampaign",OFFICIAL_EP02.campaign);
-  setText("cmHeading",d.heading);setText("cmIntro",d.intro);setText("communityCountdown",OFFICIAL_EP02.date);
-  const nextCard=document.getElementById("nextEpisodeCard");
-  const nextSmall=nextCard?.querySelector("small"); if(nextSmall)nextSmall.textContent=OFFICIAL_EP02.sub;
-  setText("cmQuote",d.quote);setText("cmQuoteBy",`— ${d.quoteBy}`);setText("cmOutfitTitle",d.outfitTitle);setImage("cmOutfitImage",d.outfitImage,"Fan favourite");
+  setText("cmLabel",d.label);setText("cmCampaign",d.campaign);setText("cmHeading",d.heading);setText("cmIntro",d.intro);setText("communityCountdown",d.releaseTime);
+  setText("cmQuote","“Well, tell your friend I’m into men. But I’m just not into him.”");setText("cmQuoteBy","— MOTH");setText("cmOutfitTitle",d.outfitTitle);setImage("cmOutfitImage",d.outfitImage,"Fan favourite");
   setText("cmViralTitle",d.viralTitle);setImage("cmViralImage",d.viralImage,"Most viral moment");setText("cmTrender",d.trender);setText("cmManiac",d.maniac);
-  const mb=document.getElementById("cmManiacBar");if(mb)mb.style.width=`${d.maniac}%`;
-  setText("cmPollQuestion","Who owned the YOU MANIAC trailer look?");
-  [["cmPoll1","Moth"],["cmPoll2","Dean"],["cmPoll3","Both"]].forEach(([n,o])=>setText(n,o));
-  renderFanPoll();const dean=document.getElementById("deanMeter"),moth=document.getElementById("mothMeter");if(dean)dean.value=d.dean;if(moth)moth.value=d.moth;dean?.dispatchEvent(new Event("input"));moth?.dispatchEvent(new Event("input"));
-  // Official EP01 stats are fixed here so stale/old Manager documents cannot replace them.
-  setText("cmRating",OFFICIAL_EP01.rating);setText("cmRatingsCount",OFFICIAL_EP01.ratingsCount);
-  setText("cmPosts",OFFICIAL_EP01.posts);setText("cmEngagement",OFFICIAL_EP01.engagement);setText("cmReach",OFFICIAL_EP01.reach);setText("cmCountries",OFFICIAL_EP01.countries);
+  const mb=document.getElementById("cmManiacBar");if(mb)mb.style.width=`${d.maniac}%`;setText("cmPollQuestion",d.pollQuestion);
+  [["cmPoll1",d.poll1,"cmPoll1Pct","cmPoll1Bar",d.poll1pct],["cmPoll2",d.poll2,"cmPoll2Pct","cmPoll2Bar",d.poll2pct],["cmPoll3",d.poll3,"cmPoll3Pct","cmPoll3Bar",d.poll3pct]].forEach(([n,o,p,b,v])=>{setText(n,o);setText(p,`${v}%`);const e=document.getElementById(b);if(e)e.style.width=`${v}%`;});
+  setText("cmPollVotes",d.pollVotes);const dean=document.getElementById("deanMeter"),moth=document.getElementById("mothMeter");if(dean)dean.value=d.dean;if(moth)moth.value=d.moth;dean?.dispatchEvent(new Event("input"));moth?.dispatchEvent(new Event("input"));
+  setText("cmRating",d.rating);setText("cmRatingsCount",d.ratingsCount);setText("cmPosts",d.posts);setText("cmEngagement",d.engagement);setText("cmReach",d.reach);setText("cmCountries","60+");
   const countryRoot=document.getElementById("cmCountryList");if(countryRoot){countryRoot.innerHTML="";String(d.countryList||"").split(",").map(x=>x.trim()).filter(Boolean).forEach(c=>{const b=document.createElement("b");b.textContent=c;countryRoot.appendChild(b);});}
   setText("cmDiscussionPrompt",d.discussionPrompt);const rules=document.getElementById("cmRules");if(rules)rules.textContent=d.rules;
 }
@@ -228,23 +147,55 @@ async function loadPublishedCommunityContent(){
   try{const snap=await getDoc(doc(db,"communityContent","published"));applyCommunityContent(snap.exists()?snap.data():CONTENT_DEFAULTS);}
   catch(e){console.warn("Community content load failed; defaults used.",e);applyCommunityContent(CONTENT_DEFAULTS);}
 }
-function bindRedFlagModal(){
-  const modal=document.getElementById("behaviorModal");
-  const open=document.getElementById("openRedFlagMeter");
-  const close=document.getElementById("closeBehavior");
-  const openResult=document.getElementById("openBehavior");
-  const show=()=>{if(!modal)return;modal.hidden=false;modal.style.display="grid";modal.style.visibility="visible";modal.style.pointerEvents="auto";};
-  const hide=()=>{if(!modal)return;modal.hidden=true;modal.style.display="none";modal.style.pointerEvents="none";};
-  open?.addEventListener("click",show);
-  close?.addEventListener("click",hide);
-  openResult?.addEventListener("click",show);
-  modal?.addEventListener("click",e=>{if(e.target===modal)hide();});
-}
-bindRedFlagModal();
-
 async function startCommunity(){
-  try{await ensureUser();await loadPublishedCommunityContent();listen("episode");startFanPoll();if(document.getElementById("campaignThread"))listen("campaign");}
+  try{await ensureUser();await loadPublishedCommunityContent();listen("episode");if(document.getElementById("campaignThread"))listen("campaign");}
   catch(e){console.error("Community startup failed:",e);const msg=friendlyAuthError(e);["episode","campaign"].forEach(t=>{const r=document.getElementById(cfg[t].list);if(r)r.innerHTML=`<div class="empty">Community sign-in failed: ${esc(msg)}</div>`;});}
 }
 onAuthStateChanged(auth,u=>{if(u){user=u;authReady=true;authError=null;updatePostButtons();}});
 startCommunity();
+/* FAN CHOICE EPISODE TOGGLE — scoped only to #events */
+(function(){
+  const rows=[...document.querySelectorAll('#events .poll-row[data-poll]')];
+  const tabs=[...document.querySelectorAll('#events .fan-episode-tab')];
+  if(!rows.length||!tabs.length)return;
+  const labels=['#TeamMoth','#TeamDean','#DeanMoth'];
+  let ep=1, unsub=null, voted=false;
+
+  function render(){
+    const q=document.getElementById('cmPollQuestion');
+    if(q)q.textContent=`Which team are you for EP${String(ep).padStart(2,'0')}?`;
+    labels.forEach((x,i)=>{const e=document.getElementById(`cmPoll${i+1}`);if(e)e.textContent=x});
+    tabs.forEach(t=>{const on=Number(t.dataset.episode)===ep;t.classList.toggle('active',on);t.setAttribute('aria-selected',on?'true':'false')});
+    rows.forEach(r=>r.classList.remove('voted'));
+  }
+  function localResults(){
+    const key=`wtFanChoiceVote_EP${ep}`;
+    const saved=localStorage.getItem(key);
+    rows.forEach((r,i)=>{
+      const b=r.querySelector('b'), p=r.querySelector('strong');
+      const on=saved!==null && Number(saved)===i;
+      if(b)b.style.width=on?'100%':'0%';
+      if(p)p.textContent=saved!==null?(on?'100%':'0%'):'—';
+      r.classList.toggle('voted',on);
+    });
+    const total=document.getElementById('cmPollVotes'); if(total)total.textContent=saved!==null?'1':'0';
+    const status=document.getElementById('fanPollStatus');
+    if(status)status.textContent=saved!==null?`${labels[Number(saved)]} is your EP${String(ep).padStart(2,'0')} choice.`:'No vote yet';
+  }
+  function select(i){
+    const key=`wtFanChoiceVote_EP${ep}`;
+    if(localStorage.getItem(key)!==null)return;
+    localStorage.setItem(key,String(i));
+    localResults();
+  }
+  function load(n){
+    ep=n; render(); localResults();
+  }
+  tabs.forEach(t=>t.addEventListener('click',()=>load(Number(t.dataset.episode))));
+  rows.forEach((r,i)=>{
+    r.addEventListener('click',()=>select(i));
+    r.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select(i)}});
+  });
+  load(1);
+})();
+
