@@ -121,7 +121,7 @@ document.querySelectorAll(".tab").forEach(tab=>tab.addEventListener("click",()=>
 const CONTENT_DEFAULTS={
   label:"COMMUNITY HUB • YOU MANIAC",campaign:"YOU MANIAC",heading:"More than a chat.",
   intro:"Explore fan features, make choices, see campaign results, track where the fandom is trending and join the conversation.",
-  releaseTime:"04:00 PM",quote:"“It was never just a game for me.”",quoteBy:"Lade",
+  releaseTime:"SEPTEMBER 5",quote:"“Well, tell your friend I’m into men. But I’m just not into him.”",quoteBy:"MOTH",
   outfitTitle:"Fan Favourite",outfitImage:"images/hero2.jpg",viralTitle:"The Moment",viralImage:"images/hero1.jpg",
   trender:"@Lade",maniac:0,pollQuestion:"What did you think of the YOU MANIAC trailer looks?",
   poll1:"Look 1",poll1pct:0,poll2:"Look 2",poll2pct:0,poll3:"Look 3",poll3pct:0,pollVotes:0,
@@ -139,7 +139,7 @@ function applyCommunityContent(raw){
   const mb=document.getElementById("cmManiacBar");if(mb)mb.style.width=`${d.maniac}%`;setText("cmPollQuestion",d.pollQuestion);
   [["cmPoll1",d.poll1,"cmPoll1Pct","cmPoll1Bar",d.poll1pct],["cmPoll2",d.poll2,"cmPoll2Pct","cmPoll2Bar",d.poll2pct],["cmPoll3",d.poll3,"cmPoll3Pct","cmPoll3Bar",d.poll3pct]].forEach(([n,o,p,b,v])=>{setText(n,o);setText(p,`${v}%`);const e=document.getElementById(b);if(e)e.style.width=`${v}%`;});
   setText("cmPollVotes",d.pollVotes);const dean=document.getElementById("deanMeter"),moth=document.getElementById("mothMeter");if(dean)dean.value=d.dean;if(moth)moth.value=d.moth;dean?.dispatchEvent(new Event("input"));moth?.dispatchEvent(new Event("input"));
-  setText("cmRating",d.rating);setText("cmRatingsCount",d.ratingsCount);setText("cmPosts",d.posts);setText("cmEngagement",d.engagement);setText("cmReach",d.reach);setText("cmCountries","60+");
+  setText("cmRating","9.4");setText("cmRatingsCount","5");setText("cmPosts","4.12M");setText("cmEngagement","7.5M");setText("cmReach","1.2B");setText("cmCountries","60+");
   const countryRoot=document.getElementById("cmCountryList");if(countryRoot){countryRoot.innerHTML="";String(d.countryList||"").split(",").map(x=>x.trim()).filter(Boolean).forEach(c=>{const b=document.createElement("b");b.textContent=c;countryRoot.appendChild(b);});}
   setText("cmDiscussionPrompt",d.discussionPrompt);const rules=document.getElementById("cmRules");if(rules)rules.textContent=d.rules;
 }

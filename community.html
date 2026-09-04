@@ -42,6 +42,7 @@
     document.getElementById('closeEpisodeStats')?.addEventListener('click',closeStats);
     modal?.addEventListener('click',e=>{if(e.target===modal)closeStats()});
     document.getElementById('openBehavior')?.addEventListener('click',()=>{if(behavior){behavior.hidden=false;behavior.style.display='grid';behavior.style.pointerEvents='auto'}});
+    document.getElementById('openRedFlagMeter')?.addEventListener('click',()=>{if(behavior){behavior.hidden=false;behavior.style.display='grid';behavior.style.visibility='visible';behavior.style.pointerEvents='auto'}});
     document.getElementById('closeBehavior')?.addEventListener('click',()=>{if(behavior){behavior.hidden=true;behavior.style.display='none';behavior.style.pointerEvents='none'}});
     behavior?.addEventListener('click',e=>{if(e.target===behavior){behavior.hidden=true;behavior.style.display='none'}});
     document.getElementById('videoToggle')?.addEventListener('click',function(){
@@ -141,7 +142,7 @@
           <div class="stat-box"><span>REACH</span><strong id="cmReach">1.2B</strong><em>potential reach</em></div>
           <div class="stat-box"><span>RATING</span><strong><b id="cmRating">9.4</b><small>/10</small></strong><em><span id="cmRatingsCount">5</span> platform scores</em></div>
         </div>
-        <div class="country-head"><span>TOP TRENDING COUNTRIES</span>p+</b></div>
+        <div class="country-head"><span>TOP TRENDING COUNTRIES</span><b id="cmCountries">60+</b></div>
         <div class="country-strip" id="cmCountryList" style="display:none"><b>60+ countries</b></div>
         <button class="text-action" id="openEpisodeStats2" type="button">Explore EP 01–EP 10 →</button>
       </article>
