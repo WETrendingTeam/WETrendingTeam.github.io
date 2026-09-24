@@ -111,6 +111,18 @@
 .wetrending-ep1-parts{display:grid;gap:10px}
 .wetrending-ep1-parts a{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-radius:14px;background:#f4f6f9;color:#17233d;text-decoration:none;font-weight:800}
 
+
+/* WilliamEst concert card */
+.wetrending-concert-card{max-width:1100px;margin:18px auto 22px;display:grid;grid-template-columns:minmax(210px,300px) 1fr;overflow:hidden;border-radius:20px;background:#fff;box-shadow:0 12px 30px rgba(15,23,42,.10);border:1px solid #e8edf3}
+.wetrending-concert-image{min-height:220px;background:#f3f4f6}
+.wetrending-concert-image img{width:100%;height:100%;display:block;object-fit:cover}
+.wetrending-concert-copy{padding:24px;display:flex;flex-direction:column;justify-content:center}
+.wetrending-concert-badge{display:inline-flex;width:max-content;padding:5px 9px;border-radius:999px;background:#facc15;color:#111827;font-size:9px;font-weight:900;letter-spacing:1px}
+.wetrending-concert-copy h2{margin:9px 0 5px;font-size:25px;color:#17233d}
+.wetrending-concert-copy p{margin:4px 0;color:#64748b;font-size:12px;line-height:1.5}
+.wetrending-concert-date{font-weight:700;color:#334155!important}
+.wetrending-concert-btn{display:inline-flex;width:max-content;margin-top:11px;padding:9px 14px;border-radius:999px;background:#17233d;color:#fff;text-decoration:none;font-size:11px;font-weight:800}
+@media(max-width:700px){.wetrending-concert-card{grid-template-columns:1fr}.wetrending-concert-image{min-height:180px;max-height:260px}.wetrending-concert-copy{padding:18px}.wetrending-concert-copy h2{font-size:20px}}
 </style>
 
 </head>
@@ -362,6 +374,22 @@ Episode 1 is now live. Episode 2 is next.
 
 
 <!-- ===========================
+     WILLIAMEST CONCERT
+============================ -->
+<section class="wetrending-concert-card" id="williamest-concert">
+  <div class="wetrending-concert-image">
+    <img src="images/william-est-concert-coming-soon.jpg" alt="WilliamEst Reign Together Concert">
+  </div>
+  <div class="wetrending-concert-copy">
+    <span class="wetrending-concert-badge">COMING SOON</span>
+    <h2>WILLIAMEST REIGN TOGETHER CONCERT</h2>
+    <p class="wetrending-concert-date">December 5–6, 2026 • Impact Arena, Bangkok</p>
+    <p>Tickets available on <strong>ThaiTicketMajor</strong>.</p>
+    <a class="wetrending-concert-btn" href="https://event.thaiticketmajor.com/live/" target="_blank" rel="noopener noreferrer">🎟️ ThaiTicketMajor</a>
+  </div>
+</section>
+
+<!-- ===========================
      EPISODES
 ============================ -->
 
@@ -408,7 +436,7 @@ Episode 1 is now live. Episode 2 is next.
 
             </div>
 
-            <a href="javascript:void(0)" class="episode-btn wetrending-episode-btn" data-episode="2">▶ Watch Episode</a>
+            <a href="javascript:void(0)" class="episode-btn wetrending-episode-btn wetrending-live-episode" data-episode="2">▶ Watch Episode</a>
 
         </div>
 
@@ -421,7 +449,7 @@ Episode 1 is now live. Episode 2 is next.
 
             </div>
 
-            <a href="javascript:void(0)" class="episode-btn wetrending-episode-btn" data-episode="3">▶ Watch Episode</a>
+            <a href="javascript:void(0)" class="episode-btn wetrending-episode-btn wetrending-live-episode" data-episode="3">▶ Watch Episode</a>
 
         </div>
 
@@ -434,7 +462,7 @@ Episode 1 is now live. Episode 2 is next.
 
             </div>
 
-            <a href="javascript:void(0)" class="episode-btn wetrending-episode-btn" data-episode="4">▶ Watch Episode</a>
+            <a href="javascript:void(0)" class="episode-btn wetrending-episode-btn wetrending-live-episode" data-episode="4">▶ Watch Episode</a>
 
         </div>
 
@@ -1338,7 +1366,7 @@ Episode 1 is now live. Episode 2 is next.
 
 <script>
 (function(){
-  const target = new Date("2026-09-05T20:30:00+07:00").getTime();
+  const target = new Date("2026-09-26T20:30:00+07:00").getTime();
   function tick(){
     let d=Math.max(0,target-Date.now());
     const days=Math.floor(d/86400000); d%=86400000;
@@ -1350,8 +1378,8 @@ Episode 1 is now live. Episode 2 is next.
   }
   document.addEventListener("DOMContentLoaded",function(){
     const t=document.querySelector(".countdown-title"),s=document.querySelector(".countdown-subtitle");
-    if(t)t.textContent="🎬 EP2 COUNTDOWN";
-    if(s)s.textContent="Countdown to YOU MANIAC Episode 2 • Saturday, September 5 • 8:30 PM Thailand Time";
+    if(t)t.textContent="🎬 EP5 COUNTDOWN";
+    if(s)s.textContent="Countdown to YOU MANIAC Episode 5 • Saturday, September 26 • 8:30 PM Thailand Time";
     tick();setInterval(tick,1000);
   });
 })();
