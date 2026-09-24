@@ -408,7 +408,7 @@ Episode 1 is now live. Episode 2 is next.
 
             </div>
 
-            <a href="javascript:void(0)" class="episode-btn" style="pointer-events:none;opacity:.65">Coming Soon</a>
+            <a href="javascript:void(0)" class="episode-btn wetrending-episode-btn" data-episode="2">▶ Watch Episode</a>
 
         </div>
 
@@ -421,7 +421,7 @@ Episode 1 is now live. Episode 2 is next.
 
             </div>
 
-            <a href="javascript:void(0)" class="episode-btn" style="pointer-events:none;opacity:.65">Coming Soon</a>
+            <a href="javascript:void(0)" class="episode-btn wetrending-episode-btn" data-episode="3">▶ Watch Episode</a>
 
         </div>
 
@@ -434,7 +434,7 @@ Episode 1 is now live. Episode 2 is next.
 
             </div>
 
-            <a href="javascript:void(0)" class="episode-btn" style="pointer-events:none;opacity:.65">Coming Soon</a>
+            <a href="javascript:void(0)" class="episode-btn wetrending-episode-btn" data-episode="4">▶ Watch Episode</a>
 
         </div>
 
@@ -534,11 +534,11 @@ Episode 1 is now live. Episode 2 is next.
     <div class="rating-grid">
         <div class="rating-card">
             <div class="platform-logo"><img src="images/platforms/imdb-logo.png" alt="IMDb"></div>
-            <a class="wetrending-rate-btn" href="https://www.imdb.com/title/tt39039439/" target="_blank" rel="noopener noreferrer">Rate Now</a>
+            <a class="wetrending-rate-btn" href="https://www.imdb.com/title/tt39039439/ratings/" target="_blank" rel="noopener noreferrer">Rate Now</a>
         </div>
         <div class="rating-card">
             <div class="platform-logo"><img src="images/platforms/mdl-logo.png" alt="MyDramaList"></div>
-            <a class="wetrending-rate-btn" href="https://mydramalist.com/" target="_blank" rel="noopener noreferrer">Rate Now</a>
+            <a class="wetrending-rate-btn" href="https://mydramalist.com/802960-you-maniac" target="_blank" rel="noopener noreferrer">Rate Now</a>
         </div>
         <div class="rating-card">
             <div class="platform-logo"><img src="images/platforms/tmdb-logo.png" alt="TMDB"></div>
@@ -550,7 +550,7 @@ Episode 1 is now live. Episode 2 is next.
         </div>
         <div class="rating-card">
             <div class="platform-logo"><img src="images/platforms/iqiyi-logo.png" alt="iQIYI"></div>
-            <a class="wetrending-rate-btn" href="https://www.iq.com/play/2gl3s57t879?sh_pltf=4&lang=en_us" target="_blank" rel="noopener noreferrer">Rate Now</a>
+            <a class="wetrending-rate-btn" href="https://www.iq.com/album/you-maniac-2026-2gl3s57t879" target="_blank" rel="noopener noreferrer">Rate Now</a>
         </div>
     </div>
 </section>
@@ -1233,45 +1233,104 @@ Episode 1 is now live. Episode 2 is next.
 
 <script>
 (function(){
-  const yt=[
-    "https://youtu.be/2X4tQVhOu2E?si=6roQnsY1gJb50fiF",
-    "https://youtu.be/Y_UBDE5n_1U?si=8I974YTj70hzBB1k",
-    "https://youtu.be/v3czK8x6_DI?si=TzdJu0RhbPIQVEZJ",
-    "https://youtu.be/nLVYwBJA7fE?si=JITOWa7X1-S1iJPt"
-  ];
-  function showYT(){
-    if(document.getElementById("ep1PartsModal")) return;
+  const streamingData={
+    1:{
+      youtube:["https://youtu.be/2X4tQVhOu2E?si=6roQnsY1gJb50fiF","https://youtu.be/Y_UBDE5n_1U?si=8I974YTj70hzBB1k","https://youtu.be/v3czK8x6_DI?si=TzdJu0RhbPIQVEZJ","https://youtu.be/nLVYwBJA7fE?si=JITOWa7X1-S1iJPt"],
+      iqiyi:"https://www.iq.com/play/2gl3s57t879?sh_pltf=4&lang=en_us",
+      oned:"https://s.oned.net/cLnN/00blwf5w",
+      viki:"https://www.viki.com/tv/41494c-you-maniac"
+    },
+    2:{
+      youtube:["https://youtu.be/msoOEi2Y1fs?si=AviuRIKDsjSB6hNK","https://youtu.be/qqsxHeGh0DY?si=7MyjLgmrbGrKqjRB","https://youtu.be/CtaDoKXCjXI?si=_0YrDSZ4HyHb1HwS","https://youtu.be/oI1yq--3pcI?si=-GQtBRPfDbCFNqN6"],
+      iqiyi:"https://www.iq.com/play/you-maniac-episode-2-2bt98za9lhk?lang=en_us",
+      oned:"https://s.oned.net/cLnN/Xosoyouma",
+      viki:"https://www.viki.com/tv/41494c-you-maniac"
+    },
+    3:{
+      youtube:["https://youtu.be/UM_Gi3mtb9E?si=9LROn4ryDSy91i9Z","https://youtu.be/GnieiPYeSdw?si=-IkQpnqWtAKq4SKp","https://youtu.be/Sybt1861OI0?si=VWFxtX9j-p1KIKQs","https://youtu.be/KCINabmiAAc?si=dfz4pi0zHeLlADPi"],
+      iqiyi:"https://www.iq.com/album/you-maniac-2026-2gl3s57t879?lang=en_us",
+      oned:"https://s.oned.net/cLnN/Xosoyouma",
+      viki:"https://www.viki.com/tv/41494c-you-maniac"
+    },
+    4:{
+      youtube:["https://youtu.be/tGtbjfAfWS0?si=i2Rqk4hLS6PI9XSG","https://youtu.be/e6TjRhU5F8E?si=kO-uLIKYdNjs_lTr","https://youtu.be/uk4zZUT_4k8?si=GJ1zWvNGc633iR-K","https://youtu.be/oUAhWsCp4Zs?si=I6vUX4usdGz9LBn7"],
+      iqiyi:"https://www.iq.com/album/you-maniac-2026-2gl3s57t879?lang=en_us",
+      oned:"https://s.oned.net/cLnN/gxosomani",
+      viki:"https://www.viki.com/tv/41494c-you-maniac"
+    }
+  };
+
+  function showYT(ep){
+    const old=document.getElementById("epYTPartsModal"); if(old)old.remove();
+    const d=streamingData[ep]; if(!d)return;
     const m=document.createElement("div");
-    m.id="ep1PartsModal";m.className="wetrending-ep1-modal";
-    m.innerHTML='<div class="wetrending-ep1-box"><button class="wetrending-ep1-close" type="button">×</button><h2>YOU MANIAC — EPISODE 1</h2><p>Watch Episode 1 on YouTube. It is split into 4 parts.</p><div class="wetrending-ep1-parts">'+
-      yt.map((u,i)=>'<a href="'+u+'" target="_blank" rel="noopener noreferrer"><span>▶ Part '+(i+1)+'/4</span><span>›</span></a>').join("")+
-      '</div></div>';
+    m.id="epYTPartsModal";m.className="wetrending-ep1-modal";
+    m.innerHTML='<div class="wetrending-ep1-box"><button class="wetrending-ep1-close" type="button">×</button><h2>YOU MANIAC — EPISODE '+ep+'</h2><p>Watch Episode '+ep+' on YouTube. It is split into 4 parts.</p><div class="wetrending-ep1-parts">'+d.youtube.map((u,i)=>'<a href="'+u+'" target="_blank" rel="noopener noreferrer"><span>▶ Part '+(i+1)+'/4</span><span>›</span></a>').join('')+'</div></div>';
     document.body.appendChild(m);
     m.addEventListener("click",e=>{if(e.target===m||e.target.closest(".wetrending-ep1-close"))m.remove()});
   }
-  document.addEventListener("DOMContentLoaded",function(){
-    const popup=document.getElementById("platformPopup");
-    document.querySelector(".wetrending-live-episode")?.addEventListener("click",function(e){
-      e.preventDefault(); if(popup) popup.classList.add("active");
-    });
-    document.querySelector(".wetrending-watch-ep1")?.addEventListener("click",function(e){
-      e.preventDefault(); if(popup) popup.classList.add("active");
-    });
-    const items=document.querySelectorAll("#platformPopup .platform-item");
-    const links=[
-      "https://www.iq.com/play/2gl3s57t879?sh_pltf=4&lang=en_us",
-      "https://s.oned.net/cLnN/00blwf5w",null,
-      "https://www.viki.com/tv/41494c-you-maniac"
-    ];
-    items.forEach(function(item,i){
+
+  function showStreaming(ep){
+    const d=streamingData[ep]; if(!d)return;
+    const popup=document.getElementById("platformPopup"); if(!popup)return;
+    popup.dataset.episode=ep;
+    const title=popup.querySelector("h2"); if(title)title.textContent="🎬 Choose a Platform";
+    const p=popup.querySelector(".popup-box > p"); if(p)p.innerHTML='Watch <strong>YOU MANIAC — EPISODE '+ep+'</strong><br>on your preferred streaming platform.';
+    const items=popup.querySelectorAll(".platform-item");
+    const vals=[d.iqiyi,d.oned,null,d.viki];
+    items.forEach((item,i)=>{
+      item.onclick=null; item.removeAttribute("target"); item.removeAttribute("rel");
       if(i===2){
         item.href="javascript:void(0)";
-        item.addEventListener("click",function(e){
-          e.preventDefault();if(popup)popup.classList.remove("active");showYT();
-        });
-      }else if(links[i]){
-        item.href=links[i];item.target="_blank";item.rel="noopener noreferrer";
+        item.onclick=function(e){e.preventDefault();popup.classList.remove("active");showYT(ep)};
+      }else{
+        item.href=vals[i]||"#"; item.target="_blank"; item.rel="noopener noreferrer";
       }
+    });
+    popup.classList.add("active");
+  }
+
+  document.addEventListener("DOMContentLoaded",function(){
+    document.querySelectorAll(".wetrending-episode-btn").forEach(btn=>btn.addEventListener("click",function(e){e.preventDefault();showStreaming(Number(btn.dataset.episode))}));
+    const ep1=document.querySelector(".wetrending-live-episode");
+    if(ep1)ep1.addEventListener("click",function(e){e.preventDefault();showStreaming(1)});
+    const watch1=document.querySelector(".wetrending-watch-ep1");
+    if(watch1)watch1.addEventListener("click",function(e){e.preventDefault();showStreaming(1)});
+  });
+})();
+</script>
+
+<script>
+(function(){
+  /* Rating destinations. Where a platform exposes an episode-specific page, the button goes there.
+     IMDb episode 1 and 2 IDs are verified from IMDb. For platforms that expose ratings only at the
+     series level, the episode option opens the official series/episode area rather than inventing a URL. */
+  const ratingData={
+    imdb:{1:"https://www.imdb.com/title/tt44306288/",2:"https://www.imdb.com/title/tt44878879/",3:"https://www.imdb.com/title/tt39039439/episodes/?season=1",4:"https://www.imdb.com/title/tt39039439/episodes/?season=1"},
+    mdl:{1:"https://mydramalist.com/802960-you-maniac/episode/1",2:"https://mydramalist.com/802960-you-maniac/episode/2",3:"https://mydramalist.com/802960-you-maniac/episode/3",4:"https://mydramalist.com/802960-you-maniac/episode/4"},
+    tmdb:{1:"https://www.themoviedb.org/tv/306630-you-maniac/season/1/episode/1",2:"https://www.themoviedb.org/tv/306630-you-maniac/season/1/episode/2",3:"https://www.themoviedb.org/tv/306630-you-maniac/season/1/episode/3",4:"https://www.themoviedb.org/tv/306630-you-maniac/season/1/episode/4"},
+    viki:{1:"https://www.viki.com/tv/41494c-you-maniac",2:"https://www.viki.com/tv/41494c-you-maniac",3:"https://www.viki.com/tv/41494c-you-maniac",4:"https://www.viki.com/tv/41494c-you-maniac"},
+    iqiyi:{1:"https://www.iq.com/album/you-maniac-2026-2gl3s57t879?lang=en_us",2:"https://www.iq.com/play/you-maniac-episode-2-2bt98za9lhk?lang=en_us",3:"https://www.iq.com/album/you-maniac-2026-2gl3s57t879?lang=en_us",4:"https://www.iq.com/album/you-maniac-2026-2gl3s57t879?lang=en_us"}
+  };
+  const names={imdb:"IMDb",mdl:"MyDramaList",tmdb:"TMDB",viki:"Viki",iqiyi:"iQIYI"};
+
+  function showRatingEpisodes(platform){
+    const old=document.getElementById("ratingEpisodesModal"); if(old)old.remove();
+    const m=document.createElement("div");m.id="ratingEpisodesModal";m.className="wetrending-ep1-modal";
+    const links=[1,2,3,4].map(ep=>'<a href="'+ratingData[platform][ep]+'" target="_blank" rel="noopener noreferrer"><span>⭐ Rate Episode '+ep+' Now</span><span>›</span></a>').join('');
+    m.innerHTML='<div class="wetrending-ep1-box"><button class="wetrending-ep1-close" type="button">×</button><h2>'+names[platform]+'</h2><p>Choose the episode you want to rate.</p><div class="wetrending-ep1-parts">'+links+'</div></div>';
+    document.body.appendChild(m);m.addEventListener("click",e=>{if(e.target===m||e.target.closest(".wetrending-ep1-close"))m.remove()});
+  }
+
+  document.addEventListener("DOMContentLoaded",function(){
+    const buttons=document.querySelectorAll(".wetrending-rate-btn");
+    const platforms=["imdb","mdl","tmdb","viki","iqiyi"];
+    buttons.forEach((btn,i)=>{
+      const platform=platforms[i];
+      if(!platform)return;
+      btn.href="javascript:void(0)";
+      btn.removeAttribute("target");
+      btn.onclick=function(e){e.preventDefault();showRatingEpisodes(platform)};
     });
   });
 })();
